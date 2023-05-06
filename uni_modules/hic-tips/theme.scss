@@ -1,0 +1,10 @@
+// 文字颜色
+$font-light: #c0c4cc;
+// icon颜色
+$hic-tips-main: #2595eb;
+// icon大小
+$hic-tips-font: 240rpx;
+// 圆弧的...颜色
+$hic-tips-border: lighten($hic-tips-main, 30%);
+// 按钮背景渐变色
+$hic-tips-btn-bg-color: linear-gradient(45deg, #0081ff, #1cbbb4);

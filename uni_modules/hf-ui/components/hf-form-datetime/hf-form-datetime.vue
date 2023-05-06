@@ -1,0 +1,107 @@
+<template>
+	<view class="hf-form-datetime">
+		<template v-if="$scopedSlots['display-section']">
+			<view class="" @click="pickerShow">
+				<slot name="display-section" :valueName="valueShow"></slot>
+			</view>
+		</template>
+		<template v-else>
+			<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="pickerShow">
+				<view ref="input" class="input-wrap">
+					<text v-if="valueShow">{{ valueShow }}</text>
+					<text v-else class="placeholder">{{ placeholder }}</text>
+				</view>
+			</u-form-item>
+		</template>
+		
+		<u-datetime-picker
+			:show="visible"
+			:title="label"
+			:value="valueTemp"
+			:mode="mode"
+			:min-date="minDate"
+			:max-date="maxDate"
+			closeOnClickOverlay
+			@confirm="handleConfirm"
+			@cancel="handleClose"
+			@close="handleClose"></u-datetime-picker>
+	</view>
+</template>
+
+<script>
+	import mixin from '../../libs/mixins/form.js';
+	import { formatMap, formatShowMap } from '../../libs/util/dateFormat.js';
+	
+	export default {
+		name: 'HfFormDatetime',
+		mixins: [mixin],
+		props: {
+			mode: {	// 展示格式
+				type: String,
+				default: 'datetime',
+				validator: (val) => {
+					return ['datetime', 'date', 'time', 'year-month'].includes(val);
+				}
+				// datetime 完整日期格式
+				// date 日期选择
+				// time 时间选择
+				// year-month 年月选择
+			},
+			minDate: {
+				type: Number
+			},
+			maxDate: {
+				type: Number
+			}
+		},
+		data() {
+			return {
+				visible: false
+			}
+		},
+		computed: {
+			format() {
+				return formatMap.get(this.mode);
+			},
+			formatShow() {
+				return formatShowMap.get(this.mode);
+			},
+			valueTemp() {
+				if (this.value) {
+					return this.value;
+				}
+				return Number(new Date());
+			},
+			valueShow() {
+				if (this.value) {
+					return uni.$u.timeFormat(this.value, this.formatShow);
+				}
+				return '';
+			}
+		},
+		methods: {
+			pickerShow() {
+				if (this.disabled) return;
+				this.visible = true; 
+				uni.hideKeyboard();
+			},
+			handleConfirm(event) {
+				const value = uni.$u.timeFormat(event.value, this.format);
+				this.$emit('input', value);
+				this.handleClose();
+			},
+			handleClose() {
+				this.visible = false;
+				if (this.$refs.input) {
+					this.$nextTick(() => {
+						uni.$u.formValidate(this.$refs.input, 'change');
+					});
+				}
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	@import '../../libs/css/form.scss';
+</style>
