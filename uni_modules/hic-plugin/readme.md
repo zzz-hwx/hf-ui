@@ -195,11 +195,25 @@ if (event.data) {
 
 #### chooseImage
 
-对 `uni.chooseImage` 的封装 从本地相册选择图片或使用相机拍照
+对 `uni.chooseImage` 的封装 从本地相册选择图片或使用相机拍照（参数同`uni.chooseImage`）
 
 - count：最多可以选择的图片张数，默认9
 - sizeType：original 原图，compressed 压缩图，默认二者都有
+- extension：根据文件拓展名过滤，每一项都不能是空字符串。默认不过滤。
 - sourceType：album 从相册选图，camera 使用相机，默认二者都有。如需直接开相机或直接选相册，请只使用一个选项
+- crop：图像裁剪参数，设置后 sizeType 失效
+
+#### chooseVideo
+
+对`uni.chooseVideo` 的封装 拍摄视频或从手机相册中选视频，返回视频的临时文件路径（参数同`uni.chooseVideo`）
+
+#### chooseMedia
+
+对`uni.chooseMedia` 的封装 拍摄或从手机相册中选择图片或视频（仅小程序支持）（参数同`uni.chooseMedia`）
+
+#### chooseFile
+
+对`uni.chooseFile` 的封装 从本地选择文件（参数同`uni.chooseFile`）
 
 #### copyData
 
@@ -207,6 +221,22 @@ if (event.data) {
 
 - data：需要设置的内容
 - tip：复制完成是否提示
+
+#### showActionSheet
+
+对`uni.showActionSheet`的封装，从底部向上弹出操作菜单（参数同`uni.showActionSheet`）
+
+- title：菜单标题
+- alertText：警示文案（同菜单标题）
+- itemList：按钮的文字数组
+- itemColor：按钮的文字颜色，字符串格式，默认为"#000000"
+- popover：大屏设备弹出原生选择按钮框的指示区域，默认居中显示
+
+#### makePhoneCall
+
+对`uni.makePhoneCall` 的封装 拨打电话
+
+- phoneNumber：需要拨打的电话号码
 
 ## 一些方法 tools
 

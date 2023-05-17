@@ -1,8 +1,16 @@
 // #ifdef H5
 import { compressAccurately } from '../utils/image-conversion/conversion.js';
-import { blobToPath } from '../utils/index.js';
 // #endif
+import { blobToPath, getFileInfo } from '../utils/index.js';
 import location from '@/uni_modules/hic-location/js_sdk/index.js';
+import {
+	chooseImage as uniChooseImage,
+	chooseVideo as uniChooseVideo,
+	chooseMedia as uniChooseMedia,
+	chooseFile as uniChooseFile,
+	makePhoneCall as uniMakePhoneCall,
+	showActionSheet as uniShowActionSheet,
+} from '@/uni_modules/hic-plugin';
 
 /**
  * @description 从本地相册选择图片或使用相机拍照
@@ -57,12 +65,44 @@ export async function chooseVideo() {
 }
 
 /**
+ * @description 选择图片或视频
+ * @param {Object} params 参数
+ * 	@param {Number} count = [9] 最多可选择的数量，默认9，视频只可选择1
+ */
+export async function chooseMedia({ count = 9 } = {}) {
+	// #ifdef MP-WEIXIN
+	const res = await uniChooseMedia();
+	return res.tempFiles.map((item) => {
+		const info = getFileInfo(item.tempFilePath);
+		return {
+			path: item.tempFilePath,
+			name: info.name,
+			size: item.size,
+			type: info.type
+		};
+	});
+	// #endif
+	// #ifndef MP-WEIXIN
+	const tapIndex = await uniShowActionSheet({ itemList: ['图片', '视频']});
+	switch (tapIndex) {
+		case 0:
+			return chooseImage({ count });
+		case 1:
+			return chooseVideo();
+	}
+	// #endif
+}
+
+/**
  * @description 从本地选择文件
  * @param {Object} params 参数
  * 	@param {Number} count = [1] 最多可以选择的文件数量
  */
 export async function chooseFile({ count = 1 } = {}) {
-	const res = await uniChooseFile({ count });
+	const res = await uniChooseFile({
+		count,
+		// extension: ['.zip','.doc'],	// 根据文件拓展名过滤，每一项都不能是空字符串。默认不过滤
+	});
 	const fileArr = res.tempFiles.map(item => {
 		return {
 			path: item.path,
@@ -122,78 +162,3 @@ export function scanCode(params) {
 /* ====================
 		一些工具方法
  ==================== */
-
-/**
- * 封装 uni.chooseImage
- */
-function uniChooseImage({ count } = {}) {
-	return new Promise((resolve, reject) => {
-		uni.chooseImage({
-			count,
-			sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-			sourceType: ['album', 'camera'], // 从相册选择 使用相机
-			success: (res) => {
-				console.log('--- uni.chooseImage --->', res);
-				resolve(res);
-			},
-			fail: (err) => {
-				reject(err);
-			}
-		});
-	});
-}
-
-/**
- * 封装 uni.chooseVideo
- */
-function uniChooseVideo() {
-	return new Promise((resolve, reject) => {
-		uni.chooseVideo({
-			sourceType: ['album', 'camera'],	// album 从相册选视频，camera 使用相机拍摄
-			success: (res) => {
-				console.log('--- uni.chooseVideo --->', res);
-				resolve(res);
-			},
-			fail: (err) => {
-				reject(err);
-			}
-		});
-	});
-}
-
-/**
- * 封装 uni.chooseFile
- */
-function uniChooseFile({ count, type = 'all' } = {}) {
-	return new Promise((resolve, reject) => {
-		uni.chooseFile({
-			count,
-			type,	// 所选的文件的类型 all, video, image
-			// extension: ['.zip','.doc'],	// 根据文件拓展名过滤，每一项都不能是空字符串。默认不过滤。
-			success: (res) => {
-				console.log('--- uni.chooseFile --->', res);
-				resolve(res);
-			},
-			fail: (err) => {
-				reject(err);
-			}
-		});
-	});
-}
-
-/**
- * 封装 uni.makePhoneCall
- */
-function uniMakePhoneCall(phoneNumber) {
-	return new Promise((resolve, reject) => {
-		uni.makePhoneCall({
-			phoneNumber,
-			success: (res) => {
-				resolve(res);
-			},
-			fail: (err) => {
-				reject(err);
-			}
-		});
-	});
-}

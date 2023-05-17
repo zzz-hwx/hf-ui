@@ -15,6 +15,7 @@
 		</template>
 		
 		<u-datetime-picker
+			ref="uDatetimePicker"
 			:show="visible"
 			:title="label"
 			:value="valueTemp"
@@ -77,6 +78,16 @@
 					return uni.$u.timeFormat(this.value, this.formatShow);
 				}
 				return '';
+			}
+		},
+		watch: {
+			value: {
+				handler(val) {
+					// value改变 不会触发组件u-datetime-picker改变 遂...手动触发
+					this.$nextTick(() => {
+						this.$refs.uDatetimePicker.init();
+					});
+				}
 			}
 		},
 		methods: {

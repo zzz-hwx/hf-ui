@@ -15,16 +15,17 @@
 								height: $u.addUnit(height)
 							}]"
 							@click="onPreviewImage(item)"></image>
-						<template v-else>
+						<template v-else-if="item.isVideo">
 							<view class="hf-upload__wrap__preview__other" @click="onPreviewVideo(item)">
-								<u-icon :color="primaryColor" size="26" :name="item.isVideo ? 'movie' : 'folder'"></u-icon>
-								<text class="hf-upload__wrap__preview__other__text">{{ item.isVideo ? '视频' : '文件' }}</text>
+								<u-icon :color="primaryColor" size="26" name="movie"></u-icon>
+								<text class="hf-upload__wrap__preview__other__text">视频</text>
 							</view>
-							<u-overlay :show="showVideo" @click="showVideo = false">
-								<view class="hf-upload__wrap__preview__other__video" @tap.stop>
-									<hf-video :videoSrc="item.url"></hf-video>
-								</view>
-							</u-overlay>
+						</template>
+						<template v-else>
+							<view class="hf-upload__wrap__preview__other">
+								<u-icon :color="primaryColor" size="26" name="folder"></u-icon>
+								<text class="hf-upload__wrap__preview__other__text">文件</text>
+							</view>
 						</template>
 					</template>
 					
@@ -77,14 +78,22 @@
 					<text v-if="uploadText" class="u-upload__button__text">{{ uploadText }}</text>
 				</view>
 			</template>
+			
 		</view>
+		<u-overlay :show="previewVideoVis" @click="previewVideoVis = false">
+			<view class="hf-upload__overlay">
+				<view class="hf-upload__overlay__video" @tap.stop>
+					<hf-video :videoSrc="previewVideoUrl"></hf-video>
+				</view>
+			</view>
+		</u-overlay>
 	</view>
 </template>
 
 <script>
 	import props from '@/uni_modules/uview-ui/components/u-upload/props.js';
 	import HfVideo from './hf-video.vue';
-	import { chooseImage, chooseFile } from '@/uni_modules/hf-middleware/js_sdk/index.js';
+	import { chooseImage, chooseVideo, chooseMedia, chooseFile } from '@/uni_modules/hf-middleware/js_sdk/index.js';
 	import loadData from '../../libs/util/loadData.js';
 	export default {
 		name: 'HfUpload',
@@ -101,7 +110,8 @@
 				type: String,
 				default: 'image',
 				validator: (val) => {
-					return ['image', 'video', 'media'].includes(val);
+					// image-图片 video-视频 media-图片或视频 file-文件(未实现预览)
+					return ['image', 'video', 'media', 'file'].includes(val);
 				}
 			},
 			maxCount: {		// 最大选择图片的数量
@@ -130,7 +140,6 @@
 		data() {
 			return {
 				primaryColor: uni.$u.config.color['u-primary'],
-				showVideo: false,
 				lists: [],
 				/**
 				 * url: 可访问路径(绝对路径)
@@ -144,6 +153,8 @@
 				 * 		success		上传成功
 				 * message: 提示信息
 				 */
+				previewVideoVis: false,
+				previewVideoUrl: '',
 			}
 		},
 		watch: {
@@ -180,12 +191,19 @@
 			async chooseFile() {
 				if (this.disabled) return;
 				let res;
-				if (this.accept === 'image') {
-					res = await chooseImage({ count: this.maxCount - this.lists.length });
-				} else if (this.accept === 'video') {
-					res = await chooseVideo();
-				} else if (this.accept == 'media'){
-					res = await chooseFile();
+				switch (this.accept) {
+					case 'image':
+						res = await chooseImage({ count: this.maxCount - this.lists.length });
+						break;
+					case 'video':
+						res = await chooseVideo();
+						break;
+					case 'media':
+						res = await chooseMedia();
+						break;
+					case 'file':
+						res = await chooseFile();
+						break;
 				}
 				this.onBeforeRead(res);
 				this.onAfterRead(res);
@@ -258,8 +276,8 @@
 			},
 			onPreviewVideo(item) {
 				// 预览视频
-				if (!item.isVideo) return;
-				this.showVideo =  true;
+				this.previewVideoVis =  true;
+				this.previewVideoUrl = item.url;
 			}
 		}
 	}
@@ -291,21 +309,19 @@
 					height: $hf-upload-image-height;
 				}
 				&__other {
-					width: $hf-upload-image-width;
-					height: $hf-upload-image-height;
-					background-color: $u-bg-color;
 					flex: 1;
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
 					align-items: center;
+					width: $hf-upload-image-width;
+					height: $hf-upload-image-height;
+					background-color: $u-bg-color;
+					// border: 1px solid rgba($color: $u-border-color, $alpha: 0.3);
 					&__text {
 						font-size: $font-xs;
 						color: $u-tips-color;
 						margin-top: 2px;
-					}
-					&__video {
-						margin-top: 30vh;
 					}
 				}
 			}
@@ -386,6 +402,17 @@
 				font-size: $font-xs;
 				color: $u-tips-color;
 				margin-top: 2px;
+			}
+		}
+		&__overlay {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			&__video {
+				width: 100vw;
+				height: calc(100vw *9 / 16);
 			}
 		}
 	}

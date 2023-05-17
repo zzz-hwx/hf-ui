@@ -138,20 +138,105 @@ export function scanCode (scanType = ['qrCode'], onlyFromCamera = false) {
 }
 
 /**
- * uni.chooseImage 的封装 从本地相册选择图片或使用相机拍照。
- * @param {Number} 			count		最多可以选择的图片张数，默认9
- * @param {Array<String>}	sizeType	original 原图，compressed 压缩图，默认二者都有
- * @param {Array<String>}	sourceType	album 从相册选图，camera 使用相机，默认二者都有。如需直接开相机或直接选相册，请只使用一个选项
+ * uni.chooseImage 的封装 从本地相册选择图片或使用相机拍照
  */
 export function chooseImage({
 	count = 9,
 	sizeType = ['original', 'compressed'],
-	sourceType = ['camera', 'album']
+	extension,
+	sourceType = ['camera', 'album'],
+	crop
 } = {}) {
 	return new Promise((resolve, reject) => {
 		uni.chooseImage({
 			count,
 			sizeType,
+			extension,
+			sourceType,
+			crop,
+			success: (res) => {
+				resolve(res);
+			},
+			fail: (err) => {
+				console.log(err);
+				reject(err);
+			}
+		});
+	});
+}
+
+/**
+ * uni.chooseVideo 的封装 拍摄视频或从手机相册中选视频，返回视频的临时文件路径
+ */
+export function chooseVideo({
+	sourceType = ['album', 'camera'],
+	extension,
+	compressed,
+	maxDuration,
+	camera
+} = {}) {
+	return new Promise((resolve, reject) => {
+		uni.chooseVideo({
+			sourceType,
+			extension,
+			compressed,
+			maxDuration,
+			camera,
+			success: (res) => {
+				resolve(res);
+			},
+			fail: (err) => {
+				console.log(err);
+				reject(err);
+			}
+		});
+	});
+}
+
+/**
+ * uni.chooseMedia 的封装 拍摄或从手机相册中选择图片或视频（仅小程序支持）
+ */
+export function chooseMedia({
+	count = 9,
+	mediaType = ['image', 'video'],
+	sourceType = ['album', 'camera'],
+	maxDuration = 10,
+	sizeType = ['original', 'compressed'],
+	camera = 'back'
+} = {}) {
+	return new Promise((resolve, reject) => {
+		uni.chooseMedia({
+			count,
+			mediaType,
+			sourceType,
+			maxDuration,
+			sizeType,
+			camera,
+			success: (res) => {
+				resolve(res);
+			},
+			fail: (err) => {
+				console.log(err);
+				reject(err);
+			}
+		});
+	});
+}
+
+/**
+ * uni.chooseFile 的封装 从本地选择文件
+ */
+export function chooseFile({
+	count = 100,
+	type = 'all',	// 所选的文件的类型 all, video, image
+	extension,
+	sourceType = ['album','camera']
+} = {}) {
+	return new Promise((resolve, reject) => {
+		uni.chooseFile({
+			count,
+			type,
+			extension,
 			sourceType,
 			success: (res) => {
 				resolve(res);
@@ -161,7 +246,7 @@ export function chooseImage({
 				reject(err);
 			}
 		});
-	})
+	});
 }
 
 /**
@@ -182,6 +267,58 @@ export function copyData(data, tip = false) {
 			fail: (err) => {
 				console.log(err);
 				reject();
+			}
+		});
+	});
+}
+
+/**
+ * uni.showActionSheet 的封装 从底部向上弹出操作菜单
+ * @param {Array<String>} itemList 按钮的文字数组
+ * @returns {Number} 用户点击的按钮，从上到下的顺序，从0开始
+ */
+export function showActionSheet({
+	title,
+	alertText,
+	itemList,
+	itemColor,
+	popover
+	
+} = {}) {
+	return new Promise((resolve, reject) => {
+		if (!Array.isArray(itemList)) {
+			throw new Error('itemList 必填');
+		}
+		uni.showActionSheet({
+			title,
+			alertText,
+			itemList,
+			itemColor,
+			popover,
+			success: (res) => {
+				resolve(res.tapIndex);
+			},
+			fail: (err) => {
+				console.log(err);
+				reject(err);
+			}
+		});
+	});
+}
+
+/**
+ * uni.makePhoneCall 的封装 拨打电话
+ * @param {String } phoneNumber 需要拨打的电话号码
+ */
+export function makePhoneCall(phoneNumber) {
+	return new Promise((resolve, reject) => {
+		uni.makePhoneCall({
+			phoneNumber,
+			success: (res) => {
+				resolve(res);
+			},
+			fail: (err) => {
+				reject(err);
 			}
 		});
 	});

@@ -1,3 +1,12 @@
+## 1.0.9（2023-05-17）
+- 修改方法导出方式
+## 1.0.8（2023-05-17）
+- 添加方法
+	- chooseVideo
+	- chooseMedia
+	- chooseFile
+	- showActionSheet
+	- makePhoneCall
 ## 1.0.7（2023-04-19）
 - 添加方法
 	- treeDataFormat

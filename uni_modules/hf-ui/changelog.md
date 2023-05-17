@@ -1,3 +1,20 @@
+## 1.0.11（2023-05-17）
+- hf-upload
+	- 修改 accept 接收的文件类型：media-图片或视频 file-文件
+	- 优化视频预览逻辑
+- hf-preview
+	- 优化视频预览逻辑
+## 1.0.10（2023-05-15）
+- hf-form-datetime 手动触发组件u-datetime-picker列更新
+## 1.0.9（2023-05-10）
+- hf-form-textarea
+	- 修改textAlign默认值：left，文字靠左
+	- 修改样式
+- hf-list-only
+	- 修改bug：渲染多个组件，防抖会复用fetch-list
+	- 修改limit默认值：10，分页每页10条
+- hf-list
+	- 修改limit默认值：10，分页每页10条
 ## 1.0.8（2023-05-05）
 - hf-form-location
 	- 添加 change 事件

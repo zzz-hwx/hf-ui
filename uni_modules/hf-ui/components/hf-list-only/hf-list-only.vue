@@ -49,7 +49,7 @@
 			limit: {
 				// 分页每页条数 0-不分页
 				type: Number,
-				default: 20
+				default: 10
 			},
 			listStyle: {	// u-list 样式
 				type: Object
@@ -81,12 +81,21 @@
 			}
 		},
 		created() {
+			/**
+			 * 如果放methods里直接赋值: getList: promiseDebounce(async function { ... 函数体 ... }),
+			 * 多个组件实例, 会共用同一个promiseDebounce(防抖)返回的函数
+			 * promiseDebounce 内部的私有化属性 计时器timer 共用了
+			 * 然后...只执行一遍...
+			 * ∴ 改到created里赋值
+			 */
+			this.getList = promiseDebounce(this._getList);
+			
 			if (!this.initNoFetchList) {
 				this.getList(true);
 			}
 		},
 		methods: {
-			getList: promiseDebounce(async function (refresh = false) {
+			async _getList(refresh = false) {
 				if (refresh) {
 					this.pagination.page = 1;
 				}
@@ -117,7 +126,8 @@
 					this.pagination.loading = false;
 					uni.stopPullDownRefresh();
 				}
-			}),
+			},
+			// getList: promiseDebounce(async function ),
 			loadmore() {
 				this.pagination.page++;
 				this.getList();

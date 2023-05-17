@@ -1,7 +1,7 @@
 {
 	"id": "hic-plugin",
 	"displayName": "hic-plugin",
-	"version": "1.0.7",
+	"version": "1.0.9",
 	"description": "一些常用js函数",
 	"keywords": [
         "常用函数"

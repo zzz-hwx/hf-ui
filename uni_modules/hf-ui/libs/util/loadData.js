@@ -16,7 +16,7 @@ const loadData = {
 	 * @return {Array} [{ url: '绝对路径', name: '文件名' }]
 	 */
 	async getAbsPath(val) {
-		return list;
+		return val;
 	},
 	/**
 	 * 图片上传

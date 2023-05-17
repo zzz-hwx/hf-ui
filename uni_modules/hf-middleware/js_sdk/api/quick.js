@@ -1,5 +1,9 @@
 import { useBase } from '../utils/base.js';
 import { base64ToPath, getFileType } from '../utils/index.js';
+import {
+	modal,
+	showActionSheet as uniShowActionSheet
+} from '@/uni_modules/hic-plugin';
 
 /* ====================
 		快应api
@@ -30,6 +34,54 @@ export async function chooseImage({ count = 9 } = {}) {
 	});
 	console.log('--- chooseImage --->', fileArr);
 	return fileArr;
+}
+
+/**
+ * @description 选择视频 (只允许MP4格式)
+ * 使用选择文件接口, 快应没有提供选择视频的api
+ */
+export async function chooseVideo() {
+	const count = 1;	// 只允许选择1个
+	const res = await useBase('selectFiles', {
+		maxCount: count
+	});
+	console.log('--- chooseVideo --->', res);
+	let tip = false;
+	const fileArr = res.map((item) => {
+		if (item.fileType !== 'mp4') {
+			tip = true;
+			return;
+		}
+		return {
+			path: base64ToPath(item.file, item.fileType, item.name),	// 不知道怎么拼文件类型 (埋雷 T^T)
+			name: item.name,
+			size: item.size,
+			type: getFileType(item.fileType)
+		}
+	}).filter(Boolean);
+	if (tip) {
+		modal({
+			title: '提示',
+			content: '请选择MP4格式视频',
+			showCancel: false
+		});
+	}
+	return fileArr;
+}
+
+/**
+ * @description 选择图片或视频
+ * @param {Object} params 参数
+ * 	@param {Number} count = [9] 最多可选择的数量，默认9，视频只可选择1
+ */
+export async function chooseMedia({ count = 9 } = {}) {
+	const tapIndex = await uniShowActionSheet({ itemList: ['图片', '视频']});
+	switch (tapIndex) {
+		case 0:
+			return chooseImage({ count });
+		case 1:
+			return chooseVideo();
+	}
 }
 
 /**

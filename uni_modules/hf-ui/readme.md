@@ -235,6 +235,8 @@ export default {
 }
 ```
 
+**props**
+
 | 参数       | 说明     | 类型     | 默认值 | 可选值 |
 | -------- | ------ | ------ | --- | --- |
 | dictCode | 字典code | String |     |     |
@@ -354,6 +356,8 @@ export default {
     }
 }
 ```
+
+**props**
 
 | 参数            | 说明                                        | 类型       | 默认值   | 可选值         |
 | ------------- | ----------------------------------------- | -------- | ----- | ----------- |
@@ -623,6 +627,8 @@ export default {
 }
 ```
 
+**props**
+
 | 参数               | 说明        | 类型     | 默认值                           | 可选值 |
 | ---------------- | --------- | ------ | ----------------------------- | --- |
 | value            | 绑定值       | String |                               |     |
@@ -670,19 +676,57 @@ export default {
 
 **props**
 
-| 参数               | 说明                          | 类型             | 默认值              | 可选值                                     |
-| ---------------- | --------------------------- | -------------- | ---------------- | --------------------------------------- |
-| value            | 绑定值                         | String         |                  |                                         |
-| accept           | 接受的文件类型                     | String         | image            | image\|video\|media                     |
-| maxCount         | 最大选择图片的数量                   | Number         | 9                |                                         |
-| separator        | 分隔符                         | String         | ,                |                                         |
-| bizPath          | 控制文件上传的业务路径                 | String         | 'temp'           |                                         |
-| maxSize          | 选择单个文件的最大大小，单位B(byte)，默认不限制 | String\|Number | Number.MAX_VALUE |                                         |
-| disableNoShowBtn | 禁用状态，是否不显示选择文件按钮            | Boolean        | false            | true\|false |
+| 参数             | 说明                                            | 类型           | 默认值           | 可选值                    |
+| ---------------- | ----------------------------------------------- | -------------- | ---------------- | ------------------------- |
+| value            | 绑定值                                          | String         |                  |                           |
+| accept           | 接受的文件类型                                  | String         | image            | image\|video\|media\|file |
+| maxCount         | 最大选择图片的数量                              | Number         | 9                |                           |
+| separator        | 分隔符                                          | String         | ,                |                           |
+| bizPath          | 控制文件上传的业务路径                          | String         | 'temp'           |                           |
+| maxSize          | 选择单个文件的最大大小，单位B(byte)，默认不限制 | String\|Number | Number.MAX_VALUE |                           |
+| disableNoShowBtn | 禁用状态，是否不显示选择文件按钮                | Boolean        | false            | true\|false               |
 
-### hf-preview 附件预览..
+**accept 合法值**
 
-???
+| 值    | 说明               |
+| ----- | ------------------ |
+| image | 图片               |
+| video | 视频               |
+| media | 图片或视频         |
+| file  | 文件（未实现预览） |
+
+### hf-preview 附件预览
+
+附件预览，样式同hf-upload
+
+**示例**
+
+```html
+<hf-preview :value="info.attachmentList"></hf-preview>
+```
+
+``` js
+export default {
+    data() {
+        return {
+            info: {
+                // 文件上传保存的值, 后端保存的文件id, 逗号',' 分隔
+                attachmentList: '1658666945588277249,1658667005730402306'
+            }
+        };
+    }
+}
+```
+
+**props**
+
+| 参数      | 说明                                              | 类型           | 默认值     | 可选值 |
+| --------- | ------------------------------------------------- | -------------- | ---------- | ------ |
+| value     | 绑定值                                            | String         |            |        |
+| width     | 预览文件区域宽度，单位rpx，不能是百分比，或者auto | String\|Number | 80         |        |
+| height    | 预览文件区域高度，单位rpx，不能是百分比，或者auto | String\|Number | 80         |        |
+| separator | 分隔符                                            | String         | ,          |        |
+| imageMode | 预览图片的裁剪模式，和image组件的mode属性一致     | String         | aspectFill |        |
 
 ### hf-list
 

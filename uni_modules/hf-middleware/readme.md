@@ -14,23 +14,62 @@ API
 
 - uniapp
 
-|               | 快应                           | 自研  | uniapp |           |
-| ------------- | ---------------------------- | --- | ------ | --------- |
-| chooseImage   | ✔                            | ✔   | ✔      | 选择图片 拍照   |
-| chooseFile    | ✔                            | ✔   | ✔      | 选择文件      |
-| chooseVideo   |                              | ✔   | ✔      | 选择视频      |
-| getLocation   | ✔                            | ✔   | ✔      | 定位        |
-| makePhoneCall |  | ✔   | ✔      | 拨打电话      |
-| anyRtc        |                              | ✔   |        | 视频、语音     |
-| scanCode      |                              | ✔   | ✔      | 扫码        |
-| getSystemInfo | ✔                            |     |        | 获取系统信息    |
-| logout        |                              | ✔   |        | 退出登录      |
-| getUserInfo   |                              | ✔   |        | 获取用户信息    |
-| getIdCardOcr  |                              | ✔   |        | 证件OCR正/反面 |
-| getToken      | ✔                            | ✔   |        | 获取token   |
-| refreshToken  | ✔                            | ✔   |        | 刷新token   |
+|               | 快应 | 自研 | uniapp |                |
+| ------------- | ---- | ---- | ------ | -------------- |
+| chooseImage   | ✔    | ✔    | ✔      | 选择图片 拍照  |
+| chooseVideo   | ✔    | ✔    | ✔      | 选择视频       |
+| chooseMedia   | ✔    | ✔    | ✔      | 选择图片或视频 |
+| chooseFile    | ✔    | ✔    | ✔      | 选择文件       |
+| getLocation   | ✔    | ✔    | ✔      | 定位           |
+| makePhoneCall |      | ✔    | ✔      | 拨打电话       |
+| anyRtc        |      | ✔    |        | 视频、语音     |
+| scanCode      |      | ✔    | ✔      | 扫码           |
+| getSystemInfo | ✔    |      |        | 获取系统信息   |
+| softInputMode |      | ✔    |        | 布局静默       |
+| logout        |      | ✔    |        | 退出登录       |
+| getUserInfo   |      | ✔    |        | 获取用户信息   |
+| getIdCardOcr  |      | ✔    |        | 证件OCR正/反面 |
+| getToken      | ✔    | ✔    |        | 获取token      |
+| refreshToken  | ✔    | ✔    |        | 刷新token      |
 
-## 基本用法
+## 使用
+
+### 配置
+
+`main.js`
+
+```js
+import './plugin/middleware.js'
+```
+
+`plugin/middleware`
+
+```js
+import configService from '@/envCfg.js';
+
+import { setConfig } from '@/uni_modules/hf-middleware';
+
+setConfig({
+    usedApi: configService.usedApi,
+    usedConfig: configService.usedConfig
+});
+```
+
+`envCfg.js`
+
+```js
+import { QUICK_API } from '@/uni_modules/hf-middleware';
+export default {
+    // 中间件
+    usedApi: QUICK_API,    // 使用的 API
+    usedConfig: {
+        protocol: 'kysk-fzsy-app://',    // app自定义协议
+        path: 'native',
+    }
+}
+```
+
+### 基本用法
 
 ```html
 <view>
@@ -69,7 +108,7 @@ API
 ```
 
 ```js
-import { usedApi, chooseImage, chooseFile, chooseVideo, getLocation } from '@/uni_modules/hf-middleware/js_sdk/index.js';
+import { usedApi, chooseImage, chooseFile, chooseVideo, getLocation } from '@/uni_modules/hf-middleware';
 export default {
     data() {
         return {
@@ -155,6 +194,63 @@ chooseImage({ count: 2 }).then((res) => {
 });
 ```
 
+#### chooseVideo()
+
+拍摄视频或从手机相册中选视频，返回视频的临时文件路径。
+
+**平台差异说明**
+
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+| ✔    | ✔    | ✔      |
+
+**返回参数说明**
+
+Array 选择的视频列表
+
+| 参数   | 类型     | 说明            |
+| ---- | ------ | ------------- |
+| path | String | 本地文件路径        |
+| name | String | 包含扩展名的文件名称    |
+| size | Number | 文件大小，单位：B（字节） |
+| type | String | 文件类型          |
+
+**示例**
+
+```js
+chooseVideo().then((res) => {
+    console.log(res);
+    // [{path: 'blob:http://localhost:8080/xxx.mp4', name: 'xxx.mp4', size: '123456', type: 'video/mp4'}]; 
+});
+```
+
+#### chooseMedia(OBJECT)
+
+选择图片或视频
+
+**平台差异说明**
+
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+| ✔    | ✔    | ✔      |
+
+**返回参数说明**
+
+Array 选择的视频列表
+
+| 参数  | 类型   | 说明                                   |
+| ----- | ------ | -------------------------------------- |
+| count | Number | 最多可选择的数量，默认9，视频只可选择1 |
+
+**示例**
+
+```js
+chooseMedia().then((res) => {
+    console.log(res);
+    // [{path: 'blob:http://localhost:8080/xxx.mp4', name: 'xxx.mp4', size: '123456', type: 'video/mp4'}]; 
+});
+```
+
 #### chooseFile(OBJECT)
 
 选择文件
@@ -186,36 +282,6 @@ Array 选择的文件列表
 
 ```js
 chooseFile({ count: 1 }).then((res) => {
-    console.log(res);
-    // [{path: 'blob:http://localhost:8080/xxx.mp4', name: 'xxx.mp4', size: '123456', type: 'video/mp4'}]; 
-});
-```
-
-#### chooseVideo()
-
-拍摄视频或从手机相册中选视频，返回视频的临时文件路径。
-
-**平台差异说明**
-
-| 快应  | 自研  | uniapp |
-| --- | --- | ------ |
-|     | ✔   | ✔      |
-
-**返回参数说明**
-
-Array 选择的视频列表
-
-| 参数   | 类型     | 说明            |
-| ---- | ------ | ------------- |
-| path | String | 本地文件路径        |
-| name | String | 包含扩展名的文件名称    |
-| size | Number | 文件大小，单位：B（字节） |
-| type | String | 文件类型          |
-
-**示例**
-
-```js
-chooseVideo().then((res) => {
     console.log(res);
     // [{path: 'blob:http://localhost:8080/xxx.mp4', name: 'xxx.mp4', size: '123456', type: 'video/mp4'}]; 
 });
@@ -350,6 +416,28 @@ getSystemInfo().then(res => {
 });
 ```
 
+#### softInputMode(OBJECT)
+
+布局静默
+
+**平台差异说明**
+
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+|      | ✔    |        |
+
+**OBJECT 参数说明**
+
+| 参数 | 类型   | 默认值 | 说明                                      |
+| ---- | ------ | ------ | ----------------------------------------- |
+| type | Number | 1      | 类型 1-布局静默, 2-布局上拉直至输入框可见 |
+
+**示例**
+
+```js
+softInputMode({ type: 1 });
+```
+
 ### 第三方服务
 
 #### logout()
@@ -482,3 +570,6 @@ refreshToken().then((token) => {
   - `index.js`：工具方法
 - `config.js`：配置文件
 - `index.js`：入口文件
+
+
+

@@ -1,8 +1,10 @@
 // 消息提示
 import modal from './js_sdk/message/modal';
 import toast from './js_sdk/message/toast';
-export * from './js_sdk/message/modal';
-export * from './js_sdk/message/toast';
+export {
+	modal,
+	toast
+};
 
 // 对数据存储Storage的封装
 import * as storage from './js_sdk/storage/storage';

@@ -1,5 +1,6 @@
 import { useBase } from '../utils/base.js';
 import { base64ToPath, getFileType } from '../utils/index.js';
+import { showActionSheet as uniShowActionSheet } from '@/uni_modules/hic-plugin';
 
 /* ====================
 		自研api
@@ -12,7 +13,7 @@ import { base64ToPath, getFileType } from '../utils/index.js';
  * 	@param {Number} count 最多可以选择的图片张数，默认9
  */
 export async function chooseImage({ count = 9 } = {}) {
-	const tapIndex = await uniShowActionSheet(['从相册选择', '相机']);
+	const tapIndex = await uniShowActionSheet({ itemList: ['从相册选择', '相机'] });
 	if (tapIndex === 0) {
 		// 从相册选择
 		if (count < 1) count = 1;
@@ -51,7 +52,7 @@ export async function chooseImage({ count = 9 } = {}) {
  * @description 选择视频，只能选择1个
  */
 export async function chooseVideo() {
-	const tapIndex = await uniShowActionSheet(['从相册选择', '相机']);
+	const tapIndex = await uniShowActionSheet({ itemList: ['从相册选择', '相机'] });
 	if (tapIndex === 0) {
 		// 从相册选择视频
 		const res = await useBase('select', {
@@ -77,6 +78,21 @@ export async function chooseVideo() {
 			size: res.fileSize,
 			type: getFileType(res.fileType)
 		}];
+	}
+}
+
+/**
+ * @description 选择图片或视频
+ * @param {Object} params 参数
+ * 	@param {Number} count = [9] 最多可选择的数量，默认9，视频只可选择1
+ */
+export async function chooseMedia({ count = 9 } = {}) {
+	const tapIndex = await uniShowActionSheet({ itemList: ['图片', '视频']});
+	switch (tapIndex) {
+		case 0:
+			return chooseImage({ count });
+		case 1:
+			return chooseVideo();
 	}
 }
 
@@ -124,7 +140,7 @@ export async function getIdCardOcr({ ocrType = 1 } = {}) {
 		return {
 			name: res.name,			// 姓名
 			sex: res.sex,			// 性别
-			nation: res.nation,		// 民族
+			nation: res.people,		// 民族
 			birthday: formatBirthday(res.birthday),	// 出生日期
 			address: res.address,	// 住址
 			idcard: res.idNumber,	// 证件号
@@ -160,7 +176,7 @@ export async function anyRtc({ userId = '', type = 0 } = {}) {
 	if (!userId) {
 		throw new Error('userId is required');
 	}
-	const res = await useBase('anyRtc', {
+	await useBase('anyRtc', {
 		anyRtcUserId: userId,
 		anyRtcType: type
 	}, true);
@@ -260,31 +276,20 @@ export async function refreshToken() {
 	return res.token;
 }
 
+/**
+ * @description 布局静默
+ * @param {Object} params 参数
+ * 	@param {Number} type 类型 1-布局静默, 2-布局上拉直至输入框可见
+ */
+export async function softInputMode({ type = 1 } = {}) {
+	await useBase('softInputMode', {
+		softInputModeType: type
+	}, true);
+}
+
 /* ====================
 		一些工具方法
  ==================== */
-
-/**
- * uni.showActionSheet promise 封装
- * @param {Object} itemList
- */
-function uniShowActionSheet(itemList) {
-	return new Promise((resolve, reject) => {
-		if (!Array.isArray(itemList)) {
-			throw new Error('itemList is required')
-		}
-		uni.showActionSheet({
-			itemList,
-			success: function (res) {
-				resolve(res.tapIndex);
-			},
-			fail: function (err) {
-				console.log(err.errMsg);
-				reject(err);
-			}
-		});
-	});
-}
 
 /**
  * @description 日期格式化

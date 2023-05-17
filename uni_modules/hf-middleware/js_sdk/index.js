@@ -30,6 +30,28 @@ export function chooseImage(...args) {
 }
 
 /**
+ * @description 选择视频
+ */
+export function chooseVideo(...args) {
+	if (!apiMap[config.usedApi].chooseVideo) {
+		throw new Error(`${config.usedApi} is not has chooseVideo`);
+	}
+	return apiMap[config.usedApi].chooseVideo(...args);
+}
+
+/**
+ * @description 选择图片或视频
+ * @param {Object} params 参数
+ * 	@param {Number} count = [9] 最多可选择的数量，默认9，视频只可选择1
+ */
+export function chooseMedia(...args) {
+	if (!apiMap[config.usedApi].chooseMedia) {
+		throw new Error(`${config.usedApi} is not has chooseMedia`);
+	}
+	return apiMap[config.usedApi].chooseMedia(...args);
+}
+
+/**
  * @description 选择文件
  * @param {Object} params 参数
  * 	@param {Number} count = [1] 最多可以选择的文件数量，默认1
@@ -44,16 +66,6 @@ export function chooseFile(...args) {
 		throw new Error(`${config.usedApi} is not has chooseFile`);
 	}
 	return apiMap[config.usedApi].chooseFile(...args);
-}
-
-/**
- * @description 选择视频
- */
-export function chooseVideo(...args) {
-	if (!apiMap[config.usedApi].chooseVideo) {
-		throw new Error(`${config.usedApi} is not has chooseVideo`);
-	}
-	return apiMap[config.usedApi].chooseVideo(...args);
 }
 
 /**
@@ -161,4 +173,16 @@ export function getSystemInfo(...args) {
 		throw new Error(`${config.usedApi} is not has getSystemInfo`);
 	}
 	return apiMap[config.usedApi].getSystemInfo(...args);
+}
+
+/**
+ * @description 布局静默
+ * @param {Object} params 参数
+ * 	@param {Number} type 类型 1-布局静默, 2-布局上拉直至输入框可见
+ */
+export function softInputMode(...args) {
+	if (!apiMap[config.usedApi].softInputMode) {
+		throw new Error(`${config.usedApi} is not has softInputMode`);
+	}
+	return apiMap[config.usedApi].softInputMode(...args);
 }

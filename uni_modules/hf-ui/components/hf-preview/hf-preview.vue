@@ -1,5 +1,5 @@
 <template>
-	<view class="img-list">
+	<view class="hf-preview">
 		<view
 			class="img-item"
 			v-for="(item, index) in lists" :key="index">
@@ -12,20 +12,28 @@
 						height: $u.addUnit(height)
 					}]"
 					@click="onPreviewImage(item)"></image>
-				<template v-else>
+				<template v-else-if="item.isVideo || (item.type && item.type === 'video')">
 					<view class="video-item" @click="onPreviewVideo(item)">
-						<u-icon :color="primaryColor" size="26" :name="item.isVideo || (item.type && item.type === 'video') ? 'movie' : 'folder'"></u-icon>
-						<text class="other-text">{{ item.isVideo || (item.type && item.type === 'video') ? '视频' : '文件' }}</text>
+						<u-icon :color="primaryColor" size="26" name="movie"></u-icon>
+						<text class="other-text">视频</text>
 					</view>
-					<u-overlay :show="showVideo" @click="showVideo = false">
-						<view class="video-wrap" @tap.stop>
-							<hf-video :videoSrc="item.url"></hf-video>
-						</view>
-					</u-overlay>
+				</template>
+				<template v-else>
+					<view class="video-item">
+						<u-icon :color="primaryColor" size="26" name="folder"></u-icon>
+						<text class="other-text">文件</text>
+					</view>
 				</template>
 			</template>
 		</view>
 		
+		<u-overlay :show="previewVideoVis" @click="previewVideoVis = false">
+			<view class="hf-preview__overlay">
+				<view class="hf-preview__overlay__video" @tap.stop>
+					<hf-video :videoSrc="previewVideoUrl"></hf-video>
+				</view>
+			</view>
+		</u-overlay>
 	</view>
 </template>
 
@@ -38,6 +46,10 @@
 			HfVideo
 		},
 		props: {
+			value: {
+				type: String,
+				default: ''
+			},
 			width: {
 				type: [String, Number],
 				default: uni.$u.props.upload.width
@@ -45,10 +57,6 @@
 			height: {
 				type: [String, Number],
 				default: uni.$u.props.upload.height
-			},
-			value: {
-				type: String,
-				default: ''
 			},
 			separator: {	// 分隔符
 				type: String,
@@ -62,8 +70,9 @@
 		data() {
 			return {
 				primaryColor: uni.$u.config.color['u-primary'],
-				showVideo: false,
-				lists: []
+				lists: [],
+				previewVideoVis: false,
+				previewVideoUrl: '',
 			}
 		},
 		watch: {
@@ -106,8 +115,8 @@
 				});
 			},
 			onPreviewVideo(item) {
-				if (!item.isVideo) return;
-				this.showVideo =  true;
+				this.previewVideoVis =  true;
+				this.previewVideoUrl = item.url;
 			}
 		}
 	}
@@ -117,7 +126,7 @@
 	$hf-preview-image-width: 80px;
 	$hf-preview-image-height: $hf-preview-image-width;
 	
-	.img-list {
+	.hf-preview {
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
@@ -135,6 +144,7 @@
 			width: $hf-preview-image-width;
 			height: $hf-preview-image-height;
 			background-color: $u-bg-color;
+			border: 1px solid rgba($color: $u-border-color, $alpha: 0.3);
 			margin-right: 10rpx;
 			.other-text {
 				font-size: $font-xs;
@@ -142,8 +152,16 @@
 				margin-top: 2px;
 			}
 		}
-	}
-	.video-wrap {
-		margin-top: 30vh;
+		&__overlay {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			&__video {
+				width: 100vw;
+				height: calc(100vw *9 / 16);
+			}
+		}
 	}
 </style>

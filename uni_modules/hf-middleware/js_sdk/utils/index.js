@@ -22,11 +22,34 @@ const typeMap = new Map([	// 文件类型 - 类型 对应关系
 	['mp4', 'MP4']
 ])
 
+/**
+ * @description 根据文件后缀(jpg mp4) 返回MIME类型(image/jpeg video/mp4)
+ * @param {String} fileType 文件后缀
+ * @return {String} MIME类型
+ */
 export function getFileType(fileType) {
 	if (typeMap.has(fileType)) {
 		return mimeType.get(typeMap.get(fileType));
 	}
 	return '';
+}
+
+/**
+ * @description 根据文件路径 返回文件信息
+ * @param {String} path 文件路径
+ * @return {Object} 文件信息
+ */
+export function getFileInfo(path) {
+	const extIndex = path.lastIndexOf('.');
+	const ext = path.substring(extIndex + 1);	// 扩展名 jpg mp4
+	const nameIndex = path.lastIndexOf('/');
+	const name = path.substring(nameIndex + 1);	// 文件名 xxx.jpg
+	const type = getFileType(ext);				// 文件MIME类型 image/jpeg
+	return {
+		path,	// 文件路径
+		name,	// 文件名
+		type,	// 文件类型
+	};
 }
 
 /**

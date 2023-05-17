@@ -60,7 +60,7 @@
 			limit: {
 				// 分页每页条数 0-不分页
 				type: Number,
-				default: 20
+				default: 10
 			},
 			listStyle: {	// u-list 样式
 				type: Object

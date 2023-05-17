@@ -32,7 +32,7 @@
 			},
 			textAlign: {
 				type: String,
-				default: 'right'
+				default: 'left'
 			},
 			border: {
 				type: String,
@@ -66,7 +66,7 @@
 			color: $u-main-color;
 		}
 		&.none {
-			padding: 0;
+			padding: $sm 0 0;
 		}
 		background-color: $bg-white;
 	}
