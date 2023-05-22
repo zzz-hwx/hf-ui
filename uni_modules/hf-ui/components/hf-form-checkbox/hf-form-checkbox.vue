@@ -1,10 +1,7 @@
 <template>
 	<view class="hf-select" >
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="openCheckOptions">
-			<view ref="input" class="input-wrap">
-				<!-- <text v-if="valueName">{{ valueName }}</text> -->
-				<text class="placeholder">{{ placeholder }}</text>
-			</view>
+			<hf-form-content ref="input" :placeholder="placeholder"></hf-form-content>
 			<template #right>
 				<slot name="right"></slot>
 			</template>
@@ -146,7 +143,6 @@
 </script>
 
 <style lang="scss" scoped>
-	@import '../../libs/css/form.scss';
 	.check-list{
 		display: flex;
 		flex-direction: row;

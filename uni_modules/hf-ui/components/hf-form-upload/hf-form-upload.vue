@@ -3,8 +3,8 @@
 		<!-- hf-upload 添加属性: disable-no-show-btn, 禁用状态 && 没有文件 => 不显示表单项 -->
 		<u-form-item :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
 			<template #label>
-				<view class="label">
-					<text v-if="required" class="required">*</text>
+				<view class="left-content">
+					<text v-if="required" class="left-content__required">*</text>
 					<text :style="{color}">{{ label }}</text>
 					<text class="tip" v-if="!disabled">
 						<slot name="tip">
@@ -29,10 +29,10 @@
 					@input="handleInput">
 					<view class="button">
 						<template v-if="accept === 'image' || accept === 'media'">
-							<image src="/static/sj_icon_photo.png" mode="aspectFit"></image>
+							<hf-icon name="photo-square" size="44" :color="tipsColor"></hf-icon>
 						</template>
 						<template v-else-if="accept === 'video'">
-							<image src="/static/sj_icon_video.png" mode="aspectFit"></image>
+							<hf-icon name="video-square" size="44" :color="tipsColor"></hf-icon>
 						</template>
 					</view>
 				</hf-upload>
@@ -71,6 +71,11 @@
 				default: 50 * 1024 * 1024	// 50M
 			}
 		},
+		data() {
+			return {
+				tipsColor: uni.$u.config.color['u-tips-color']
+			}
+		},
 		computed: {
 			color() {
 				if(this.disabled) {
@@ -99,16 +104,11 @@
 </script>
 
 <style lang="scss" scoped>
+	@import '../../libs/css/form.scss';
+	
 	.hf-form-upload {
-		.label {
+		.left-content {
 			position: relative;
-			.required {
-				position: absolute;
-				left: -9px;
-				top: 3px;
-				font-size: 20px;
-				color: $u-error;
-			}
 			.tip {
 				padding-left: $xs;
 				color: #E67D7D;

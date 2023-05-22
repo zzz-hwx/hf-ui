@@ -1,3 +1,9 @@
+## 1.0.12（2023-05-22）
+- 添加组件
+	- hf-icon
+- hf-radio
+	- options添加参数disabled
+- 兼容微信小程序
 ## 1.0.11（2023-05-17）
 - hf-upload
 	- 修改 accept 接收的文件类型：media-图片或视频 file-文件

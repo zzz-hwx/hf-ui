@@ -1,10 +1,7 @@
 <template>
 	<view class="hf-area">
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="pickerShow">
-			<view ref="input" class="input-wrap">
-				<text v-if="valueName">{{ valueName }}</text>
-				<text v-else class="placeholder">{{ placeholder }}</text>
-			</view>
+			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 		</u-form-item>
 		<u-picker
 			ref="uPicker"
@@ -90,7 +87,7 @@
 				for (let i = 0; i < this.level; i++) {
 					const list = Object.entries(pcaa[pid]).map(([value, label]) => ({ value, label }));
 					this.columns.push(list);
-					if (picker) {
+					if (picker && picker.setColumnValues) {
 						picker.setColumnValues(i, list);
 					}
 					pid = this.innerValue[i] || list[0].value;
@@ -147,7 +144,9 @@
 			handleClose() {
 				this.visible = false;
 				this.$nextTick(() => {
-					uni.$u.formValidate(this.$refs.input, 'change');
+					if (this.$refs.input) {
+						uni.$u.formValidate(this.$refs.input, 'change');
+					}
 				});
 			}
 		}
@@ -155,5 +154,5 @@
 </script>
 
 <style lang="scss" scoped>
-	@import '../../libs/css/form.scss';
+	
 </style>

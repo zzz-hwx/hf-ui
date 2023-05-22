@@ -6,14 +6,17 @@
 			</view>
 		</template>
 		<template v-else>
-			<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
-				<template v-if="$slots.label" #label>
-					<slot name="label"></slot>
+			<u-form-item :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
+				<template #label>
+					<view class="left-content">
+						<text v-if="required" class="left-content__required">*</text>
+						<template v-if="$slots.label">
+							<slot name="label"></slot>
+						</template>
+						<template v-else>{{ label }}</template>
+					</view>
 				</template>
-				<view ref="input" class="input-wrap">
-					<text v-if="valueName" class="u-line-1">{{ valueName }}</text>
-					<text v-else class="placeholder">{{ placeholder }}</text>
-				</view>
+				<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 				<template #right>
 					<slot name="right"></slot>
 				</template>
@@ -41,7 +44,7 @@
 						</template>
 					</u-navbar>
 					<hf-search v-if="search" v-model="searchForm.keyword" placeholder="请输入关键词"></hf-search>
-					<u-list>
+					<u-list custom-style="flex: 1; height: 0 !important;">
 						<u-list-item v-for="item in renderList" :key="item[keyValue]">
 							<view class="item" @click="handleClickItem(item)">
 								<view class="slot">
@@ -122,6 +125,11 @@
 				default: ','
 			}
 		},
+		// #ifdef MP-WEIXIN
+		options: {
+			styleIsolation: 'shared'
+		},
+		// #endif
 		data() {
 			return {
 				visible: false,
@@ -283,22 +291,18 @@
 			background-color: $bg-white;
 			display: flex;
 			flex-direction: column;
-			.u-list {
-				flex: 1;
-				height: 0 !important;
-				.item {
-					padding: $sm $lg;
-					display: flex;
-					.slot {
-						flex: 1;
-						width: 0;
-					}
+			.item {
+				padding: $sm $lg;
+				display: flex;
+				.slot {
+					flex: 1;
+					width: 0;
 				}
 			}
 			.btns {
 				padding: $df;
 				display: flex;
-				.u-button + .u-button {
+				/deep/ .u-button + .u-button {
 					margin-left: $df;
 				}
 			}

@@ -1,3 +1,20 @@
+// 表单样式
+
+// 左侧提示文字 + 必填
+.left-content {
+	position: relative;
+	padding-right: 10rpx;
+	&__required {
+		position: absolute;
+		left: -9px;
+		color: $u-error;
+		line-height: 20px;
+		font-size: 20px;
+		top: 3px;
+	}
+}
+
+// 右侧内容
 .input-wrap {
 	width: 100%;
 	height: 100%;

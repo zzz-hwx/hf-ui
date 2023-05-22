@@ -1,10 +1,7 @@
 <template>
 	<view class="hf-form-cascader">
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="pickerShow">
-			<view ref="input" class="input-wrap">
-				<text v-if="valueName">{{ valueName }}</text>
-				<text v-else class="placeholder">{{ placeholder }}</text>
-			</view>
+			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 			<template #right>
 				<slot name="right"></slot>
 			</template>
@@ -99,7 +96,6 @@
 </script>
 
 <style lang="scss" scoped>
-	@import '../../libs/css/form.scss';
 	.hf-form-cascader {
 		.top {
 			height: 100rpx;

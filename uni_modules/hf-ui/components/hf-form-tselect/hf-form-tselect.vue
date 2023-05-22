@@ -1,11 +1,7 @@
 <template>
 	<view class="hf-select">
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" @click="pickerShow" :borderBottom="borderBottom">
-			<!-- <u-input ref="input" :value="valueName" disabled disabled-color="#ffffff" :placeholder="placeholder" border="none" input-align="right"></u-input> -->
-			<view ref="input" class="input-wrap">
-				<text v-if="valueName">{{ valueName }}</text>
-				<text v-else class="placeholder">{{ placeholder }}</text>
-			</view>
+			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 			<template #right>
 				<slot name="right"></slot>
 			</template>
@@ -153,5 +149,5 @@
 </script>
 
 <style lang="scss" scoped>
-	@import '../../libs/css/form.scss';
+
 </style>

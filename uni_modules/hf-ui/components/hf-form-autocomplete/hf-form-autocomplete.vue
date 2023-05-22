@@ -1,10 +1,7 @@
 <template>
 	<view class="hf-autocomplete">
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
-			<view ref="input" class="input-wrap">
-				<text v-if="valueName">{{ valueName }}</text>
-				<text v-else class="placeholder">{{ placeholder }}</text>
-			</view>
+			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 		</u-form-item>
 		<u-popup
 			:show="visible"
@@ -21,7 +18,11 @@
 					</template>
 				</u-navbar>
 				<hf-search v-if="search" v-model="searchForm.keyword" placeholder="请输入地址关键字" @search="handleSearch"></hf-search>
-				<u-list :scroll-top="scrollTop" @scrolltolower="scrolltolower">
+				<u-list
+					:scroll-top="scrollTop"
+					customStyle="flex: 1; height: 0 !important;"
+					@scrolltolower="scrolltolower"
+				>
 					<u-list-item v-for="item in list" :key="item[keyValue]">
 						<view class="item" @click="handleConfirm(item)">
 							<view class="slot">
@@ -160,7 +161,9 @@
 			handleClose() {
 				this.visible = false;
 				this.$nextTick(() => {
-					uni.$u.formValidate(this.$refs.input, 'change');
+					if (this.$refs.input) {
+						uni.$u.formValidate(this.$refs.input, 'change');
+					}
 				});
 			},
 			handleSearch() {
@@ -219,7 +222,6 @@
 </script>
 
 <style lang="scss" scoped>
-	@import '../../libs/css/form.scss';
 	.hf-autocomplete {
 		.u-popup-slot {
 			width: 90vw;
@@ -227,16 +229,12 @@
 			background-color: $bg-white;
 			display: flex;
 			flex-direction: column;
-			.u-list {
-				flex: 1;
-				height: 0 !important;
-				.item {
-					padding: $sm $lg;
-					display: flex;
-					.slot {
-						flex: 1;
-						width: 0;
-					}
+			.item {
+				padding: $sm $lg;
+				display: flex;
+				.slot {
+					flex: 1;
+					width: 0;
 				}
 			}
 		}

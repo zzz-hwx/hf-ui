@@ -1,36 +1,52 @@
 <template>
-	<u-list class="hf-list-only" :scroll-top="scrollTop" :customStyle="listStyle" scroll-with-animation @scrolltolower="scrolltolower">
-		<template v-if="$slots['list-top']">
-			<!-- list-top 列表上方 -->
-			<slot name="list-top"></slot>
-		</template>
-		<template v-if="$scopedSlots.list">
-			<!-- list 整个列表替换 (带删除的列表) -->
-			<slot name="list" :list="list"></slot>
-		</template>
-		<template v-if="$scopedSlots.item">
-			<!-- item 常规 自定义列表每一项样式 -->
-			<u-list-item v-for="item in list" :key="item[rowKey]">
-				<slot name="item" :item="item"></slot>
-			</u-list-item>
-		</template>
-		<hic-tips
-			ref="hicTips"
-			:page="pagination.page"
-			:limit="limit === 0 ? pagination.total : limit"
-			:total="pagination.total"
-			:loading="pagination.loading"
-			:error="pagination.error"
-			:emptyText="emptyText"
-			@load="getList"
-			@loadmore="loadmore">
-			<!-- ??? 空提示....和UI一致 -->
-			<template v-if="$slots.empty" #empty>
-				<!-- empty 自定义空提示 -->
-				<slot name="empty"></slot>
+	<view class="hf-list-only">
+		<u-list :scroll-top="scrollTop" :customStyle="listOnlyStyle" scroll-with-animation @scrolltolower="scrolltolower">
+			<template v-if="$slots['list-top']">
+				<!-- list-top 列表上方 -->
+				<slot name="list-top"></slot>
 			</template>
-		</hic-tips>
-	</u-list>
+			<!-- #ifndef MP-WEIXIN -->
+			<template v-if="$scopedSlots.list">
+				<!-- list 整个列表替换 (带删除的列表) -->
+				<slot name="list" :list="list"></slot>
+			</template>
+			<template v-if="$scopedSlots.item">
+				<!-- item 常规 自定义列表每一项样式 -->
+				<u-list-item v-for="item in list" :key="item[rowKey]">
+					<slot name="item" :item="item"></slot>
+				</u-list-item>
+			</template>
+			<!-- #endif -->
+			<!-- #ifdef MP-WEIXIN -->
+			<template v-if="$slots.list">
+				<!-- list 整个列表替换 (带删除的列表) -->
+				<slot name="list" :list="list"></slot>
+			</template>
+			<template v-if="$slots.item">
+				<!-- item 常规 自定义列表每一项样式 -->
+				<u-list-item v-for="item in list" :key="item[rowKey]">
+					<slot name="item" :item="item"></slot>
+				</u-list-item>
+			</template>
+			<!-- #endif -->
+			<hic-tips
+				ref="hicTips"
+				:page="pagination.page"
+				:limit="limit === 0 ? pagination.total : limit"
+				:total="pagination.total"
+				:loading="pagination.loading"
+				:error="pagination.error"
+				:emptyText="emptyText"
+				@load="getList"
+				@loadmore="loadmore">
+				<!-- ??? 空提示....和UI一致 -->
+				<template v-if="$slots.empty" #empty>
+					<!-- empty 自定义空提示 -->
+					<slot name="empty"></slot>
+				</template>
+			</hic-tips>
+		</u-list>
+	</view>
 </template>
 
 <script>
@@ -68,6 +84,11 @@
 				default: false
 			}
 		},
+		// #ifdef MP-WEIXIN
+		options: {
+			styleIsolation: 'shared'
+		},
+		// #endif
 		data() {
 			return {
 				scrollTop: 0,
@@ -77,10 +98,18 @@
 					loading: false,
 					error: false
 				},
-				list: []
+				list: [],
+				_fetchList: null
 			}
 		},
 		created() {
+			/**
+			 * props传入函数, 组件内调用
+			 * H5: 正常vue逻辑, this指向定义函数的组件实例 (vue 怎么实现的...?...)
+			 * 微信小程序: this指向当前组件实例 hf-list-only
+			 * 	父组件调用setFetchList 手动传入函数 组件内调用 this指向父级
+			 */
+			this.setFetchList(this.fetchList);
 			/**
 			 * 如果放methods里直接赋值: getList: promiseDebounce(async function { ... 函数体 ... }),
 			 * 多个组件实例, 会共用同一个promiseDebounce(防抖)返回的函数
@@ -94,7 +123,20 @@
 				this.getList(true);
 			}
 		},
+		computed: {
+			listOnlyStyle() {
+				return {
+					...this.listStyle,
+					flex: 1,
+					height: '0 !important',
+					// height: '100% !important',
+				}
+			}
+		},
 		methods: {
+			setFetchList(handle) {
+				this._fetchList = handle;
+			},
 			async _getList(refresh = false) {
 				if (refresh) {
 					this.pagination.page = 1;
@@ -102,10 +144,10 @@
 				this.pagination.loading = true;
 				this.pagination.error = false;
 				try {
-					if (typeof(this.fetchList) !== 'function') {
+					if (typeof(this._fetchList) !== 'function') {
 						throw new Error('fetchList must be a function');
 					}
-					const res = await this.fetchList({
+					const res = await this._fetchList({
 						pageNo: this.pagination.page,
 						pageSize: this.limit === 0 ? -1 : this.limit	// limit == 0 不分页
 					});
@@ -149,7 +191,10 @@
 <style lang="scss" scoped>
 	.hf-list-only {
 		flex: 1;
-		height: 0 !important;
+		// 微信小程序 多一层 ∴ 手动设置高度撑开
+		height: 100%;
+		display: flex;
+		flex-direction: column;
 		/deep/ .u-cell {
 			background-color: $bg-white;
 		}

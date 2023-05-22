@@ -121,7 +121,14 @@ import './plugin/hf-ui.js'
 **示例**
 
 ```html
-<hf-form-input label="姓名" prop="name" :required="!disabled" v-model="model.name" :disabled="disabled" placeholder="请输入"></hf-form-input>
+<hf-form-input
+	v-model="model.name"
+    label="姓名"
+    prop="name"
+    :required="!disabled"
+    :disabled="disabled"
+    placeholder="请输入"
+></hf-form-input>
 ```
 
 ```js
@@ -142,7 +149,16 @@ export default {
 **示例**
 
 ```html
-<hf-form-textarea label="备注" prop="remark" v-model="model.remark" :disabled="disabled" :maxlength="500" placeholder="请输入"></hf-form-textarea>
+<hf-form-textarea
+    v-model="model.introduction"
+    label="简介"
+    prop="introduction"
+    :required="!disabled"
+    :disabled="disabled"
+    placeholder="请输入"
+    :maxlength="500"
+    count
+></hf-form-textarea>
 ```
 
 ```js
@@ -150,7 +166,7 @@ export default {
     data() {
         return {
             model: {
-                remark: ''
+                introduction: ''
             },
             disabled: false
         };
@@ -174,7 +190,15 @@ export default {
 **示例1**
 
 ```html
-<hf-form-datetime label="日期" prop="date" :required="!disabled" v-model="model.date" :disabled="disabled" mode="date" placeholder="请选择"></hf-form-datetime>
+<hf-form-datetime
+    v-model="model.birthday"
+    label="生日"
+    prop="birthday"
+    :required="!disabled"
+    :disabled="disabled"
+    placeholder="请选择"
+    mode="date"
+></hf-form-datetime>
 ```
 
 ```js
@@ -182,7 +206,7 @@ export default {
     data() {
         return {
             model: {
-                date: ''
+                birthday: ''
             },
             disabled: false
         };
@@ -196,7 +220,7 @@ export default {
 
 ```html
 <hf-form-datetime v-model="startTime" mode="date">
-    <template v-slot:display-section="{ valueName }">{{ valueName || '巡查开始时间' }}</template>
+    <template v-slot:display-section="{ valueName }">{{ valueName || '开始时间' }}</template>
 </hf-form-datetime>
 ```
 
@@ -219,7 +243,22 @@ export default {
 **示例**
 
 ```html
-<hf-form-radio label="性别" prop="gender" :required="!disabled" v-model="model.gender" :disabled="disabled" dict-code="GENDER"></hf-form-radio>
+<hf-form-radio
+	v-model="model.gender"
+	label="性别"
+	prop="gender"
+	:required="!disabled"
+	:disabled="disabled"
+	dict-code="GENDER"
+></hf-form-radio>
+<hf-form-radio
+    v-model="model.sex"
+    label="性别"
+    prop="sex"
+    :required="!disabled"
+    :disabled="disabled"
+    :options="options"
+></hf-form-radio>
 ```
 
 ```js
@@ -227,9 +266,14 @@ export default {
     data() {
         return {
             model: {
-                gender: ''
+                gender: '',
+                sex: '1'
             },
-            disabled: false
+            disabled: false,
+            options: [
+            	{ value: '1', label: '男' },
+            	{ value: '2', label: '女' },
+            ]
         };
     }
 }
@@ -242,29 +286,97 @@ export default {
 | dictCode | 字典code | String |     |     |
 | options  | 选项     | Array  | []  |     |
 
-### hf-form-checkbox 多选
+### hf-form-checkbox 多选..
 
 ???
 
 ### hf-form-select 列表选择器
 
-**示例**
+**示例**1
 
-```html
-<hf-form-select label="性别" prop="sex" :required="!disabled" v-model="model.sex" :disabled="disabled" dict-code="SEX" placeholder="请选择"></hf-form-select>
-```
+- 通过`dict-code`传入字典code
+- 通过`options`传入选项
 
-```js
+``` html
+<hf-form-select
+	v-model="model.gender"
+	label="性别"
+	prop="gender"
+	:required="!disabled"
+	:disabled="disabled"
+	placeholder="请选择"
+	dict-code="GENDER"
+></hf-form-select>
+<hf-form-select
+	v-model="model.sex"
+	label="性别"
+	prop="sex"
+	:required="!disabled"
+	:disabled="disabled"
+	placeholder="请选择"
+	:options="options"
+></hf-form-select>
+
+<script>
 export default {
     data() {
         return {
             model: {
-                sex: ''
+                gender: '',
+                sex: '1'
             },
-            disabled: false
+            disabled: false,
+            options: [
+            	{ value: '1', label: '男' },
+            	{ value: '2', label: '女' },
+            ]
         };
     }
 }
+</script>
+```
+
+**示例2**
+
+- 右侧弹出框：`mode="right"`
+- 前端搜索：`search`
+- 多选：`multiple`
+
+```html
+<hf-form-select
+    v-model="model.interest"
+    label="兴趣爱好"
+    prop="interest"
+    :disabled="disabled"
+    placeholder="请选择"
+    :options="dictOptions.interest"
+    mode="right"
+    search
+    multiple
+></hf-form-select>
+<script>
+export default {
+    data() {
+        return {
+            model: {
+                interest: ''
+            },
+            disabled: false,
+            options: [
+            	{ value: '1', label: '羽毛球' },
+                { value: '2', label: '跑步' },
+                { value: '3', label: '爬山' },
+                { value: '4', label: '游泳' },
+                { value: '5', label: '瑜伽' },
+                { value: '6', label: '舞蹈' },
+                { value: '7', label: '足球' },
+                { value: '8', label: '攀岩' },
+                { value: '9', label: '钓鱼' },
+            ]
+        };
+    }
+}
+</script>
 ```
 
 **props**
@@ -303,14 +415,14 @@ export default {
 2. 直接显示搜索列表，可输入关键字搜索 (通过 trigger-on-show 控制)
 3. 不可搜索 直接显示列表
 
-**示例**
+**示例1**
 
 ```html
 <hf-form-autocomplete
+    v-model="model.buildingId"
     label="建筑物地址"
     prop="buildingId"
     :required="!disabled"
-    v-model="model.buildingId"
     :disabled="disabled"
     placeholder="网格名称+道路+门楼牌+小区+幢号"
     :fetchList="getBuildingList"
@@ -357,6 +469,53 @@ export default {
 }
 ```
 
+**示例2**
+
+``` html
+<hf-form-autocomplete
+    v-model="model.articleId"
+    label="分页文章列表"
+    prop="articleId"
+    :disabled="disabled"
+    placeholder="请选择"
+    :fetch-list="fetchArticleList"
+    key-name="title"
+    key-value="id"
+    search
+>
+    <template v-slot:item="{ item }">
+        <u-text :text="item.title" bold></u-text>
+        <u-text :text="item.content" type="info"></u-text>
+    </template>
+</hf-form-autocomplete>
+```
+
+```js
+export default {
+    data() {
+        return {
+            model: {
+                articleId: ''
+            }
+        }
+    },
+    methods: {
+        async fetchArticleList(param, pagination) {
+            // param = { keyword: '搜索关键字' }, pagination = { pageNo: 1, pageSize: 20 }
+            const records = [];
+            for (let i = 0; i < pagination.pageSize; i++) {
+                const id = (pagination.pageNo - 1) * pagination.pageSize + i + 1;
+                records.push({ id, title: `文章${id}`, content: '文章内容文章内容文章内容...' });
+            }
+            return {
+                total: 160,
+                records
+            };
+        },
+    }
+}
+```
+
 **props**
 
 | 参数            | 说明                                        | 类型       | 默认值   | 可选值         |
@@ -369,12 +528,25 @@ export default {
 | keyValue      | 控制取值的字段                                   | String   | value |             |
 | defaultItem   | 默认选中回填的对象                                 | Object   | {}    |             |
 
+**scoped-slot**
+
+| 名称 | 说明             | 参数         |
+| ---- | ---------------- | ------------ |
+| item | 自定义选项的内容 | {item: 选项} |
+
 ### hf-form-area 省市县选择器
 
 **示例**
 
 ```html
-<hf-form-area label="省市县" prop="area" :required="!disabled" v-model="model.area" :disabled="disabled" placeholder="请选择"></hf-form-area>
+<hf-form-area
+    v-model="model.area"
+    label="省市县"
+    prop="area"
+    :required="!disabled"
+    :disabled="disabled"
+    placeholder="请选择"
+></hf-form-area>
 ```
 
 ```js
@@ -404,7 +576,15 @@ export default {
 **示例**
 
 ```html
-<hf-form-cascader label="区域" prop="cascader" :required="!disabled" v-model="model.cascader" :options="options" :disabled="disabled" placeholder="请选择"></hf-form-cascader>
+<hf-form-cascader
+    v-model="model.cascader"
+    label="区域"
+    prop="cascader"
+    :required="!disabled"
+    :disabled="disabled"
+    placeholder="请选择"
+    :options="options"
+></hf-form-cascader>
 ```
 
 ```js
@@ -416,26 +596,32 @@ export default {
             },
             disabled: false,
             options: [{
-                "value": "1-0",
-                "text": "大连监所",
-                "children": [{
-                    "value": "1-1",
-                    "text": "第一看守所",
-                    "children": [{
-                        "value": "1-1-1",
-                        "text": "一层",
-                        "children": [{
-                            "value": "1-1-1-1",
-                            "text": "一层101",
-                            "children": []
-                        }]
-                    }]
-                }, {
-                    "value": "1-2",
-                    "text": "第三看守所",
-                    "children": []
-                }]
-            }]
+					value: '1',
+					text: '一级 1',
+					children: [{
+						value: '1-1',
+						text: '二级 1-1',
+						children: [{
+							value: '1-1-1',
+							text: '三级 1-1-1',
+							children: [{
+								value: '1-1-1-1',
+								text: '四级 1-1-1-1'
+							}]
+						}]
+					}, {
+						value: '1-2',
+						text: '二级 1-2',
+					}]
+				}, {
+					value: '2',
+					text: '一级 2',
+					children: [{
+						value: '2-1',
+						text: '二级 2-1'
+					}]
+				}
+			]
         };
     }
 }
@@ -533,6 +719,32 @@ export default {
 ```
 
 ## 显示组件
+
+### hf-icon 图标
+
+**示例**
+
+``` html
+<hf-icon name="location-fill" color="primary" size="24"></hf-icon>
+```
+
+**props**
+
+| 参数         | 说明                                        | 类型           | 默认值                   | 可选值      |
+| ------------ | ------------------------------------------- | -------------- | ------------------------ | ----------- |
+| name         | 图标名称，对应iconfont（Font Class）        | String         |                          |             |
+| color        | 图标颜色，可配置主题颜色（primary/info...） | String         | color['u-content-color'] |             |
+| size         | 图标字体大小，单位默认px                    | String\|Number | 16px                     |             |
+| bold         | 是否显示粗体                                | Boolean        | false                    | true\|false |
+| customFamily | Font Family                                 | String         | hf                       |             |
+| customPrefix | 自定义字体图标库 前缀                       | String         | hf                       |             |
+| stop         | 是否阻止事件传播                            | Boolean        | false                    | true\|false |
+
+**events**
+
+| 事件名 | 说明           | 回调参数 |
+| ------ | -------------- | -------- |
+| click  | 点击图标时触发 | -        |
 
 ### hf-search 搜索
 
@@ -790,14 +1002,14 @@ export default {
 
 **props**
 
-| 参数              | 说明           | 类型       | 默认值   | 可选值         |
-| --------------- | ------------ | -------- | ----- | ----------- |
-| fetchList       | 获取数据的函数      | Function |       |             |
-| limit           | 分页每页条数 0-不分页 | Number   | 20    |             |
-| listStyle       | u-list 样式    | Object   |       |             |
-| emptyText       | 空提示文字        | String   |       |             |
-| rowKey          | 唯一标识字段，作为key | String   | id    |             |
-| initNoFetchList | 初始化是否不获取数据   | Boolean  | false | true\|false |
+| 参数            | 说明                  | 类型     | 默认值 | 可选值      |
+| --------------- | --------------------- | -------- | ------ | ----------- |
+| fetchList       | 获取数据的函数        | Function |        |             |
+| limit           | 分页每页条数 0-不分页 | Number   | 10     |             |
+| listStyle       | u-list 样式           | Object   |        |             |
+| emptyText       | 空提示文字            | String   |        |             |
+| rowKey          | 唯一标识字段，作为key | String   | id     |             |
+| initNoFetchList | 初始化是否不获取数据  | Boolean  | false  | true\|false |
 
 > 注意：
 > 
@@ -805,11 +1017,154 @@ export default {
 
 ### hf-list-only
 
-列表滚动组件
+列表滚动组件，包含缺省提示
 
-**示例**
+**示例1：H5**
 
-> 参考`<hf-list>`
+弹性布局的纵向布局，上下可自定义内容，`hf-list-only`剩余高度撑开
+
+``` html
+<template>
+	<view class="page">
+		<hf-search v-model="searchForm.keyword" placeholder="请输入关键字" @search="refreshList"></hf-search>
+		<hf-list-only
+			ref="hfList"
+			:fetch-list="fetchList"
+		>
+			<template v-slot:item="{ item }">
+				<u-cell :title="item.title" :label="item.content"></u-cell>
+			</template>
+		</hf-list-only>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				searchForm: {
+					keyword: ''
+				}
+			};
+		},
+		onShow() {
+			this.refreshList();
+		},
+		onPullDownRefresh() {
+			this.refreshList();
+		},
+		methods: {
+			refreshList() {
+				this.$refs.hfList && this.$refs.hfList.getList(true);
+			},
+			fetchList(pagination) {
+				const params = {
+					keyword: this.searchForm.keyword,
+					...pagination
+				}
+				const records = [];
+				for (let i = 0; i < pagination.pageSize; i++) {
+					const id = (pagination.pageNo - 1) * pagination.pageSize + i + 1;
+					records.push({ id, title: `文章${id}`, content: '文章内容文章内容文章内容...' });
+				}
+				return {
+					total: 160,
+					records
+				};
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+.page {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+</style>
+```
+
+**示例2：小程序**
+
+相比 **示例1：H5** 添加代码
+
+- 添加样式：`<hf-list-only style="flex: 1; height: 0;" ...>`
+  ∵ 微信小程序 多一层 ∴ 手动设置高度撑开
+- 生命周期`mounted`手动设置`fetch-list`：`this.$refs.hfList.setFetchList(this.fetchList);`
+  ∵ props传入函数, 组件内调用，微信小程序 this指向当前组件实例`hf-list-only`
+  ∴ 父组件调用`setFetchList`手动传入函数，组件内调用，`this`指向父级
+
+``` html
+<template>
+	<view class="page">
+		<hf-search v-model="searchForm.keyword" placeholder="请输入关键字" @search="refreshList"></hf-search>
+		<hf-list-only
+			ref="hfList"
+			:fetch-list="fetchList"
+			style="flex: 1; height: 0;"
+		>
+			<template v-slot:item="{ item }">
+				<u-cell :title="item.title" :label="item.content"></u-cell>
+			</template>
+		</hf-list-only>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				searchForm: {
+					keyword: ''
+				}
+			};
+		},
+		mounted() {
+			this.$refs.hfList.setFetchList(this.fetchList);
+		},
+		onShow() {
+			this.refreshList();
+		},
+		onPullDownRefresh() {
+			this.refreshList();
+		},
+		methods: {
+			refreshList() {
+				this.$refs.hfList && this.$refs.hfList.getList(true);
+			},
+			fetchList(pagination) {
+				const params = {
+					keyword: this.searchForm.keyword,
+					...pagination
+				}
+				const records = [];
+				for (let i = 0; i < pagination.pageSize; i++) {
+					const id = (pagination.pageNo - 1) * pagination.pageSize + i + 1;
+					records.push({ id, title: `文章${id}`, content: '文章内容文章内容文章内容...' });
+				}
+				return {
+					total: 160,
+					records
+				};
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+.page {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+</style>
+```
+
+说明：
+
+通过ref调用组件`setFetchList`方法，只能放mount生命周期之后
+组件内部`created`生命周期钩子函数，调用防抖返回的`getList`方法，因为防抖500ms时延，所以...阴差阳错...外部手动调用`setFetchList`设置`fetchList`之后，组件内部再初次调用`getList`调用父组件传入的`fetchList`方法。
 
 ### hf-tree
 

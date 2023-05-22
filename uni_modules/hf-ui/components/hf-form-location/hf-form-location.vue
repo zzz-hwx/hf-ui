@@ -2,7 +2,9 @@
 	<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
 		<u-input ref="input" :value="value" :placeholder="placeholder" disabled border="none" disabled-color="#ffffff" input-align="right" @input="handleInput"></u-input>
 		<template #right>
-			<image src="@/static/sj_icon_location.png" @click="chooseLocation"></image>
+			<view class="m-l-xs">
+				<hf-icon name="location-fill" color="primary" size="24" @click="chooseLocation"></hf-icon>
+			</view>
 		</template>
 	</u-form-item>
 </template>
@@ -30,8 +32,8 @@
 		},
 		data() {
 			return {
-				primaryColor: uni.$u.config.color['u-primary']
-			}
+				
+			};
 		},
 		created() {
 			if (this.initializeLocation) {
@@ -70,9 +72,7 @@
 </script>
 
 <style lang="scss" scoped>
-	image {
-		width: 24px;
-		height: 24px;
+	.m-l-xs {
 		margin-left: $xs;
 	}
 </style>

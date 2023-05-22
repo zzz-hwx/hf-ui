@@ -1,19 +1,19 @@
 <template>
-	<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
-		<u-textarea
-			class="textarea"
-			:class="border"
-			:value="value"
-			:placeholder="placeholder"
-			:disabled="disabled"
-			:border="border"
-			disableDefaultPadding
-			:maxlength="maxlength"
-			:count="count"
-			:height="height"
-			:style="textareaStyle"
-			@input="handleInput"></u-textarea>
-	</u-form-item>
+	<view class="hf-form-textarea">
+		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
+			<u-textarea
+				:value="value"
+				:placeholder="placeholder"
+				:disabled="disabled"
+				:border="border"
+				disableDefaultPadding
+				:maxlength="maxlength"
+				:count="count"
+				:height="height"
+				:custom-style="textareaStyle"
+				@input="handleInput"></u-textarea>
+		</u-form-item>
+	</view>
 </template>
 
 <script>
@@ -47,9 +47,20 @@
 				default: 70
 			}
 		},
+		// #ifdef MP-WEIXIN
+		options: {
+			styleIsolation: 'shared'
+		},
+		// #endif
 		computed: {
 			textareaStyle() {
-				return `text-align: ${this.textAlign}`;
+				const style = {
+					textAlign: this.textAlign,
+				}
+				if (this.border === 'none') {
+					style.padding = 0;
+				}
+				return style;
 			}
 		},
 		methods: {
@@ -61,13 +72,12 @@
 </script>
 
 <style lang="scss" scoped>
-	.textarea {
-		/deep/ .u-textarea__field {
-			color: $u-main-color;
+	.hf-form-textarea {
+		/deep/ .u-textarea {
+			margin-top: $sm;
+			.u-textarea__field {
+				color: $u-main-color;
+			}
 		}
-		&.none {
-			padding: $sm 0 0;
-		}
-		background-color: $bg-white;
 	}
 </style>
