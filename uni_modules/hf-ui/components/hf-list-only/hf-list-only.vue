@@ -191,8 +191,13 @@
 <style lang="scss" scoped>
 	.hf-list-only {
 		flex: 1;
+		/* #ifdef MP-WEIXIN */
 		// 微信小程序 多一层 ∴ 手动设置高度撑开
 		height: 100%;
+		/* #endif */
+		/* #ifdef H5 */
+		height: 0;
+		/* #endif */
 		display: flex;
 		flex-direction: column;
 		/deep/ .u-cell {

@@ -1,3 +1,16 @@
+## 1.0.15（2023-05-24）
+- hf-form-upload：修改详情状态下label样式
+- hf-form-select：修改详情状态下label样式
+## 1.0.14（2023-05-23）
+- hf-upload
+	- 添加props：useBeforeRead
+	- 添加props：beforeRead
+	- 添加props：useBeforePreview
+	- 添加props：beforePreview
+- hf-form-avatar
+	- 支持重新选择头像
+## 1.0.13（2023-05-22）
+- 修改文本域背景颜色
 ## 1.0.12（2023-05-22）
 - 添加组件
 	- hf-icon

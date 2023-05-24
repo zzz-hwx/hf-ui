@@ -56,6 +56,7 @@
 			textareaStyle() {
 				const style = {
 					textAlign: this.textAlign,
+					background: '#fff'
 				}
 				if (this.border === 'none') {
 					style.padding = 0;

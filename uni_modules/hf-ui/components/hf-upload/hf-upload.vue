@@ -135,6 +135,26 @@
 				// 禁用状态 是否不显示选择文件按钮
 				type: Boolean,
 				default: false
+			},
+			useBeforeRead: {
+				// 是否开启读取前的处理函数
+				type: Boolean,
+				default: false
+			},
+			beforeRead: {
+				// 读取前的处理函数
+				type: Function,
+				default: null
+			},
+			useBeforePreview: {
+				// 是否开启预览前的处理函数
+				type: Boolean,
+				default: false
+			},
+			beforePreview: {
+				// 预览前的处理函数
+				type: Function,
+				default: null
 			}
 		},
 		data() {
@@ -210,7 +230,9 @@
 			},
 			onBeforeRead(fileArr) {
 				// 文件读取之前
-				// ... 一些操作
+				if (this.useBeforeRead && uni.$u.test.func(this.beforeRead)) {
+					this.beforeRead(fileArr);
+				}
 			},
 			async onAfterRead(fileArr) {
 				const fileListLen = this.lists.length;
@@ -263,8 +285,11 @@
 			},
 			onPreviewImage(item) {
 				// 预览图片
-				console.log('onPreviewImage', item);
-				if (!item.isImage) return;
+				if (!this.disabled && this.useBeforePreview && uni.$u.test.func(this.beforePreview)) {
+					// 预览前处理
+					this.beforePreview(item);
+					return;
+				}
 				uni.previewImage({
 					// 先filter找出为图片的item，再返回filter结果中的图片url
 					urls: this.lists.filter((item) => (this.accept === 'image' || item.isImage)).map((item) => (item.url || item.thumb)),

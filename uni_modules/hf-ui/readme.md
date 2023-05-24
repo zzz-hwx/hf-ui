@@ -700,6 +700,8 @@ export default {
 
 ### hf-form-avatar 头像
 
+头像选择、头像上传组件，点击头像，可重新选择头像
+
 **示例**
 
 ```html
@@ -897,6 +899,10 @@ export default {
 | bizPath          | 控制文件上传的业务路径                          | String         | 'temp'           |                           |
 | maxSize          | 选择单个文件的最大大小，单位B(byte)，默认不限制 | String\|Number | Number.MAX_VALUE |                           |
 | disableNoShowBtn | 禁用状态，是否不显示选择文件按钮                | Boolean        | false            | true\|false               |
+| useBeforeRead    | 是否开启读取前的处理函数                        | Boolean        | false            | true\|false               |
+| beforeRead       | 读取前的处理函数                                | Function       |                  |                           |
+| useBeforePreview | 是否开启预览前的处理函数                        | Boolean        | false            | true\|false               |
+| beforePreview    | 预览前的处理函数                                | Function       |                  |                           |
 
 **accept 合法值**
 

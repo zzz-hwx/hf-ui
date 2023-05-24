@@ -5,7 +5,7 @@
 			<template #label>
 				<view class="left-content">
 					<text v-if="required" class="left-content__required">*</text>
-					<text :style="{color}">{{ label }}</text>
+					<text :style="[parentData.labelStyle]">{{ label }}</text>
 					<text class="tip" v-if="!disabled">
 						<slot name="tip">
 							<text>文件最多支持上传{{ maxCount }}个</text>
@@ -73,15 +73,14 @@
 		},
 		data() {
 			return {
-				tipsColor: uni.$u.config.color['u-tips-color']
+				tipsColor: uni.$u.config.color['u-tips-color'],
+				parentData: {
+					// 提示文本的样式
+					labelStyle: {},
+				}
 			}
 		},
 		computed: {
-			color() {
-				if(this.disabled) {
-					return uni.$u.config.color['u-tips-color'];
-				}
-			},
 			sizeShow() {
 				if (this.maxSize == Number.MAX_VALUE) return '';
 				if (isNaN(this.maxSize)) return '';
@@ -95,10 +94,18 @@
 				return `${size}${unit[index]}`
 			}
 		},
+		mounted() {
+			this.updateParentData();
+		},
 		methods: {
 			handleInput(val) {
 				this.$emit('input', val);
-			}
+			},
+			updateParentData() {
+				// 获取父组件的参数
+				// 此方法写在uview的全局mixin中
+				this.getParentData('u-form');
+			},
 		}
 	}
 </script>

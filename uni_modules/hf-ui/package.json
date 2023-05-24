@@ -1,7 +1,7 @@
 {
 	"id": "hf-ui",
 	"displayName": "hf-ui",
-	"version": "1.0.12",
+	"version": "1.0.15",
 	"description": "基于uview 2.0 封装的组件库",
 	"keywords": [
         "hf-ui,ui,uni-app"

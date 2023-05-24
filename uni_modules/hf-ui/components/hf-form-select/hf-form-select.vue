@@ -13,7 +13,9 @@
 						<template v-if="$slots.label">
 							<slot name="label"></slot>
 						</template>
-						<template v-else>{{ label }}</template>
+						<template v-else>
+							<view class="" :style="[parentData.labelStyle]">{{ label }}</view>
+						</template>
 					</view>
 				</template>
 				<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
@@ -137,7 +139,11 @@
 					keyword: ''
 				},
 				list: [],
-				selected: []	// 右侧弹框 选中的项
+				selected: [],	// 右侧弹框 选中的项
+				parentData: {
+					// 提示文本的样式
+					labelStyle: {},
+				}
 			}
 		},
 		watch: {
@@ -217,7 +223,15 @@
 				}));
 			}
 		},
+		mounted() {
+			this.updateParentData();
+		},
 		methods: {
+			updateParentData() {
+				// 获取父组件的参数
+				// 此方法写在uview的全局mixin中
+				this.getParentData('u-form');
+			},
 			async loadDictOptions() {
 				if (this.dictCode) {
 					// 获取字典数据
