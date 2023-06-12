@@ -1,43 +1,66 @@
 <template>
-	<view class="tki-tree">
+	<view class="hf-tree">
 		<block v-for="item in filterList" :key="item.id">
-			<view class="tki-tree-item" :style="[{
-						paddingLeft: item.rank*15 + 'px',
-						zIndex: item.rank*-1 + 50
-					}]" :class="{
+			<view
+				class="hf-tree-item"
+				:style="[{
+						paddingLeft: item.rank * 15 + 'px',
+						zIndex: item.rank * -1 + 50
+					}]" 
+				:class="{
 						border: border === true,
 						show: item.show,
 						last: item.lastRank,
 						showchild: item.showChild,
 						open: item.open,
-					}">
-				<view class="tki-tree-label" @click.stop="_treeItemTap(item)">
-					<view class="tki-tree-label__icon">
-						<u-icon :name="item.lastRank ? lastIcon : item.showChild ? 'arrow-down-fill' : 'play-right-fill'"></u-icon>
+					}"
+				>
+				<view class="hf-tree-label" @click.stop="_treeItemTap(item)">
+					<view class="hf-tree-label__icon">
+						<template v-if="item.lastRank">
+							<hf-icon v-if="lastIcon" :name="lastIcon" :color="lastIconColor"></hf-icon>
+						</template>
+						<template v-else>
+							<hf-icon :name="item.showChild ? 'arrow-down-fill' : 'arrow-right-fill'" :size="10"></hf-icon>
+						</template>
 					</view>
-					<view class="tki-tree-label__content">
+					<view class="hf-tree-label__content">
 						<slot :node="item" :data="item.source">
 							<text>{{ item.name }}</text>
 						</slot>
 					</view>
 				</view>
-				<view class="tki-tree-check"
+				<view
+					class="hf-tree-check"
 					v-if="!disabled && !noShowCheckbox && (selectParent || item.lastRank) && !item.disabled"
-					@click.stop="_treeItemSelect(item)">
-					<view v-if="item.checked" class="tki-tree-check-yes" :class="{'radio': !multiple}"
-						:style="{'border-color': confirmColor}">
-						<view class="tki-tree-check-yes-b" :style="{'background-color': confirmColor}">
-							<text class="cuIcon-check"></text>
-						</view>
+					@click.stop="_treeItemSelect(item)"
+				>
+					<view
+						v-if="item.checked"
+						class="hf-tree-check-yes"
+						:class="{'radio': !multiple}"
+						:style="{
+							'border-color': confirmColor,
+							'background-color': confirmColor
+						}"
+					>
+						<u-icon name="checkmark" color="#fff"></u-icon>
 					</view>
-					<view v-else-if="item.indeterminate" class="tki-tree-check-yes" :class="{'radio': !multiple}"
-						:style="{'border-color': confirmColor}">
-						<view class="tki-tree-check-yes-b" :style="{'background-color': confirmColor}">
-							<text class="cuIcon-move"></text>
-						</view>
+					<view
+						v-else-if="item.indeterminate"
+						class="hf-tree-check-yes"
+						:class="{'radio': !multiple}"
+						:style="{
+							'border-color': confirmColor,
+							'background-color': confirmColor
+						}"
+					>
+						<u-icon name="minus" size="5" bold color="#fff"></u-icon>
 					</view>
-					<view v-else class="tki-tree-check-no" :class="{'radio': !multiple}"
-						:style="{'border-color': confirmColor}"></view>
+					<view
+						v-else class="hf-tree-check-no"
+						:class="{'radio': !multiple}"
+					></view>
 				</view>
 			</view>
 		</block>
@@ -45,15 +68,16 @@
 </template>
 
 <script>
+	/**
+	 * @description 树形组件
+	 * 用清晰的层级结构展示信息，可展开或折叠。
+	 */
+	import PinyinEngine from '../../libs/pinyin-engine/cn.js';
 	export default {
 		props: {
 			value: {
 				type: [Array, String, Number],
 				default: () => []
-			},
-			filterText: {
-				type: String,
-				default: ''
 			},
 			options: {
 				type: Array,
@@ -62,7 +86,7 @@
 			defaultProps: {
 				type: Object,
 				default: () => ({
-					label: 'label',
+					text: 'text',
 					value: 'value',
 					children: 'children'
 				})
@@ -72,6 +96,11 @@
 				default: false
 			},
 			selectParent: {
+				type: Boolean,
+				default: false
+			},
+			selectStrictly: {
+				// 在多选的情况下 是否严格遵循父子不互相关联的做法
 				type: Boolean,
 				default: false
 			},
@@ -99,22 +128,100 @@
 				type: Boolean,
 				default: false
 			},
+			filterText: {
+				type: String,
+				default: ''
+			},
 			filterKeys: {
 				type: Array
 			},
+			pinyin: {
+				type: Boolean,
+				default: false
+			},
 			confirmColor: {
 				type: String,
-				default: '#0081ff'
+				default: uni.$u.config.color['u-primary']
 			},
 			lastIcon: {
 				type: String,
 				default: ''
+			},
+			lastIconColor: {
+				type: String
 			}
 		},
 		data() {
 			return {
 				treeList: [],
-				pinyinObj: null
+			}
+		},
+		computed: {
+			idKey() {
+				return this.defaultProps.value || 'value';
+			},
+			textKey() {
+				return this.defaultProps.text || 'text';
+			},
+			childrenKey() {
+				return this.defaultProps.children || 'children';
+			},
+			disabledKey() {
+				return this.defaultProps.disabled || 'disabled';
+			},
+			propsChange() {
+				return [this.multiple, this.selectParent];
+			},
+			pinyinKeys() {
+				if (this.filterKeys && Array.isArray(this.filterKeys) && this.filterKeys.length) {
+					return this.filterKeys;
+				}
+				return [this.textKey];
+			},
+			flatOptions() {
+				// 拍扁的options --> 一维数组
+				const list = [];
+				if (Array.isArray(this.options) && this.options.length) {
+					const queue = this.options.slice();
+					while (queue.length) {
+						const item = queue.shift();
+						list.push(item);
+						if (Array.isArray(item.children) && item.children.length) {
+							queue.unshift(...item.children);
+						}
+					}
+				}
+				return list;
+			},
+			pinyinObj() {
+				if (this.filterable && this.pinyin && this.flatOptions.length) {
+					return new PinyinEngine(this.flatOptions, this.pinyinKeys);
+				}
+				return null;
+			},
+			filterList() {
+				if (!this.filterable || !this.filterText || !this.flatOptions.length) return this.treeList;
+				let list = [];
+				if (this.pinyinObj) {
+					// 拼音搜索
+					list = this.pinyinObj.query(this.filterText);
+				} else {
+					// 普通搜索
+					list = this.flatOptions.filter(item => {
+						return this.pinyinKeys.some((key) => (item[key].indexOf(this.filterText) !== -1));
+					});
+				}
+				const ids = list.map(item => (item[this.idKey])); // 搜索结果的id
+				const parentIds = this.treeList.filter(item => {
+					return ids.indexOf(item.id) != -1;
+				}).map(item => (item.parentId)).flat(Infinity); // 有子集的父级
+				const idSet = new Set(ids.concat(parentIds));
+
+				const filterList = this.treeList.filter(item => {
+					return idSet.has(item.id);
+				});
+				// console.log('--- filterList --->', list, filterList);
+				return filterList;
 			}
 		},
 		watch: {
@@ -131,103 +238,53 @@
 				},
 				immediate: true
 			},
-			multiple() {
+			propsChange() {
 				if (Array.isArray(this.options) && this.options.length) {
 					this._reTreeList();
 				}
 			},
-			selectParent() {
-				if (Array.isArray(this.options) && this.options.length) {
-					this._reTreeList();
-				}
-			},
-		},
-		computed: {
-			idKey() {
-				return this.defaultProps.value || 'value';
-			},
-			labelKey() {
-				return this.defaultProps.label || 'label';
-			},
-			childrenKey() {
-				return this.defaultProps.children || 'children';
-			},
-			disabledKey() {
-				return this.defaultProps.disabled || 'disabled';
-			},
-			pinyinKeys() {
-				if (this.filterKeys && Array.isArray(this.filterKeys) && this.filterKeys.length) {
-					return this.filterKeys;
-				}
-				return [this.labelKey];
-			},
-			flatOptions() {
-				// 拍扁的options --> 一维数组
-				const list = [];
-				if (Array.isArray(this.options) && this.options.length) {
-					const queue = this.options.slice();
-					while (queue.length) {
-						const item = queue.shift();
-						list.push(item);
-						if (Array.isArray(item.children) && item.children.length) {
-							queue.unshift(...item.children);
-						}
-					}
-				}
-				if (this.filterable && list.length) {
-					const obj = new PinyinEngine(list, this.pinyinKeys);
-					this.pinyinObj = Object.freeze(obj);
-				}
-				return list;
-			},
-			filterList() {
-				if (!this.filterable || !this.pinyinObj || !this.filterText) return this.treeList;
-				const list = this.pinyinObj.query(this.filterText);
-				const ids = list.map(item => (item[this.idKey])); // 搜索结果的id
-				const parentIds = this.treeList.filter(item => {
-					return ids.indexOf(item.id) != -1;
-				}).map(item => (item.parentId)).flat(Infinity); // 有子集的父级
-				const idSet = new Set(ids.concat(parentIds));
-
-				const filterList = this.treeList.filter(item => {
-					return idSet.has(item.id);
-				});
-				console.log('--- filterList --->', list, filterList);
-				return filterList;
-			}
 		},
 		methods: {
-			_confirm() {
+			confirm() {
 				// 处理所选数据 父组件调用
 				if (this.multiple) {
-					// 选中的叶子节点
-					const result = this.treeList.filter(item => (item.checked && !(item.source[this.childrenKey] && item
-						.source[this.childrenKey].length))).map(item => ({
-						...item.source
-					}));
+					const result = this.treeList.filter(item => {
+						if (this.selectParent && this.selectStrictly) {
+							// 可选父节点 && 父子不互相关联
+							return item.checked;
+						}
+						// 选中的叶子节点
+						return item.checked && !(item.source[this.childrenKey] && item.source[this.childrenKey].length);
+					}).map(item => {
+						return {
+							...item.source
+						};
+					});
 					return result;
 				} else {
 					// 单选
-					const result = this.treeList.filter(item => (item.checked)).map(item => ({
-						...item.source
-					}));
+					const result = this.treeList.filter(item => (item.checked)).map(item => {
+						return {
+							...item.source
+						};
+					});
 					return result;
 				}
 			},
 			_renderTreeList(list = [], rank = 0, parentId = [], parents = []) {
-				//扁平化树结构
+				// 扁平化树结构
 				list.forEach(item => {
 					this.treeList.push({
 						id: item[this.idKey],
-						name: item[this.labelKey],
+						name: item[this.textKey],
 						disabled: item[this.disabledKey],
 						source: item,
-						parentId, // 父级id数组
-						parents, // 父级id数组
-						rank, // 层级
-						showChild: false, //子级是否显示
-						open: false, //是否打开
-						show: rank === 0, // 自身是否显示
+						parentId,	// 父级id数组
+						parents,	// 父级id数组
+						rank,		// 层级
+						showChild: false,	//子级是否显示
+						open: false,		//是否打开
+						show: rank === 0,	// 自身是否显示
 						hideArr: [],
 						orChecked: item.checked ? item.checked : false,
 						checked: item.checked ? item.checked : false,
@@ -241,7 +298,7 @@
 						parentid.push(item[this.idKey]);
 						parentArr.push({
 							[this.idKey]: item[this.idKey],
-							[this.labelKey]: item[this.labelKey]
+							[this.textKey]: item[this.textKey]
 						})
 						this._renderTreeList(item[this.childrenKey], rank + 1, parentid, parentArr);
 					} else {
@@ -278,7 +335,7 @@
 				item.open = item.showChild ? true : !item.open;
 				list.forEach((childItem, i) => {
 					if (item.showChild === false) {
-						//隐藏所有子级
+						// 隐藏所有子级
 						if (!childItem.parentId.includes(id)) {
 							return;
 						}
@@ -321,14 +378,15 @@
 			_treeItemSelect(item, index) {
 				if (this.disabled || item.disabled) {
 					// 禁用状态
-					return
+					return;
 				}
 				if (!index) {
 					index = this.treeList.findIndex(it => it.id == item.id);
 				}
 				this.treeList[index].checked = !this.treeList[index].checked;
 				this._fixMultiple(index);
-				if (this.selectParent && this.multiple) {
+				if (this.multiple && this.selectParent && !this.selectStrictly) {
+					// 多选 && 可选父节点 && 父子互相关联
 					if (item.source[this.childrenKey] && item.source[this.childrenKey].length) {
 						// 选中其下所有叶子节点
 						const checked = item.checked;
@@ -357,21 +415,20 @@
 			},
 			_fixMultiple(index) {
 				// 处理单选
-				if (!this.multiple) {
-					this.treeList.forEach((v, i) => {
-						if (i != index) {
-							this.treeList[i].checked = false
-						} else {
-							this.treeList[i].checked = true
-						}
-					})
-				}
+				if (this.multiple) return;
+				this.treeList.forEach((v, i) => {
+					if (i != index) {
+						this.treeList[i].checked = false;
+					} else {
+						this.treeList[i].checked = true;
+					}
+				});
 			},
 			_reTreeList() {
 				// 重置数据
 				this.treeList.forEach((v, i) => {
-					this.treeList[i].checked = v.orChecked
-				})
+					this.treeList[i].checked = v.orChecked;
+				});
 			},
 			_initTree(options = this.options) {
 				this.treeList = [];
@@ -401,7 +458,7 @@
 					}
 				}
 				if (list.length > 0) {
-					const arr = [];
+					// const arr = [];
 					list.forEach(id => {
 						const index = this.treeList.findIndex(treeItem => (treeItem.id == id));
 						if (index != -1) {
@@ -409,12 +466,12 @@
 							if (!data.checked) {
 								this._treeItemSelect(data, index);
 							}
-							arr.push({
-								...data.source
-							});
+							// arr.push({
+							// 	...data.source
+							// });
 						}
 					});
-					this.$emit('getLabel', arr);
+					// this.$emit('getLabel', arr);
 				}
 			},
 			changeParentChecked(list = this.options) {
@@ -439,8 +496,8 @@
 					}
 				});
 				return {
-					checkedNum, // 选择的叶子节点数量
-					nodeNum // 所有的叶子节点数量
+					checkedNum,	// 选择的叶子节点数量
+					nodeNum		// 所有的叶子节点数量
 				};
 			},
 			changeChecked(id, data) {
@@ -469,10 +526,9 @@
 </script>
 
 <style lang="scss" scoped>
-	.tki-tree {
+	.hf-tree {
 		padding: 20rpx;
-
-		.tki-tree-item {
+		.hf-tree-item {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
@@ -484,70 +540,56 @@
 			transition: 0.2s;
 			position: relative;
 			overflow: hidden;
-
 			&.show {
 				height: 80rpx;
 				opacity: 1;
 			}
-
 			&.showchild:before {
 				transform: rotate(90deg);
 			}
-
 			&.last:before {
 				opacity: 0;
 			}
 		}
-
-		.tki-tree-label {
+		.hf-tree-label {
 			flex: 1;
 			display: flex;
 			align-items: center;
 			height: 100%;
 			&__icon {
 				width: 36rpx;
+				display: flex;
+				justify-content: center;
 			}
 			&__content {
 				flex: 1;
+				padding-left: $xs;
 			}
 		}
-
-		.tki-tree-check {
+		.hf-tree-check {
 			width: 40px;
 			height: 40px;
-			font-size: 25rpx;
-			color: #fff;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-
-			.tki-tree-check-yes,
-			.tki-tree-check-no {
+			.hf-tree-check-yes,
+			.hf-tree-check-no {
 				width: 20px;
 				height: 20px;
-				border-radius: 20%;
-				border: 1rpx solid $u-primary;
+				border-radius: 50%;
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				box-sizing: border-box;
 			}
-
-			.tki-tree-check-yes-b {
-				width: 12px;
-				height: 12px;
-				border-radius: 20%;
+			.hf-tree-check-yes {
+				border: 1rpx solid $u-primary;
 				background-color: $u-primary;
 			}
-
-			.radio {
-				border-radius: 50%;
-
-				.tki-tree-check-yes-b {
-					border-radius: 50%;
-          
-				}
+			.hf-tree-check-no {
+				border: 2px solid $u-border-color;
 			}
+			// .radio {}
 		}
 	}
 </style>

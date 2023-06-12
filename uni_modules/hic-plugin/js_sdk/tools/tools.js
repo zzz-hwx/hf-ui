@@ -277,3 +277,46 @@ export function treeDataFormat(data, handle) {
 		};
 	});
 }
+
+/**
+ * 树 获取路径
+ * @param {String} key 要找的选项值
+ * @param {Array} treeData 数据
+ * @param {Object} defaultProps 字段映射关系 默认值: { text: 'text', value: 'value' }
+ * @param {Array} path 路径
+ */
+export function treeFindPath(key, treeData, defaultProps, path = []) {
+	if (!Array.isArray(treeData)) {
+		console.warn('treeData is not array');
+		return [];
+	}
+	const { text: textField = 'text', value: valueField = 'value', children: childrenField = 'children' } = defaultProps || {};
+	// let textField = defaultProps.text || 'text';
+	// let valueField = defaultProps.value || 'value';
+	// const childrenField = defaultProps.children || 'children';
+	for (let i = 0; i < treeData.length; i++) {
+		const node = treeData[i];
+		const children = node[childrenField];
+		const text = node[textField];
+		const value = node[valueField];
+
+		path.push({
+			[textField]: text,
+			[valueField]: value
+		});
+
+		if (value === key) {
+			return path;
+		}
+
+		if (children) {
+			const p = treeFindPath(key, children, defaultProps, path);
+			if (p.length) {
+				return p;
+			}
+		}
+
+		path.pop();
+	}
+	return [];
+}

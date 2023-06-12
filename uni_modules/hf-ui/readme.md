@@ -349,7 +349,7 @@ export default {
     prop="interest"
     :disabled="disabled"
     placeholder="请选择"
-    :options="dictOptions.interest"
+    :options="options"
     mode="right"
     search
     multiple
@@ -381,17 +381,18 @@ export default {
 
 **props**
 
-| 参数        | 说明                      | 类型      | 默认值    | 可选值           |
-| --------- | ----------------------- | ------- | ------ | ------------- |
-| dictCode  | 字典code                  | String  |        |               |
-| options   | 选项                      | Array   | []     |               |
+| 参数      | 说明                             | 类型    | 默认值 | 可选值        |
+| --------- | -------------------------------- | ------- | ------ | ------------- |
+| dictCode  | 字典code                         | String  |        |               |
+| options   | 选项                             | Array   | []     |               |
 | showAll   | 是否添加选项：“全部”             | Boolean | false  | true\|false   |
-| mode      | 弹出方向                    | String  | bottom | bottom\|right |
+| mode      | 弹出方向                         | String  | bottom | bottom\|right |
 | search    | 是否显示搜索(仅mode='right'有效) | Boolean | false  | true\|false   |
-| multiple  | 是否多选(仅mode='right'有效)   | Boolean | false  | true\|false   |
-| keyName   | 控制显示的字段                 | String  | label  |               |
-| keyValue  | 控制取值的字段                 | String  | value  |               |
-| separator | 选项分隔符(仅mode='right'有效)  | String  | ,      |               |
+| pinyin    | 是否拼音搜索(仅mode='right'有效) | Boolean | false  | true\|false   |
+| multiple  | 是否多选(仅mode='right'有效)     | Boolean | false  | true\|false   |
+| keyName   | 控制显示的字段                   | String  | label  |               |
+| keyValue  | 控制取值的字段                   | String  | value  |               |
+| separator | 选项分隔符(仅mode='right'有效)   | String  | ,      |               |
 
 说明：
 
@@ -569,9 +570,9 @@ export default {
 | level     | 级数，默认显示 省市县 三级行政区划 | Number | 3   | 1\|2\|3 |
 | separator | 分隔符，显示文字的中文符       | String | /   |         |
 
-### hf-form-cascader 多列级联选择
+### hf-form-cascader 级联选择
 
-支持n列级联选择
+级联选择
 
 **示例**
 
@@ -584,6 +585,12 @@ export default {
     :disabled="disabled"
     placeholder="请选择"
     :options="options"
+></hf-form-cascader>
+<hf-form-cascader
+    v-model="model.cascader2"
+    label="任意一级可选择"
+    :options="options"
+    select-parent
 ></hf-form-cascader>
 ```
 
@@ -629,11 +636,271 @@ export default {
 
 **props**
 
-| 参数            | 说明           | 类型      | 默认值   | 可选值         |
-| ------------- | ------------ | ------- | ----- | ----------- |
-| options       | 选项           | Array   | []    |             |
-| showAllLevels | 是否显示选中值的完整路径 | Boolean | false | true\|false |
-| separator     | 分隔符          | String  | /     |             |
+| 参数          | 说明                                        | 类型    | 默认值 | 可选值      |
+| ------------- | ------------------------------------------- | ------- | ------ | ----------- |
+| options       | 选项                                        | Array   | []     |             |
+| showAllLevels | 是否显示选中值的完整路径                    | Boolean | false  | true\|false |
+| selectParent  | 是否可以选父级                              | Boolean | false  | true\|false |
+| separator     | 分隔符                                      | String  | /      |             |
+| defaultProps  | 配置选项，同hf-cascader-picker.defaultProps | Object  | {}     |             |
+
+### hf-form-tree 树形组件
+
+树形组件 + 右侧弹框 + 搜索
+
+**示例1**
+
+``` html
+<hf-form-tree
+	v-model="model.key1"
+	label="多选"
+	placeholder="请选择"
+	:options="options"
+	:default-props="defaultProps"
+	multiple
+></hf-form-tree>
+<hf-form-tree
+	v-model="model.key2"
+	label="多选 可选父节点"
+	placeholder="请选择"
+	:options="options"
+	:default-props="defaultProps"
+	multiple
+	select-parent
+></hf-form-tree>
+<hf-form-tree
+	v-model="model.key3"
+	label="多选 可选父节点 父子不互相关联"
+	placeholder="请选择"
+	:options="options"
+	:default-props="defaultProps"
+	multiple
+	select-parent
+	select-strictly
+	labelPosition="top"
+></hf-form-tree>
+<hf-form-tree
+	v-model="model.key4"
+	label="单选"
+	placeholder="请选择"
+	:options="options"
+	:default-props="defaultProps"
+	search
+	pinyin
+></hf-form-tree>
+```
+
+``` js
+export default {
+	data() {
+		return {
+			model: {
+				key1: '1-1-1-1,1-1-1-3',
+				key2: '1-1-1-2',
+				key3: '1,1-1-1-2',
+				key4: '1-1-1-2',
+			},
+			defaultProps: {
+				text: 'text',
+				value: 'value',
+				children: 'children'
+			},
+			options: [{
+					value: '1',
+					text: '一级 1',
+					children: [{
+							value: '1-1',
+							text: '二级 1-1',
+							children: [{
+									value: '1-1-1',
+									text: '三级 1-1-1',
+									children: [
+										{ value: '1-1-1-1', text: '四级 1-1-1-1' },
+										{ value: '1-1-1-2', text: '四级 1-1-1-2' },
+										{ value: '1-1-1-3', text: '四级 1-1-1-3' },
+									]
+								}
+							]
+						}, {
+							value: '1-2',
+							text: '二级 1-2',
+							children: [
+								{ value: '1-2-1', text: '三级 1-2-1' },
+								{ value: '1-2-2', text: '三级 1-2-2' },
+							]
+						}
+					]
+				}, {
+					value: '2',
+					text: '一级 2',
+					children: [{
+							value: '2-1',
+							text: '二级 2-1'
+						}, {
+							value: '2-2',
+							text: '二级 2-2',
+							children: [
+								{ value: '2-2-1', text: '三级 2-2-1' },
+								{ value: '2-2-2', text: '三级 2-2-2' },
+							]
+						},
+					]
+				}
+			]
+		};
+	},
+	methods: {
+		confirm() {
+			console.log('--- 打印 --->', uni.$u.deepClone(this.model));
+			// 
+		},
+	}
+}
+```
+
+**示例2**
+
+```html
+<hf-form-tree
+	v-model="model.key1"
+	label="任务下派"
+	placeholder="请选择"
+	:options="options"
+	:default-props="defaultProps"
+	multiple
+	select-parent
+	select-strictly
+	last-icon="people"
+	last-icon-color="#CCCCCC"
+></hf-form-tree>
+```
+
+``` js
+export default {
+	data() {
+		return {
+			model: {
+				key1: '1,1-1-1-1,1-1-3,1-2-2-1',
+			},
+			defaultProps: {
+				text: 'text',
+				value: 'value',
+				children: 'children'
+			},
+			options: [{
+					value: '1',
+					text: '鼓楼区',
+					children: [{
+							value: '1-1',
+							text: '社区名称',
+							children: [{
+									value: '1-1-1',
+									text: '第一网格',
+									children: [
+										{ value: '1-1-1-1', text: '刘一' },
+										{ value: '1-1-1-2', text: '陈二' },
+										
+									]
+								}, {
+									value: '1-1-2',
+									text: '第二网格',
+									children: [
+										{ value: '1-1-2-1', text: '张三' },
+										{ value: '1-1-2-2', text: '李四' },
+										{ value: '1-1-2-3', text: '王五' },
+									]
+								}, {
+									value: '1-1-3',
+									text: '第三网格',
+									children: [
+										{ value: '1-1-3-1', text: '赵六' },
+										{ value: '1-1-3-2', text: '孙七' },
+										{ value: '1-1-3-3', text: '周八' },
+									]
+								}
+							]
+						}, {
+							value: '1-2',
+							text: '社区名称',
+							children: [{
+									value: '1-2-1',
+									text: '第四网格',
+									children: [
+										{ value: '1-2-1-1', text: '吴九' },
+										{ value: '1-2-1-2', text: '郑十' },
+									]
+								}, {
+									value: '1-2-2',
+									text: '第五网格',
+									children: [
+										{ value: '1-2-2-1', text: '张三丰' },
+										{ value: '1-2-2-2', text: '张三丰' },
+									]
+								},
+							]
+						}
+					]
+				}, {
+					value: '2',
+					text: '台江区',
+					children: [{
+							value: '2-1',
+							text: '社区名称',
+							children: [{
+									value: '2-1-1',
+									text: '第一网格',
+									children: [
+										{ value: '2-1-1-1', text: '张三丰' },
+										{ value: '2-1-1-2', text: '张三丰' },
+										
+									]
+								}, {
+									value: '2-1-2',
+									text: '第二网格',
+									children: [
+										{ value: '2-1-2-1', text: '张三丰' },
+										{ value: '2-1-2-2', text: '张三丰' },
+										{ value: '2-1-2-3', text: '张三丰' },
+									]
+								}, {
+									value: '2-1-3',
+									text: '第三网格',
+									children: [
+										{ value: '2-1-3-1', text: '张三丰' },
+										{ value: '2-1-3-2', text: '张三丰' },
+										{ value: '2-1-3-3', text: '张三丰' },
+									]
+								}
+							]
+						},
+					]
+				}
+			]
+		};
+	},
+}
+```
+
+**props**
+
+| 参数           | 说明                                            | 类型    | 默认值 | 可选值      |
+| -------------- | ----------------------------------------------- | ------- | ------ | ----------- |
+| options        | 数据                                            | Array   |        |             |
+| multiple       | 是否多选                                        | Boolean | false  | true\|false |
+| defaultProps   | 选项默认配置，同hf-tree.defaultProps            | Object  |        |             |
+| search         | 是否显示搜索                                    | Boolean | false  | true\|false |
+| pinyin         | 是否拼音搜索                                    | Boolean | false  | true\|false |
+| showAllLevels  | 是否显示选中值的完整路径                        | Boolean | false  | true\|false |
+| selectParent   | 是否可以选父级                                  | Boolean | false  | true\|false |
+| selectStrictly | 在多选的情况下 是否严格遵循父子不互相关联的做法 | Boolean | false  | true\|false |
+| separator      | 多选选项值的分隔符                              | String  | ,      |             |
+| textSeparator  | 选项名的分隔符                                  | String  | /      |             |
+| lastIcon       | 没有子集的icon                                  | String  |        |             |
+| lastIconColor  | 没有子集的icon颜色                              | String  |        |             |
+
+>注意：
+>
+>- defaultProps：同`hf-tree.defaultProps`
 
 ### hf-form-location 定位
 
@@ -802,7 +1069,13 @@ export default {
 | mode    | 展示方式 | String | radio | radio\|text\|btn |
 | options | 选项   | Array  | []    |                  |
 
-### hf-cascader-picker 嵌入页面的多列级联选择
+### hf-cascader-picker 级联选择
+
+嵌入页面的多列级联选择，多层级数据的选择。
+
+何时使用：需要从一组相关联的数据集合进行选择，例如省市区，公司层级，事物分类等。
+
+重复点击已选择的选项，为反选。
 
 **示例**
 
@@ -843,13 +1116,24 @@ export default {
 
 **props**
 
-| 参数               | 说明        | 类型     | 默认值                           | 可选值 |
-| ---------------- | --------- | ------ | ----------------------------- | --- |
-| value            | 绑定值       | String |                               |     |
-| options          | 选项        | Array  | []                            |     |
-| visibleItemCount | 每列中可见选项数量 | Number | 5                             |     |
-| itemHeight       | 单个选项高度    | Number | 44                            |     |
-| defaultProps     | 配置选项      | Object | {text: 'text',value: 'value'} |     |
+| 参数             | 说明               | 类型    | 默认值 | 可选值      |
+| ---------------- | ------------------ | ------- | ------ | ----------- |
+| value            | 绑定值             | String  |        |             |
+| options          | 选项               | Array   | []     |             |
+| visibleItemCount | 每列中可见选项数量 | Number  | 5      |             |
+| itemHeight       | 单个选项高度       | Number  | 44     |             |
+| defaultProps     | 配置选项           | Object  | {}     |             |
+| selectParent     | 是否可以选父级     | Boolean | false  | true\|false |
+
+**defaultProps Options**
+默认值：`{ text: 'text', value: 'value', children: 'children' }`
+
+| 参数     | 说明             | 类型   | 默认值   |
+| -------- | ---------------- | ------ | -------- |
+| text     | 选项的标签       | String | text     |
+| value    | 选项值           | String | value    |
+| children | 子集             | String | children |
+| disabled | 是否禁用指定节点 | String | disabled |
 
 ### hf-datetime-picker 嵌入页面的日期选择器
 
@@ -1172,7 +1456,7 @@ export default {
 通过ref调用组件`setFetchList`方法，只能放mount生命周期之后
 组件内部`created`生命周期钩子函数，调用防抖返回的`getList`方法，因为防抖500ms时延，所以...阴差阳错...外部手动调用`setFetchList`设置`fetchList`之后，组件内部再初次调用`getList`调用父组件传入的`fetchList`方法。
 
-### hf-tree
+### hf-tree 树形组件
 
 树型选择器 + 仿elementUI 点击父节点多选
 
@@ -1181,41 +1465,128 @@ export default {
 **示例**
 
 ```html
+<view style="padding: 20rpx 20rpx 0; color: #999;">多选</view>
+<hf-tree ref="hfTree1" :value="model.key1" :options="options" :defaultProps="defaultProps" multiple></hf-tree>
 
+<view style="padding: 20rpx 20rpx 0; color: #999;">多选 可选父节点</view>
+<hf-tree ref="hfTree2" :value="model.key2" :options="options" :defaultProps="defaultProps" multiple select-parent></hf-tree>
+
+<view style="padding: 20rpx 20rpx 0; color: #999;">多选 可选父节点 父子不互相关联</view>
+<hf-tree ref="hfTree3" :value="model.key3" :options="options" :defaultProps="defaultProps" multiple select-parent select-strictly></hf-tree>
+
+<view style="padding: 20rpx 20rpx 0; color: #999;">单选</view>
+<hf-tree ref="hfTree4" :value="model.key4" :options="options" :defaultProps="defaultProps"></hf-tree>
+
+<view class="btns">
+	<u-button @click="confirm">打印</u-button>
+</view>
 ```
 
 ```js
-
+export default {
+	data() {
+		return {
+			model: {
+				key1: ['1-1-1-1', '1-1-1-3'],
+				key2: ['1-1-1-2'],
+				key3: ['1', '1-1-1-2'],
+				key4: '1-1-1-2',
+			},
+			defaultProps: {
+				text: 'text',
+				value: 'value',
+				children: 'children'
+			},
+			options: [{
+					value: '1',
+					text: '一级 1',
+					children: [{
+							value: '1-1',
+							text: '二级 1-1',
+							children: [{
+									value: '1-1-1',
+									text: '三级 1-1-1',
+									children: [
+										{ value: '1-1-1-1', text: '四级 1-1-1-1' },
+										{ value: '1-1-1-2', text: '四级 1-1-1-2' },
+										{ value: '1-1-1-3', text: '四级 1-1-1-3' },
+									]
+								}
+							]
+						}, {
+							value: '1-2',
+							text: '二级 1-2',
+							children: [
+								{ value: '1-2-1', text: '三级 1-2-1' },
+								{ value: '1-2-2', text: '三级 1-2-2' },
+							]
+						}
+					]
+				}, {
+					value: '2',
+					text: '一级 2',
+					children: [{
+							value: '2-1',
+							text: '二级 2-1'
+						}, {
+							value: '2-2',
+							text: '二级 2-2',
+							children: [
+								{ value: '2-2-1', text: '三级 2-2-1' },
+								{ value: '2-2-2', text: '三级 2-2-2' },
+							]
+						},
+					]
+				}
+			]
+		};
+	},
+	methods: {
+		confirm() {
+			// [{value: '1-1-1-1', text: '四级 1-1-1-1'}, {value: '1-1-1-3', text: '二级 1-1-1-3'}]
+			console.log('--- hfTree1 --->', this.$refs.hfTree1.confirm());
+			// [{value: '1-1-1-2', text: '四级 1-1-1-2'}]
+			console.log('--- hfTree2 --->', this.$refs.hfTree2.confirm());
+			// [{value: '1', text: '一级 1', children: Array(2)}, {value: '1-1-1-2', text: '四级 1-1-1-2'}]
+			console.log('--- hfTree3 --->', this.$refs.hfTree3.confirm());
+			// [{value: '1-1-1-2', text: '四级 1-1-1-2'}]
+			console.log('--- hfTree4 --->', this.$refs.hfTree4.confirm());
+		},
+	}
+}
 ```
 
 **props**
 
-| 参数             | 说明                 | 类型                    | 默认值     | 可选值         |
-| -------------- | ------------------ | --------------------- | ------- | ----------- |
-| value          | 绑定值                | Array\|String\|Number |         |             |
-| options        | 数据                 | Array                 |         |             |
-| defaultProps   | 选项默认配置，具体看下表       | Object                | 看下表     |             |
-| multiple       | 是否多选               | Boolean               | false   | true\|false |
-| selectParent   | 是否可以选父级            | Boolean               | false   | true\|false |
-| foldAll        | 折叠所有子集             | Boolean               | false   | true\|false |
-| border         |                    |                       |         |             |
-| expandLevel1   | 是否展开第一级            | Boolean               | false   | true\|false |
-| noShowCheckbox | 不显示右侧单选多选框，不影响点击选择 | Boolean               | false   | true\|false |
-| disabled       | 是否禁用               | Boolean               | false   | true\|false |
-| filterable     | 是否可搜索              | Boolean               | false   | true\|false |
-| filterText     | 搜索词                | String                |         |             |
-| filterKeys     | 可搜索字段              | Array                 |         |             |
-| confirmColor   | 单选多选框颜色            | String                | #0081ff |             |
-| lastIcon       | 没有子集的icon          | String                |         |             |
+| 参数           | 说明                                            | 类型                  | 默认值             | 可选值      |
+| -------------- | ----------------------------------------------- | --------------------- | ------------------ | ----------- |
+| value          | 绑定值                                          | Array\|String\|Number |                    |             |
+| options        | 数据                                            | Array                 |                    |             |
+| defaultProps   | 选项默认配置，具体看下表                        | Object                | 看下表             |             |
+| multiple       | 是否多选                                        | Boolean               | false              | true\|false |
+| selectParent   | 是否可以选父级                                  | Boolean               | false              | true\|false |
+| selectStrictly | 在多选的情况下 是否严格遵循父子不互相关联的做法 | Boolean               | false              | true\|false |
+| foldAll        | 折叠所有子集                                    | Boolean               | false              | true\|false |
+| border         | 是否有分割线（未实现）                          | Boolean               | false              | true\|false |
+| expandLevel1   | 是否展开第一级                                  | Boolean               | false              | true\|false |
+| noShowCheckbox | 不显示右侧单选多选框，不影响点击选择            | Boolean               | false              | true\|false |
+| disabled       | 是否禁用                                        | Boolean               | false              | true\|false |
+| filterable     | 是否可搜索                                      | Boolean               | false              | true\|false |
+| filterText     | 搜索词                                          | String                |                    |             |
+| filterKeys     | 可搜索字段                                      | Array                 |                    |             |
+| pinyin         | 是否拼音搜索                                    | Boolean               | false              | true\|false |
+| confirmColor   | 单选多选框颜色                                  | String                | color['u-primary'] |             |
+| lastIcon       | 没有子集的icon                                  | String                |                    |             |
+| lastIconColor  | 没有子集的icon颜色                              | String                |                    |             |
 
 **defaultProps Options**
-默认值：`{ label: 'label', value: 'value', children: 'children' }`
+默认值：`{ text: 'text', value: 'value', children: 'children' }`
 
-| 参数       | 说明       | 类型     | 默认值      |
-| -------- | -------- | ------ | -------- |
-| label    | 选项的标签    | String | label    |
-| value    | 选项值      | String | value    |
-| children | 子集       | String | children |
+| 参数     | 说明             | 类型   | 默认值   |
+| -------- | ---------------- | ------ | -------- |
+| text     | 选项的标签       | String | text     |
+| value    | 选项值           | String | value    |
+| children | 子集             | String | children |
 | disabled | 是否禁用指定节点 | String | disabled |
 
 **slot**

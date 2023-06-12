@@ -146,6 +146,16 @@ export function getUserInfo(...args) {
 }
 
 /**
+ * @description 获取版本号
+ */
+export function getVersion(...args) {
+	if (!apiMap[config.usedApi].getVersion) {
+		throw new Error(`${config.usedApi} is not has getVersion`);
+	}
+	return apiMap[config.usedApi].getVersion(...args);
+}
+
+/**
  * @description 获取token
  */
 export function getToken(...args) {

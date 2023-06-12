@@ -1,6 +1,6 @@
 <template>
 	<view class="hf-form-cascader">
-		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="pickerShow">
+		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
 			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 			<template #right>
 				<slot name="right"></slot>
@@ -17,7 +17,12 @@
 					<u-text :text="confirmText" type="primary" @click="handleConfirm"></u-text>
 				</view>
 			</view>
-			<hf-cascader-picker v-model="innerValue" :options="options"></hf-cascader-picker>
+			<hf-cascader-picker
+				v-model="innerValue"
+				:options="options"
+				:select-parent="selectParent"
+				:default-props="defaultProps"
+			></hf-cascader-picker>
 		</u-popup>
 	</view>
 </template>
@@ -27,7 +32,7 @@
 	 * @description 多列级联选择
 	 */
 	import mixin from '../../libs/mixins/form.js';
-	import { treeFindPath } from '../../libs/util/utils.js';
+	import { treeFindPath } from '@/uni_modules/hic-plugin';
 	export default {
 		name: 'HfFormCascader',
 		mixins: [mixin],
@@ -44,7 +49,15 @@
 			separator: {
 				type: String,
 				default: '/'
-			}
+			},
+			selectParent: {
+				type: Boolean,
+				default: false
+			},
+			defaultProps: {
+				type: Object,
+				default: () => ({})
+			},
 		},
 		data() {
 			return {
@@ -65,7 +78,7 @@
 		computed: {
 			valueName() {
 				// 选中的选项名
-				const path = treeFindPath(this.value, this.options);
+				const path = treeFindPath(this.value, this.options, this.defaultProps);
 				if (!path.length) return '';
 				if (this.showAllLevels) {
 					return path.map(item => (item.text)).join(this.separator);
@@ -81,7 +94,7 @@
 				uni.hideKeyboard();
 			},
 			handleConfirm() {
-				const path = treeFindPath(this.innerValue, this.options);
+				const path = treeFindPath(this.innerValue, this.options, this.defaultProps);
 				this.$emit('input', this.innerValue, path);	// 选中的最后一级key, 路径
 				this.handleClose();
 			},

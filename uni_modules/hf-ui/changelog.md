@@ -1,3 +1,15 @@
+## 1.0.17（2023-06-09）
+- 修改hf-video样式
+## 1.0.16（2023-06-08）
+- 添加组件
+	- hf-tree：树形组件
+	- hf-form-tree：树形组件 + 右侧弹框 + 搜索
+- hf-cascader-picker 添加props
+	- selectParent：是否可以选父级
+- hf-form-cascader 添加props
+	- selectParent：是否可以选父级
+- hf-form-select 添加props
+	- pinyin：是否拼音搜索
 ## 1.0.15（2023-05-24）
 - hf-form-upload：修改详情状态下label样式
 - hf-form-select：修改详情状态下label样式

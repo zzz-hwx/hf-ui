@@ -62,7 +62,7 @@
 						</u-list-item>
 					</u-list>
 					<view v-if="multiple" class="btns">
-						<u-button @click="handleClose">取消</u-button>
+						<u-button @click="handleClose">{{ cancelText }}</u-button>
 						<u-button type="primary" @click="handleConfirm">确定</u-button>
 					</view>
 				</view>
@@ -73,6 +73,7 @@
 
 <script>
 	import mixin from '../../libs/mixins/form.js';
+	import PinyinEngine from '../../libs/pinyin-engine/cn.js';
 	import loadData from '../../libs/util/loadData.js';
 	export default {
 		name: 'HfFormSelect',
@@ -106,6 +107,11 @@
 				type: Boolean,
 				default: false
 			},
+			pinyin: {
+				// 是否拼音搜索(仅mode='right'有效)
+				type: Boolean,
+				default: false
+			},
 			multiple: {
 				// 是否多选(仅mode='right'有效)
 				type: Boolean,
@@ -134,6 +140,8 @@
 		// #endif
 		data() {
 			return {
+				cancelText: uni.$u.props.picker.cancelText,		// 取消按钮的文字
+				// confirmText: uni.$u.props.picker.confirmText,	// 确认按钮的文字
 				visible: false,
 				searchForm: {
 					keyword: ''
@@ -144,34 +152,6 @@
 					// 提示文本的样式
 					labelStyle: {},
 				}
-			}
-		},
-		watch: {
-			dictCode: {
-				handler() {
-					this.loadDictOptions();
-				},
-				immediate: true
-			},
-			value: {
-				handler(val) {
-					if (this.mode !== 'right') return;
-					// 右侧弹框 处理value
-					if (val) {
-						this.selected = val.split(this.separator);
-					} else {
-						this.selected = [];
-					}
-				},
-				immediate: true
-			},
-			options: {
-				handler(val) {
-					if (!this.dictCode) {
-						this.list = uni.$u.deepClone(val);
-					}
-				},
-				immediate: true
 			}
 		},
 		computed: {
@@ -209,18 +189,62 @@
 				if (index === -1) index = 0;
 				return [index];
 			},
+			pinyinKeys() {
+				return [this.keyName];
+			},
+			pinyinObj() {
+				if (this.search && this.pinyin && this.list_.length) {
+					return new PinyinEngine(this.list_, this.pinyinKeys);
+				}
+				return null;
+			},
 			renderList() {
 				// 渲染显示的列表
 				let renderList = [];
 				if (!this.search || !this.searchForm.keyword) {
+					// 没有搜索
 					renderList = this.list_;
+				} else if (this.pinyinObj) {
+					// 拼音搜索
+					renderList = this.pinyinObj.query(this.searchForm.keyword);
 				} else {
-					renderList = this.list_.filter((item) => (item[this.keyName].indexOf(this.searchForm.keyword) !== -1));
+					// 普通搜索
+					renderList = this.list_.filter((item) => {
+						return this.pinyinKeys.some((key) => (item[key].indexOf(this.searchForm.keyword) !== -1));
+					});
 				}
 				return renderList.map((item) => ({
 					...item,
 					selected: this.selected.indexOf(item[this.keyValue]) !== -1
 				}));
+			}
+		},
+		watch: {
+			dictCode: {
+				handler() {
+					this.loadDictOptions();
+				},
+				immediate: true
+			},
+			value: {
+				handler(val) {
+					if (this.mode !== 'right') return;
+					// 右侧弹框 处理value
+					if (val) {
+						this.selected = val.split(this.separator);
+					} else {
+						this.selected = [];
+					}
+				},
+				immediate: true
+			},
+			options: {
+				handler(val) {
+					if (!this.dictCode) {
+						this.list = uni.$u.deepClone(val);
+					}
+				},
+				immediate: true
 			}
 		},
 		mounted() {

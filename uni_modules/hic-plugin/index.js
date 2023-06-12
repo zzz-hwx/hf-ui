@@ -25,6 +25,10 @@ export * from './js_sdk/tools/uniTools';
 import * as uviewTools from './js_sdk/tools/uviewTools';
 export * from './js_sdk/tools/uviewTools';
 
+// 校验方法
+import * as test from './js_sdk/test.js';
+export * from './js_sdk/test.js';
+
 const $z = {
 	modal,
 	toast,
@@ -32,7 +36,8 @@ const $z = {
 	...storageHis,
 	...tools,
 	...uniTools,
-	...uviewTools
+	...uviewTools,
+	...test
 };
 
 // 挂载到uni对象上

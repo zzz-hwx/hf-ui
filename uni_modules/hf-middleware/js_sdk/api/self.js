@@ -1,5 +1,6 @@
 import { useBase } from '../utils/base.js';
 import { base64ToPath, getFileType } from '../utils/index.js';
+import { gcj02towgs84 } from '../utils/mapConversion.js';
 import { showActionSheet as uniShowActionSheet } from '@/uni_modules/hic-plugin';
 
 /* ====================
@@ -115,11 +116,15 @@ export async function chooseFile() {
  */
 export async function getLocation() {
 	const res = await useBase('location');
-	console.log('--- 定位 --->', res)
+	console.log('--- 定位 --->', res);
+	// 底座返回经纬度坐标系为gcj02(高德)
+	// PC端坐标系为wgs84
+	// ∴ 转换为gcj02
+	const [longitude, latitude] = gcj02towgs84(res.longitude, res.latitude);
 	return {
-		latitude: res.latitude,		// 纬度
-		longitude: res.longitude,	// 经度
-		address: res.address		// 地址
+		latitude,	// 纬度
+		longitude,	// 经度
+		address: res.address	// 地址
 	};
 }
 
@@ -210,11 +215,14 @@ export async function logout() {
  */
 // export async function 
 
+let systemInfo = {};
+
 /**
  * @description 获取用户信息
  */
 export async function getUserInfo() {
 	const res = await useBase('systemInfo');
+	if (res) systemInfo = res;
 	if (!(res && res.userInfo)) {
 		throw new Error('获取用户信息失败', res);
 	}
@@ -249,9 +257,32 @@ export async function getUserInfo() {
 		"serverInfo": {
 			"baseUrl": "http://172.16.40.41:8080/hf-back-scpsm-dev/",
 			"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODAxNjUwOTIsInVzZXJuYW1lIjoiYWRtaW4ifQ.GThrgyr1bJMNEQSB8Q_oNlnJ3hv48KZF0qRyLpN0YGM "
+		},
+		"versionInfo": {
+			"versionCode": "xx",
+			"versionName": "xx"
 		}
 	}
 	 */
+}
+
+/**
+ * @description 获取版本号
+ */
+export async function getVersion() {
+	if (systemInfo && systemInfo.versionInfo) {
+		return {
+			...systemInfo.versionInfo
+		};
+	}
+	const res = await useBase('systemInfo');
+	if (res) systemInfo = res;
+	if (!(res && res.versionInfo)) {
+		throw new Error('获取版本号失败', res);
+	}
+	return {
+		...res.versionInfo
+	};
 }
 
 /**
@@ -259,6 +290,7 @@ export async function getUserInfo() {
  */
 export async function getToken() {
 	const res = await useBase('systemInfo');
+	if (res) systemInfo = res;
 	if (!(res && res.serverInfo && res.serverInfo.token)) {
 		throw new Error('获取token失败', res);
 	}

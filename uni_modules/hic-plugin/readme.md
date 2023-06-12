@@ -434,3 +434,29 @@ const data = treeDataFormat([{key: '', title: '', children: [{key: '', title: ''
 });
 // [{value: '', text: '', children: [{value: '', text: ''}]}]
 ```
+
+#### treeFindPath(key, treeData, defaultProps)
+
+树 获取路径
+
+- key：要找的选项值
+- treeData：数据
+- defaultProps：字段映射关系，默认值：`{ text: 'text', value: 'value' }`
+
+``` js
+const data = treeFindPath('xxx', [{key: '', title: '', children: [{key: '', title: ''}]}], { text: 'title', value: 'key' });
+// [{key: '', title: ''}, {key: '', title: ''}]
+```
+
+## test 规则校验
+
+### idCard(num)
+
+是否身份证号
+
+- num：身份证号
+
+``` js
+const flag = idCard('123456198605141234');	// false
+```
+

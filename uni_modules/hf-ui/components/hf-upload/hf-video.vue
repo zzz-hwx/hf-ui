@@ -1,9 +1,8 @@
 <template>
-	<!-- autoplay="false" -->
-	<view name="videoPlayer" class="flex flex-direction">
+	<view class="hf-video">
 		<video
 			id="myVideo"
-			class="response"
+			class="video"
 			:src="videoUrl"
 			:title="videoTitle"
 			controls="true"
@@ -90,6 +89,10 @@
 	};
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.hf-video,
+video.video {
+	width: 100%;
+	height: 100%;
+}
 </style>

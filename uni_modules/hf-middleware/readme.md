@@ -25,6 +25,7 @@ API
 | anyRtc        |      | ✔    |        | 视频、语音     |
 | scanCode      |      | ✔    | ✔      | 扫码           |
 | getSystemInfo | ✔    |      |        | 获取系统信息   |
+| getVersion    |      | ✔    |        | 获取版本号     |
 | softInputMode |      | ✔    |        | 布局静默       |
 | logout        |      | ✔    |        | 退出登录       |
 | getUserInfo   |      | ✔    |        | 获取用户信息   |
@@ -404,15 +405,33 @@ scanCode().then((res) => {
 
 **平台差异说明**
 
-| 快应  | 自研  | uniapp |
-| --- | --- | ------ |
-|     | ✔   |        |
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+| ✔    |      |        |
 
 **示例**
 
 ```js
 getSystemInfo().then(res => {
     console.log(res);    // { statusBarHeight: 25 }
+});
+```
+
+#### getVersion()
+
+获取版本号
+
+**平台差异**
+
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+|      | ✔    |        |
+
+**示例**
+
+``` js
+getVersion().then(res => {
+    console.log(res);    // { versionCode: xx, versionName: xx }
 });
 ```
 

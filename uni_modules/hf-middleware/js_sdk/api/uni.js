@@ -116,6 +116,7 @@ export async function chooseFile({ count = 1 } = {}) {
 
 /**
  * @description 获取当前的地理位置
+ * uni.getLocation 默认为 wgs84 (小程序 腾讯/高德地图 坐标系gcj02 返回的经纬度是什么坐标系 ???)
  */
 export async function getLocation() {
 	const res = await location.reverseGeocoder();

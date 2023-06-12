@@ -13,6 +13,7 @@
 					:before-preview="beforePreview"
 					use-before-read
 					:before-read="beforeRead"
+					:deletable="false"
 					@input="handleInput">
 					<u-avatar icon="account-fill" size="60" font-size="50" bg-color="#EDEEF5" color="#586ABA"></u-avatar>
 				</hf-upload>

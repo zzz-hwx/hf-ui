@@ -31,9 +31,9 @@
 <script>
 	/**
 	 * @description 嵌入页面的多列级联选择
-	 * 逻辑从<uni-data-picker>拷贝粘贴(版本: 1.1.1)
+	 * 逻辑参考<uni-data-picker>(版本: 1.1.1)
 	 */
-	import { treeFindPath } from '../../libs/util/utils.js';
+	import { treeFindPath } from '@/uni_modules/hic-plugin';
 	export default {
 		name: 'HfCascaderPicker',
 		props: {
@@ -55,10 +55,11 @@
 			},
 			defaultProps: {
 				type: Object,
-				default: () => ({
-					text: 'text',
-					value: 'value'
-				})
+				default: () => ({})
+			},
+			selectParent: {
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
@@ -88,22 +89,30 @@
 				return `height: ${uni.$u.addUnit(this.visibleItemCount * this.itemHeight)}`;
 			},
 			selected_() {
-				return this.selected.filter(item => (item.text));
+				return this.selected.filter(item => (item[this.textKey]));
 			},
 			dataList_() {
 				const i = this.selectedIndex;
 				if (i >= this.dataList.length) return [];
-				const {
-					text,
-					value
-				} = this.defaultProps;
 				return this.dataList[i].map(item => ({
-					text: item[text],
-					value: item[value],
+					text: item[this.textKey],
+					value: item[this.idKey],
 					isleaf: item.isleaf,
 					disabled: item.disabled
 				}));
-			}
+			},
+			idKey() {
+				return this.defaultProps.value || 'value';
+			},
+			textKey() {
+				return this.defaultProps.text || 'text';
+			},
+			childrenKey() {
+				return this.defaultProps.children || 'children';
+			},
+			disabledKey() {
+				return this.defaultProps.disabled || 'disabled';
+			},
 		},
 		methods: {
 			init() {
@@ -113,8 +122,8 @@
 				let inputValue = this.value;
 				if (Array.isArray(inputValue)) {
 					inputValue = inputValue[inputValue.length - 1];
-					if (typeof inputValue === 'object' && inputValue[this.defaultProps.value]) {
-						inputValue = inputValue[this.defaultProps.value];
+					if (typeof inputValue === 'object' && inputValue[this.idKey]) {
+						inputValue = inputValue[this.idKey];
 					}
 				}
 
@@ -126,23 +135,26 @@
 				this.scrollToTop();
 			},
 			handleNodeClick(item, j) {
-				const i = this.selectedIndex;
 				if (item.disabled) return;
 
+				const i = this.selectedIndex;
 				const node = this.dataList[i][j];
-				const text = node[this.defaultProps.text];
-				const value = node[this.defaultProps.value];
+				const text = node[this.textKey];
+				const value = node[this.idKey];
 
-				if (i < this.selected.length - 1) {
+				if (this.selected[i][this.idKey] === value) {
+					// 点击 已选中的 反选 => 清除选中
+					this.selected.splice(i, this.selected.length - i);
+				} else if (i < this.selected.length - 1) {
 					this.selected.splice(i, this.selected.length - i);
 					this.selected.push({
-						text,
-						value
+						[this.textKey]: text,
+						[this.idKey]: value
 					});
 				} else if (i === this.selected.length - 1) {
 					this.selected.splice(i, 1, {
-						text,
-						value
+						[this.textKey]: text,
+						[this.idKey]: value
 					});
 				}
 
@@ -158,7 +170,8 @@
 				this.onSelectedChange(node, (!hasNodes || isleaf));
 			},
 			onSelectedChange(node, isleaf) {
-				if (isleaf) {
+				if (this.selectParent || isleaf) {
+					// 任意一级可选择 || 叶子节点
 					this._dispatchEvent();
 				}
 				if (node) {
@@ -172,7 +185,7 @@
 				await this.nextTick();
 				this.selectedScrollIntoView = '_' + this.selectedIndex;
 				// list 纵向滚动
-				const value = this.selected[this.selectedIndex].value;
+				const value = this.selected[this.selectedIndex][this.idKey];
 				if (value === null) {
 					// 滚动到顶部
 					this.scrollTop = -Infinity;
@@ -186,8 +199,11 @@
 				}
 			},
 			_dispatchEvent() {
-				this.$emit('change', this.selected.slice(0));
-				this.$emit('input', this.selected[this.selected.length - 1].value);
+				// if 任意一级可选择 过滤掉最后一级[请选择]
+				const path = this.selected.filter((item) => (item[this.idKey] !== null));
+				const value = path[path.length - 1][this.idKey];
+				this.$emit('change', path);
+				this.$emit('input', value);
 			},
 			_updateBindData(node) {
 				const {
@@ -206,8 +222,8 @@
 
 				if (!isleaf && this.selected.length < dataList.length) {
 					this.selected.push({
-						value: null,
-						text: "请选择"
+						[this.idKey]: null,
+						[this.textKey]: "请选择"
 					})
 					this.scrollToTop();
 				}
@@ -218,25 +234,25 @@
 				}
 			},
 			_extractTree(nodes, result, parent_value) {
-				let list = result || []
-				const valueField = this.defaultProps.value
+				let list = result || [];
+				const valueField = this.idKey;
 				for (let i = 0; i < nodes.length; i++) {
-					let node = nodes[i]
+					let node = nodes[i];
 
-					let child = {}
+					let child = {};
 					for (let key in node) {
 						if (key !== 'children') {
-							child[key] = node[key]
+							child[key] = node[key];
 						}
 					}
 					if (parent_value !== null && parent_value !== undefined && parent_value !== '') {
-						child.parent_value = parent_value
+						child.parent_value = parent_value;
 					}
-					result.push(child)
+					result.push(child);
 
-					let children = node.children
+					let children = node.children;
 					if (children) {
-						this._extractTree(children, result, node[valueField])
+						this._extractTree(children, result, node[valueField]);
 					}
 				}
 			},
@@ -249,7 +265,7 @@
 						.parent_value === '')
 				}))
 				for (let i = 0; i < paths.length; i++) {
-					let value = paths[i].value
+					let value = paths[i][this.idKey];
 					let nodes = data.filter((item) => {
 						return item.parent_value === value
 					})
