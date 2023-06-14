@@ -16,7 +16,7 @@ const loadData = {
 	 * @return {Array} [{ url: '绝对路径', name: '文件名' }]
 	 */
 	async getAbsPath(val) {
-		return val;
+		return [{ url: val, name: 'api.pdf' }];
 	},
 	/**
 	 * 图片上传
@@ -26,8 +26,8 @@ const loadData = {
 	 */
 	async uploadFile({ path, name }) {
 		return {
-			url: '',	// 图片可访问绝对路径
-			path: ''	// 相对路径(保存)
+			url: path,	// 图片可访问绝对路径
+			path: path	// 相对路径(保存)
 		}
 	}
 };

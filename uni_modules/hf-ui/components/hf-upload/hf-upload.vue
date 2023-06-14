@@ -22,9 +22,16 @@
 							</view>
 						</template>
 						<template v-else>
-							<view class="hf-upload__wrap__preview__other">
-								<u-icon :color="primaryColor" size="26" name="folder"></u-icon>
-								<text class="hf-upload__wrap__preview__other__text">文件</text>
+							<view class="hf-upload__wrap__preview__other" @click="onPreviewFile(item)">
+								<hf-icon v-if="item.ext === 'xls' || item.ext === 'xlsx'" color="#16ac52" size="26" name="file-excel-fill"></hf-icon>
+								<hf-icon v-else-if="item.ext === 'ppt' || item.ext === 'pptx'" color="#f07010" size="26" name="file-ppt-fill"></hf-icon>
+								<hf-icon v-else-if="item.ext === 'doc' || item.ext === 'docx'" color="#1c90ff" size="26" name="file-word-fill"></hf-icon>
+								<hf-icon v-else-if="item.ext === 'pdf'" color="#e53833" size="26" name="file-pdf-fill"></hf-icon>
+								<hf-icon v-else-if="item.ext === 'md'" color="#b2b2b2" size="26" name="file-markdown-fill"></hf-icon>
+								<hf-icon v-else-if="item.ext === 'txt'" color="#adadad" size="26" name="file-text-fill"></hf-icon>
+								<hf-icon v-else-if="item.ext === 'zip'" color="#f4b209" size="26" name="file-zip-fill"></hf-icon>
+								<hf-icon v-else :color="primaryColor" size="26" name="file-fill"></hf-icon>
+								<text class="hf-upload__wrap__preview__other__text u-line-2">{{ item.name | filterFileName }}</text>
 							</view>
 						</template>
 					</template>
@@ -45,7 +52,7 @@
 							class="hf-upload__deletable"
 							@click.stop="deleteItem(index)">
 							<view class="hf-upload__deletable__icon">
-								<u-icon name="close" color="#ffffff" size="10"></u-icon>
+								<u-icon name="close" color="#ffffff" size="16"></u-icon>
 							</view>
 						</view>
 					</template>
@@ -78,8 +85,9 @@
 					<text v-if="uploadText" class="u-upload__button__text">{{ uploadText }}</text>
 				</view>
 			</template>
-			
 		</view>
+		
+		<!-- 预览视频 -->
 		<u-overlay :show="previewVideoVis" @click="previewVideoVis = false">
 			<view class="hf-upload__overlay">
 				<view class="hf-upload__overlay__video" @tap.stop>
@@ -100,6 +108,22 @@
 		mixins: [props],
 		components: {
 			HfVideo
+		},
+		filters: {
+			filterFileName(name) {
+				const extIndex = name.lastIndexOf('.');
+				if (extIndex === -1) {
+					return '文件';
+				}
+				const ext = name.substring(extIndex + 1);	// 扩展名 jpg mp4
+				const showLen = 8;
+				if (showLen > extIndex) {
+					return name;
+				} else {
+					const fileName = name.substring(0, showLen);
+					return `${fileName}...${ext}`;
+				}
+			},
 		},
 		props: {
 			value: {
@@ -172,6 +196,9 @@
 				 * 		failed		上传失败
 				 * 		success		上传成功
 				 * message: 提示信息
+				 * name: 文件名
+				 * tempFilePath: 临时路径
+				 * ext: 文件扩展名
 				 */
 				previewVideoVis: false,
 				previewVideoUrl: '',
@@ -192,6 +219,7 @@
 						}
 						return {
 							url: absList[index].url || '',	// 绝对路径
+							name: absList[index].name,
 							path,	// 相对路径 id
 							isImage: this.accept === 'image' || uni.$u.test.image(absList[index].name),
 							isVideo: this.accept === 'video' || uni.$u.test.video(absList[index].name),
@@ -237,12 +265,17 @@
 			async onAfterRead(fileArr) {
 				const fileListLen = this.lists.length;
 				const list = fileArr.map(item => {
+					const name = item.name;
+					const extIndex = name.lastIndexOf('.');
+					const ext = name.substring(extIndex + 1);	// 扩展名 jpg mp4
 					return {
 						url: item.path,
+						name: item.name,
 						status: 'uploading',
 						message: '上传中',
 						isImage: this.accept === 'image' || uni.$u.test.image(item.name || item.thumb),
 						isVideo: this.accept === 'video' || uni.$u.test.video(item.name || item.thumb),
+						ext
 					};
 				})
 				this.lists.push(...list);
@@ -303,8 +336,102 @@
 				// 预览视频
 				this.previewVideoVis =  true;
 				this.previewVideoUrl = item.url;
+			},
+			async onPreviewFile(item) {
+				// 预览文件
+				// #ifdef MP-WEIXIN
+				this.onPreviewFile__uni(item);
+				// #endif
+				// #ifdef H5
+				this.onPreviewFile__hybrid(item);
+				// #endif
+				// #ifdef APP
+				this.onPreviewFile__uni(item);
+				// this.onPreviewFile__app(item);
+				// #endif
+			},
+			async onPreviewFile__uni(item) {
+				console.log(item);
+				const arr = ['doc', 'xls', 'ppt', 'pdf', 'docx', 'xlsx', 'pptx'];	// uni.openDocument 支持格式
+				if (item.ext && arr.includes(item.ext)) {
+					if (!item.tempFilePath) {
+						const filePath = await downloadFile(item.url);
+						// const filePath = item.url;
+						const index = this.lists.findIndex(it => (it === item));
+						if (index !== -1) {
+							this.lists.splice(index, 1, Object.assign({}, item, {
+								tempFilePath: filePath
+							}));
+							item = this.lists[index];
+						}
+					}
+					if (item.tempFilePath) {
+						openDocument(item.tempFilePath);
+						return;
+					}
+				}
+				uni.$u.toast('该文件不支持预览');
+			},
+			// #ifdef H5
+			onPreviewFile__hybrid(item) {
+				const arr = ['pdf'];	// 只支持pdf
+				if (item.ext && arr.includes(item.ext)) {
+					uni.$u.route('/uni_modules/hf-ui/pages/preview/preview', {
+						url: encodeURIComponent(item.url)
+					});
+				}
+				uni.$u.toast('该文件不支持预览');
+			},
+			// #endif
+			// #ifdef APP
+			onPreviewFile__app(item) {
+				// uni.shareWithSystem({
+				// 	href: item.url
+				// })
+				// plus.share.sendWithSystem(item.url, (res), errorCB);
 			}
+			// #endif
 		}
+	}
+	
+	function downloadFile (url) {
+		return new Promise((resolve, reject) => {
+			console.log('--- 下载文件 uni.downloadFile --->', url)
+			// 下载文件
+			uni.downloadFile({
+				url,
+				success: (res) => {
+					console.log(res);
+					if (res.statusCode === 200) {
+						resolve(res.tempFilePath);
+					} else {
+						reject(res);
+					}
+				},
+				fail: (err) => {
+					console.log(err);
+					reject(err);
+				}
+			})
+		})
+	}
+	function openDocument (url, ) {
+		return new Promise((resolve, reject) => {
+			// 新开页面打开文档，支持格式：doc, xls, ppt, pdf, docx, xlsx, pptx
+			uni.openDocument({
+				filePath: url,
+				showMenu: false,
+				success: (res) => {
+					console.log('--- 打开文档成功 --->', res);
+					resolve(res);
+				},
+				fail: (err) => {
+					console.log(err);
+					uni.$u.toast('该文件不支持预览');
+					reject(err);
+				}
+			})
+		})
 	}
 </script>
 
@@ -344,9 +471,9 @@
 					background-color: $u-bg-color;
 					// border: 1px solid rgba($color: $u-border-color, $alpha: 0.3);
 					&__text {
-						font-size: $font-xs;
+						font-size: 10px;
 						color: $u-tips-color;
-						margin-top: 2px;
+						margin: 2px 4px 0;
 					}
 				}
 			}
@@ -377,9 +504,9 @@
 			position: absolute;
 			top: 0;
 			right: 0;
-			background-color: #373737;
-			height: 14px;
-			width: 14px;
+			background-color: rgba($color: #000008, $alpha: 0.3);
+			height: 20px;
+			width: 20px;
 			display: flex;
 			flex-direction: column;
 			border-bottom-left-radius: 100px;

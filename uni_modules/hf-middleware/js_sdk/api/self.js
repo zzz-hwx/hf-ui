@@ -1,7 +1,7 @@
 import { useBase } from '../utils/base.js';
 import { base64ToPath, getFileType } from '../utils/index.js';
 import { gcj02towgs84 } from '../utils/mapConversion.js';
-import { showActionSheet as uniShowActionSheet } from '@/uni_modules/hic-plugin';
+import { showActionSheet as uniShowActionSheet, delay } from '@/uni_modules/hic-plugin';
 
 /* ====================
 		自研api
@@ -89,6 +89,7 @@ export async function chooseVideo() {
  */
 export async function chooseMedia({ count = 9 } = {}) {
 	const tapIndex = await uniShowActionSheet({ itemList: ['图片', '视频']});
+	await delay(100);	// 等待样式过渡时间 .3s
 	switch (tapIndex) {
 		case 0:
 			return chooseImage({ count });

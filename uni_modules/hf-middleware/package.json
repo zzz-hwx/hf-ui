@@ -1,7 +1,7 @@
 {
   "id": "hf-middleware",
   "displayName": "hf-middleware",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "hf-middleware",
   "keywords": [
     "hf-middleware"
@@ -64,7 +64,7 @@
           "Safari": "u"
         },
         "小程序": {
-          "微信": "u",
+          "微信": "y",
           "阿里": "u",
           "百度": "u",
           "字节跳动": "u",

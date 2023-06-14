@@ -28,11 +28,11 @@
 					disable-no-show-btn
 					@input="handleInput">
 					<view class="button">
-						<template v-if="accept === 'image' || accept === 'media'">
-							<hf-icon name="photo-square" size="44" :color="tipsColor"></hf-icon>
-						</template>
-						<template v-else-if="accept === 'video'">
+						<template v-if="accept === 'video'">
 							<hf-icon name="video-square" size="44" :color="tipsColor"></hf-icon>
+						</template>
+						<template v-else>
+							<hf-icon name="photo-square" size="44" :color="tipsColor"></hf-icon>
 						</template>
 					</view>
 				</hf-upload>

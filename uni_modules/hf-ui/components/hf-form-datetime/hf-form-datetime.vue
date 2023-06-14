@@ -1,12 +1,5 @@
 <template>
 	<view class="hf-form-datetime">
-		<!-- #ifdef H5 -->
-		<template v-if="$scopedSlots['display-section']">
-			<view class="" @click="pickerShow">
-				<slot name="display-section" :valueName="valueShow"></slot>
-			</view>
-		</template>
-		<!-- #endif -->
 		<!-- #ifdef MP-WEIXIN -->
 		<template v-if="$slots['display-section']">
 			<view class="" @click="pickerShow">
@@ -14,6 +7,14 @@
 			</view>
 		</template>
 		<!-- #endif -->
+		<!-- #ifndef MP-WEIXIN -->
+		<template v-if="$scopedSlots['display-section']">
+			<view class="" @click="pickerShow">
+				<slot name="display-section" :valueName="valueShow"></slot>
+			</view>
+		</template>
+		<!-- #endif -->
+		
 		<template v-else>
 			<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="pickerShow">
 				<hf-form-content ref="input" :value="valueShow" :placeholder="placeholder"></hf-form-content>

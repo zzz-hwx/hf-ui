@@ -35,31 +35,34 @@ export async function chooseImage({ count = 9, compress = true, size = 200 } = {
 			});
 			// #endif
 			// #ifndef H5
+			const info = getFileInfo(file.path);	// 微信小程序没有返回 name、type
 			fileArr.push({
 				path: file.path,	// 本地文件路径
-				name: file.name,	// 包含扩展名的文件名称，仅H5支持
+				name: file.name || info.name,	// 包含扩展名的文件名称，仅H5支持
 				size: file.size,	// 本地文件大小，单位：B(字节)
-				type: file.type		// 文件类型，仅H5支持 image/jpeg
+				type: file.type || info.type		// 文件类型，仅H5支持 image/jpeg
 			});
 			// #endif
 		}
 	} else {
 		fileArr.push(...res.tempFiles);
 	}
-	console.log('--- uni.chooseImage --->', res.tempFiles, fileArr);
 	return fileArr;	// 图片的本地文件路径列表
 }
 
 /**
  * @description 拍摄视频或从手机相册中选视频，返回视频的临时文件路径
  */
-export async function chooseVideo() {
-	const res = await uniChooseVideo();	// 只能选择1个
+export async function chooseVideo({ maxDuration = 10 } = {}) {
+	const res = await uniChooseVideo({
+		maxDuration
+	});	// 只能选择1个
+	const info = getFileInfo(res.tempFilePath);	// 微信小程序没有返回 name、type
 	const fileArr = [{
 		path: res.tempFilePath,
-		name: res.name,
+		name: res.name || info.name,
 		size: res.size,
-		type: (res.tempFile || {}).type
+		type: (res.tempFile || {}).type || info.type
 	}];
 	return fileArr;
 }
@@ -69,9 +72,12 @@ export async function chooseVideo() {
  * @param {Object} params 参数
  * 	@param {Number} count = [9] 最多可选择的数量，默认9，视频只可选择1
  */
-export async function chooseMedia({ count = 9 } = {}) {
+export async function chooseMedia({ count = 9, maxDuration = 10 } = {}) {
 	// #ifdef MP-WEIXIN
-	const res = await uniChooseMedia();
+	const res = await uniChooseMedia({
+		count,
+		maxDuration
+	});
 	return res.tempFiles.map((item) => {
 		const info = getFileInfo(item.tempFilePath);
 		return {
@@ -99,6 +105,21 @@ export async function chooseMedia({ count = 9 } = {}) {
  * 	@param {Number} count = [1] 最多可以选择的文件数量
  */
 export async function chooseFile({ count = 1 } = {}) {
+	// #ifdef MP-WEIXIN
+	// 微信小程序 没有 uni.chooseFile
+	const res = await chooseMessageFile({ count });
+	const fileArr = res.tempFiles.map(item => {
+		const info = getFileInfo(item.path);
+		return {
+			path: item.path,
+			name: item.name,
+			size: item.size,
+			type: info.type,	// api返回的type为video, image, file
+		};
+	});
+	return fileArr;
+	// #endif
+	// #ifndef MP-WEIXIN
 	const res = await uniChooseFile({
 		count,
 		// extension: ['.zip','.doc'],	// 根据文件拓展名过滤，每一项都不能是空字符串。默认不过滤
@@ -112,6 +133,7 @@ export async function chooseFile({ count = 1 } = {}) {
 		};
 	});
 	return fileArr;
+	// #endif
 }
 
 /**
@@ -163,3 +185,22 @@ export function scanCode(params) {
 /* ====================
 		一些工具方法
  ==================== */
+
+// #ifdef MP-WEIXIN
+function chooseMessageFile({ count }) {
+	return new Promise((resolve, reject) => {
+		wx.chooseMessageFile({
+			count,
+			type: 'all',
+			// extension: [''],	// 根据文件拓展名过滤，仅 type==file 时有效。每一项都不能是空字符串。默认不过滤。
+			success: (res) => {
+				resolve(res);
+			},
+			fail: (err) => {
+				console.log(err);
+				reject();
+			}
+		});
+	});
+}
+// #endif
