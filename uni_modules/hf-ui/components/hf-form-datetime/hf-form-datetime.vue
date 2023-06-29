@@ -81,10 +81,11 @@
 				return Number(new Date());
 			},
 			valueShow() {
-				if (this.value) {
-					return uni.$u.timeFormat(this.value, this.formatShow);
+				if (!this.value) return '';
+				if (this.mode === 'time') {
+					return this.value;	// 时间 12:24
 				}
-				return '';
+				return uni.$u.timeFormat(this.value, this.formatShow);
 			}
 		},
 		watch: {

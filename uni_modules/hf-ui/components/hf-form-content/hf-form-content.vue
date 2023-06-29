@@ -1,6 +1,6 @@
 <template>
 	<view class="hf-form-content">
-		<text v-if="value">{{ value }}</text>
+		<text v-if="value" class="value">{{ value }}</text>
 		<text v-else class="placeholder">{{ placeholder }}</text>
 	</view>
 </template>
@@ -40,8 +40,16 @@
 	height: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
+	// justify-content: space-between;
 	font-size: $font-df;
+	.value,
+	.placeholder {
+		flex: 1;
+		width: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	.placeholder {
 		color: $u-light-color;
 	}

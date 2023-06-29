@@ -116,6 +116,16 @@ import './plugin/hf-ui.js'
 | --- | --- |
 |     |     |
 
+> ***说明***
+>
+> 1. 重写了label样式的组件
+>    - hf-form-select
+>    - hf-form-checkbox
+>    - hf-form-upload
+> 2. 表单校验的错误提示位置：
+>    - 默认：内容区域底部（margin-left: labelWidth）
+>    - 左侧：多选checkbox、图片上传upload、头像avatar、文本域textarea（margin-left: 0;）
+
 ### hf-form-input 输入框
 
 **示例**
@@ -281,14 +291,73 @@ export default {
 
 **props**
 
-| 参数       | 说明     | 类型     | 默认值 | 可选值 |
-| -------- | ------ | ------ | --- | --- |
-| dictCode | 字典code | String |     |     |
-| options  | 选项     | Array  | []  |     |
+| 参数     | 说明     | 类型   | 默认值 | 可选值 |
+| -------- | -------- | ------ | ------ | ------ |
+| dictCode | 字典code | String |        |        |
+| options  | 选项     | Array  | []     |        |
 
-### hf-form-checkbox 多选..
+### hf-form-checkbox 复选框
 
-???
+**示例**
+
+``` html
+<u-form :model="model">
+    <hf-form-checkbox
+        v-model="model.str"
+        label="多选"
+        placeholder="请选择"
+        :options="options"
+	></hf-form-checkbox>
+</u-form>
+```
+
+``` js
+export default {
+	data() {
+		return {
+			model: {
+				str: '3,5,8,b,e,n'
+			},
+			options: [
+				{ value: '1', label: '吕布吕奉先' },
+				{ value: '2', label: '赵云赵子龙' },
+				{ value: '3', label: '典韦' },
+				{ value: '4', label: '关羽关云长' },
+				{ value: '5', label: '马超马孟起' },
+				{ value: '6', label: '张飞张翼德', disabled: true },
+				{ value: '7', label: '黄忠' },
+				{ value: '8', label: '许褚' },
+				{ value: '9', label: '孙策' },
+				{ value: 'a', label: '太史慈' },
+				{ value: 'b', label: '夏侯惇' },
+				{ value: 'c', label: '夏侯渊' },
+				{ value: 'd', label: '张辽' },
+				{ value: 'e', label: '曹操曹孟德' },
+				{ value: 'f', label: '曹丕' },
+				{ value: 'g', label: '曹植' },
+				{ value: 'h', label: '曹冲' },
+				{ value: 'i', label: '曹昂' },
+				{ value: 'j', label: '曹安民' },
+				{ value: 'k', label: '郭嘉' },
+				{ value: 'l', label: '孙权孙仲谋' },
+				{ value: 'm', label: '孙坚' },
+				{ value: 'n', label: '周瑜周公瑾' },
+				{ value: 'o', label: '刘备刘玄德' },
+			]
+		};
+	}
+}
+```
+
+**props**
+
+| 参数          | 说明        | 类型   | 默认值             | 可选值    |
+| ------------- | ----------- | ------ | ------------------ | --------- |
+| dictCode      | 字典code    | String |                    |           |
+| options       | 选项        | Array  | []                 |           |
+| separator     | 选项分隔符  | String | ,                  |           |
+| labelPosition | label的位置 | String | top                | left\|top |
+| confirmColor  | 多选框颜色  | String | color['u-primary'] |           |
 
 ### hf-form-select 列表选择器
 
@@ -1028,13 +1097,20 @@ export default {
 **示例**
 
 ```html
-<hf-form-avatar label="头像" prop="picPath" v-model="model.picPath"></hf-form-avatar>
+<hf-form-avatar
+    v-model="model.picPath"
+    label="头像"
+    prop="picPath"
+    :required="!disabled"
+    :disabled="disabled"
+></hf-form-avatar>
 ```
 
 ```js
 export default {
     data() {
         return {
+            disabled: false,
             model: {
                 picPath: ''
             }
@@ -1654,3 +1730,8 @@ export default {
 | 名称  | 说明                           |
 | --- | ---------------------------- |
 | —   | 自定义树节点的内容，参数为 { node, data } |
+
+## 说明
+
+
+

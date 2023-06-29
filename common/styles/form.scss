@@ -1,0 +1,96 @@
+/**
+ * 表单页面 标题
+ * <view class="title">基础信息</view>
+ */
+.title {
+	padding: $df;
+	color: $u-info;
+}
+
+/**
+ * 表单外层样式
+	<u-form ref="uForm" :model="model" :rules="rules" :labelStyle="labelStyle">
+		<view class="form">
+			<hf-form-input label="身份证号码" prop="idcard" :required="!disabled" v-model="model.idcard" :disabled="disabled" placeholder="自动获取或手动输入"></hf-form-input>
+		</view>
+	</u-form>
+ */
+.form {
+	background-color: $bg-white;
+	padding: $formPadding;
+}
+
+/**
+ * 表单页面 提交按钮样式
+	<view class="btns">
+		<u-button type="primary" @click="submit">提交</u-button>
+	</view>
+ */
+.btns {
+	padding: $df;
+	display: flex;
+	/deep/.u-button + .u-button {
+		margin-left: $df;
+	}
+}
+
+/**
+ * 表单页面 标题 + ocr扫描样式
+	<view class="scan">
+		<view class="title">基础信息</view>
+		<view v-if="!disabled" class="icon" @click="scan">
+			<u-icon name="scan" :size="30" color="#fff"></u-icon>
+		</view>
+	</view>
+ */
+.scan {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	.title {
+		padding: $df;
+		color: $u-info;
+	}
+	.icon {
+		margin-right: $df;
+		padding: 4rpx;
+		background-color: $u-primary;
+		box-shadow: 0 0 16rpx $u-primary;
+		border-radius: 50%;
+	}
+}
+
+/**
+ * 胶囊按钮 重置 | 搜索
+	<view class="btns capsule">
+		<view class="info" @click="reset">重置</view>
+		<view class="primary" @click="search">搜索</view>
+	</view>
+ */
+.btns.capsule {
+	padding: $lg $df;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	$h: 88rpx;
+	$radius: 0.5* $h;
+	& > view {
+		height: $h;
+		font-size: $font-lg;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.info {
+		flex: 2;
+		color: $u-main-color;
+		background-color: #EEEEEE;
+		border-radius: $radius 0 0 $radius;
+	}
+	.primary {
+		flex: 3;
+		color: $bg-white;
+		background-color: $u-primary;
+		border-radius: 0 $radius $radius 0;
+	}
+}

@@ -1,6 +1,6 @@
 <template>
 	<view class="hf-form-textarea">
-		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
+		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :label-width="labelWidth" :borderBottom="borderBottom">
 			<u-textarea
 				:value="value"
 				:placeholder="placeholder"
@@ -25,6 +25,10 @@
 			labelPosition: {
 				type: String,
 				default: 'top'
+			},
+			labelWidth: {
+				type: [String, Number],
+				default: 'auto'
 			},
 			maxlength: {	// 最大输入长度
 				type: [String, Number],
@@ -79,6 +83,10 @@
 			.u-textarea__field {
 				color: $u-main-color;
 			}
+		}
+		/deep/ .u-form-item__body__right__message {
+			// 表单校验的错误提示 放左侧
+			margin-left: 0 !important;
 		}
 	}
 </style>

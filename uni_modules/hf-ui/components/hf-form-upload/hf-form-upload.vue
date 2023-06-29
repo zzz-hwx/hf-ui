@@ -3,7 +3,7 @@
 		<!-- hf-upload 添加属性: disable-no-show-btn, 禁用状态 && 没有文件 => 不显示表单项 -->
 		<u-form-item :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
 			<template #label>
-				<view class="left-content">
+				<view class="left-content" :style="labelStyle">
 					<text v-if="required" class="left-content__required">*</text>
 					<text :style="[parentData.labelStyle]">{{ label }}</text>
 					<text class="tip" v-if="!disabled">
@@ -16,9 +16,12 @@
 			</template>
 			
 			<view class="wrap">
-				<u-line v-if="!disabled"></u-line>
-				<u-gap v-if="!disabled" height="10"></u-gap>
+				<template v-if="!disabled">
+					<u-line></u-line>
+					<u-gap height="10"></u-gap>
+				</template>
 				<hf-upload
+					ref="hfUpload"
 					:value="value"
 					:disabled="disabled"
 					:accept="accept"
@@ -71,13 +74,14 @@
 				default: 50 * 1024 * 1024	// 50M
 			}
 		},
+		// #ifdef MP-WEIXIN
+		options: {
+			styleIsolation: 'shared'
+		},
+		// #endif
 		data() {
 			return {
 				tipsColor: uni.$u.config.color['u-tips-color'],
-				parentData: {
-					// 提示文本的样式
-					labelStyle: {},
-				}
 			}
 		},
 		computed: {
@@ -94,17 +98,12 @@
 				return `${size}${unit[index]}`
 			}
 		},
-		mounted() {
-			this.updateParentData();
-		},
 		methods: {
 			handleInput(val) {
 				this.$emit('input', val);
-			},
-			updateParentData() {
-				// 获取父组件的参数
-				// 此方法写在uview的全局mixin中
-				this.getParentData('u-form');
+				this.$nextTick(() => {
+					uni.$u.formValidate(this.$refs.hfUpload, 'change');
+				});
 			},
 		}
 	}
@@ -137,6 +136,10 @@
 				width: 88rpx;
 				height: 88rpx;
 			}
+		}
+		/deep/ .u-form-item__body__right__message {
+			// 表单校验的错误提示 放左侧
+			margin-left: 0 !important;
 		}
 	}
 </style>

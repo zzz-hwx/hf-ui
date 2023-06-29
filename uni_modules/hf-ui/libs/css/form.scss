@@ -4,6 +4,7 @@
 .left-content {
 	position: relative;
 	padding-right: 10rpx;
+	box-sizing: border-box;
 	&__required {
 		position: absolute;
 		left: -9px;
@@ -20,7 +21,7 @@
 	height: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
+	// justify-content: flex-end;
 	font-size: $font-df;
 	.placeholder {
 		color: $u-light-color;

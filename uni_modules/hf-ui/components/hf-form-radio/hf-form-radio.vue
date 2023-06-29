@@ -1,13 +1,11 @@
 <template>
 	<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
-		<view class="flex-end">
-			<template v-if="disabled">
-				<view>{{ valueName }}</view>
-			</template>
-			<template v-else>
-				<hf-radio :value="value" :options="list" @input="handleInput"></hf-radio>
-			</template>
-		</view>
+		<template v-if="disabled">
+			<view>{{ valueName }}</view>
+		</template>
+		<template v-else>
+			<hf-radio :value="value" :options="list" @input="handleInput"></hf-radio>
+		</template>
 	</u-form-item>
 </template>
 
@@ -67,12 +65,5 @@
 </script>
 
 <style lang="scss" scoped>
-	.flex-end {
-		width: 100%;
-		display: flex;
-		justify-content: flex-end;
-		.u-radio-group {
-			justify-content: flex-end;
-		}
-	}
+	
 </style>

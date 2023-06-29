@@ -1,5 +1,5 @@
 <template>
-	<view class="hf-avatar">
+	<view class="hf-form-avatar">
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom">
 			<view class="flex-end">
 				<hf-upload
@@ -30,9 +30,17 @@
 	export default {
 		name: 'HfFormAvatar',
 		mixins: [mixin],
+		// #ifdef MP-WEIXIN
+		options: {
+			styleIsolation: 'shared'
+		},
+		// #endif
 		methods: {
 			handleInput(val) {
 				this.$emit('input', val);
+				this.$nextTick(() => {
+					uni.$u.formValidate(this.$refs.hfUpload, 'change');
+				});
 			},
 			beforeRead() {
 				// 选择的头像前 清空图片列表
@@ -60,16 +68,22 @@
 </script>
 
 <style lang="scss" scoped>
-	.flex-end {
-		width: 100%;
-		display: flex;
-		justify-content: flex-end;
-		/deep/ .hf-upload__wrap {
+	.hf-form-avatar {
+		.flex-end {
+			width: 100%;
+			display: flex;
 			justify-content: flex-end;
-			.hf-upload__wrap__preview {
-				margin: 0;
-				border-radius: 50%;
+			/deep/ .hf-upload__wrap {
+				justify-content: flex-end;
+				.hf-upload__wrap__preview {
+					margin: 0;
+					border-radius: 50%;
+				}
 			}
+		}
+		/deep/ .u-form-item__body__right__message {
+			// 表单校验的错误提示 放左侧
+			margin-left: 0 !important;
 		}
 	}
 </style>

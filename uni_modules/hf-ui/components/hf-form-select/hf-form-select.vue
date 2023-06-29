@@ -8,7 +8,7 @@
 		<template v-else>
 			<u-form-item :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
 				<template #label>
-					<view class="left-content">
+					<view class="left-content" :style="labelStyle">
 						<text v-if="required" class="left-content__required">*</text>
 						<template v-if="$slots.label">
 							<slot name="label"></slot>
@@ -148,10 +148,6 @@
 				},
 				list: [],
 				selected: [],	// 右侧弹框 选中的项
-				parentData: {
-					// 提示文本的样式
-					labelStyle: {},
-				}
 			}
 		},
 		computed: {
@@ -247,15 +243,7 @@
 				immediate: true
 			}
 		},
-		mounted() {
-			this.updateParentData();
-		},
 		methods: {
-			updateParentData() {
-				// 获取父组件的参数
-				// 此方法写在uview的全局mixin中
-				this.getParentData('u-form');
-			},
 			async loadDictOptions() {
 				if (this.dictCode) {
 					// 获取字典数据

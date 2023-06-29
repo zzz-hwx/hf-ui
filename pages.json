@@ -1,17 +1,63 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [ // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "hf-ui"
+			}
+		}, {
+			"path": "pages/componentsA/form",
+			"style": {
+				"navigationBarTitleText": "表单"
+			}
+		}, {
+			"path": "pages/componentsA/test",
+			"style": {
+				"navigationBarTitleText": "测试",
+				"enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/componentsB/datetime",
+			"style": {
+				"navigationBarTitleText": "时间日期选择器"
+			}
+		}, {
+			"path": "pages/componentsB/radio",
+			"style": {
+				"navigationBarTitleText": "单选框"
+			}
+		}, {
+			"path": "pages/componentsB/checkbox",
+			"style": {
+				"navigationBarTitleText": "复选框"
+			}
+		}, {
+			"path": "pages/componentsB/upload",
+			"style": {
+				"navigationBarTitleText": "上传"
+			}
+		}
+		// #ifdef H5 || APP
+		, {
+			"path": "uni_modules/hf-ui/pages/preview/preview",
+			"style": {
+				"navigationBarTitleText": "文件预览"
+			}
+		}
+		// #endif
+		, {
+			"path": "pages/componentsC/list",
+			"style": {
+				"navigationBarTitleText": "列表",
+				"enablePullDownRefresh": true
 			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTitleText": "hf-ui",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
 	},
 	"uniIdRouter": {}
 }

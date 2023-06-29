@@ -1,5 +1,5 @@
 <template>
-	<view class="hf-area">
+	<view class="hf-form-area">
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="pickerShow">
 			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 		</u-form-item>
