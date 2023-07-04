@@ -27,6 +27,14 @@
 							path: '/pages/componentsA/form',
 							icon: 'form'
 						}, {
+							title: 'map 地图',
+							path: '/pages/componentsA/map',
+							icon: 'navbar'
+						}, {
+							title: 'amap 高德地图',
+							path: '/pages/componentsA/amap',
+							icon: 'navbar'
+						}, {
 							title: '测试',
 							path: '/pages/componentsA/test',
 							icon: 'color'

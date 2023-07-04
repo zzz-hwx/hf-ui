@@ -51,6 +51,16 @@
 				"navigationBarTitleText": "列表",
 				"enablePullDownRefresh": true
 			}
+		}, {
+			"path": "pages/componentsA/map",
+			"style": {
+				"navigationBarTitleText": "地图组件"
+			}
+		}, {
+			"path": "pages/componentsA/amap",
+			"style": {
+				"navigationBarTitleText": "高德地图"
+			}
 		}
 	],
 	"globalStyle": {

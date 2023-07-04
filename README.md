@@ -69,6 +69,44 @@ export const xxx = (params = {}) => {
 
 `throttleTime`为Vue原型上变量，默认300，单位ms
 
+## 地图定位坐标系
+
+`wgs84`：PC端地图展示、后端接口保存、中间件获取定位方法`getLocation`（代码手动转换）
+
+`gcj04`：高德地图、底座返回（底座使用高德地图定位）
+
+- 用途一：获取定位（都是`wgs84`，不用做坐标系转换）
+  - 调用中间件方法`getLocation`返回定位
+  - 请求后端接口保存数据
+
+- 用途二：展示地图
+  - 使用的功能模块：地图打点、网格巡查、地图轨迹...
+  - 使用的第三方地图SDK：高德地图
+    - 调用中间件方法`getLocation`返回定位（`wgs84`）
+    - 坐标系转换`wgs84togcj02`
+    - 设置地图中心点center经纬度（因为PC端坐标系为wgs84，所以getLocation返回的经纬度坐标系为wgs84，但是高德地图坐标系为gcj04）
+    - 地图操作....从地图返回的经纬度
+    - 坐标系转换`gcj02towgs84`
+    - 请求后端接口保存数据（`wgs84`）
+
+栗子
+
+``` js
+import { getLocation } from '@/uni_modules/hf-middleware';
+import { wgs84togcj02, gcj02towgs84 } from '@/uni_modules/hf-middleware/js_sdk/utils/mapConversion.js';
+
+const res = await getLocation();	// { longitude: 119.24934182769975, latitude: 26.051565918068977 }
+const [lng, lat] = wgs84togcj02(res.longitude, res.latitude);	// 坐标系转换
+this.map = new Amap.Map('map', {
+    center: [lng, lat],	// 地图中心
+    zoom: this.zoom,
+});
+// ... 地图操作 ...
+let lnglat = [119.123, 26.123];	// 从地图返回的经纬度
+lnglat = gcj02towgs84(lnglat[0], lnglat[1])	// 坐标系转换
+// 请求后端接口保存数据
+```
+
 # 踩坑
 
 ## uni-simple-router
