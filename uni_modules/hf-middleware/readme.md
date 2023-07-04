@@ -20,6 +20,7 @@ API
 | chooseVideo   | ✔    | ✔    | ✔      | 选择视频       |
 | chooseMedia   | ✔    | ✔    | ✔      | 选择图片或视频 |
 | chooseFile    | ✔    | ✔    | ✔      | 选择文件       |
+| getRecord     |      | ✔    |        | 录音           |
 | getLocation   | ✔    | ✔    | ✔      | 定位           |
 | makePhoneCall |      | ✔    | ✔      | 拨打电话       |
 | anyRtc        |      | ✔    |        | 视频、语音     |
@@ -27,6 +28,7 @@ API
 | getSystemInfo | ✔    |      |        | 获取系统信息   |
 | getVersion    |      | ✔    |        | 获取版本号     |
 | softInputMode |      | ✔    |        | 布局静默       |
+| openDocument  |      | ✔    | ✔      | 打开文档       |
 | logout        |      | ✔    |        | 退出登录       |
 | getUserInfo   |      | ✔    |        | 获取用户信息   |
 | getIdCardOcr  |      | ✔    |        | 证件OCR正/反面 |
@@ -288,6 +290,62 @@ chooseFile({ count: 1 }).then((res) => {
 });
 ```
 
+#### getRecord()
+
+录音
+
+**平台差异说明**
+
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+|      | ✔    |        |
+
+**返回参数说明**
+
+Array 录音列表（其实只有一项 和其他统一一致...）
+
+| 参数   | 类型     | 说明            |
+| ---- | ------ | ------------- |
+| path | String | 本地文件路径        |
+| name | String | 包含扩展名的文件名称    |
+| size | Number | 文件大小，单位：B（字节） |
+| type | String | 文件类型          |
+
+**示例**
+
+``` html
+<u-button @click="getRecord">录音</u-button>
+<audio
+       :src="audit.src"
+       :name="audit.name"
+       author="xxx"
+       controls
+></audio>
+```
+
+```js
+import { getRecord } from '@/uni_modules/hf-middleware';
+export default {
+    data() {
+    	return {
+    		audit: {
+                src: '',
+                name: ''
+            }
+    	}
+    },
+    methods: {
+    	async getRecord() {
+            const res = await getRecord();
+            console.log('--- 录音 --->', res);
+            // [{path: 'blob:http://localhost:8080/xxx.mp3', name: '6月30日 17点40分.mp3', size: '79848', type: 'audit/mpeg'}]; 
+            this.audit.src = res[0].path;
+            this.audit.name = res[0].name;
+        },
+    }
+}
+```
+
 ### 位置
 
 #### getLocation()
@@ -455,6 +513,30 @@ getVersion().then(res => {
 
 ```js
 softInputMode({ type: 1 });
+```
+
+#### openDocument
+
+打开文档
+
+**平台差异说明**
+
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+|      | ✔    | ✔      |
+
+**OBJECT 参数说明**
+
+| 参数 | 类型   | 默认值 | 说明     |
+| ---- | ------ | ------ | -------- |
+| path | String |        | 文件地址 |
+
+**示例**
+
+``` js
+openDocument({ path: 'http://xxx/xxx.pdf' }).then(() => {
+    console.log('--- 文件预览成功 --->');
+});
 ```
 
 ### 第三方服务

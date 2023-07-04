@@ -21,7 +21,7 @@
 							<hf-icon v-if="lastIcon" :name="lastIcon" :color="lastIconColor"></hf-icon>
 						</template>
 						<template v-else>
-							<hf-icon :name="item.showChild ? 'arrow-down-fill' : 'arrow-right-fill'" :size="10"></hf-icon>
+							<hf-icon :name="item.showChild ? 'arrow-down-fill' : 'arrow-right-fill'" :size="8"></hf-icon>
 						</template>
 					</view>
 					<view class="hf-tree-label__content">

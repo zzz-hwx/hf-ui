@@ -101,7 +101,7 @@
 <script>
 	import props from '@/uni_modules/uview-ui/components/u-upload/props.js';
 	import HfVideo from './hf-video.vue';
-	import { chooseImage, chooseVideo, chooseMedia, chooseFile } from '@/uni_modules/hf-middleware/js_sdk/index.js';
+	import { chooseImage, chooseVideo, chooseMedia, chooseFile, openDocument } from '@/uni_modules/hf-middleware/js_sdk/index.js';
 	import loadData from '../../libs/util/loadData.js';
 	export default {
 		name: 'HfUpload',
@@ -217,13 +217,17 @@
 						if (i !== -1) {
 							return this.lists[i];
 						}
+						const name = absList[index].name;
+						const extIndex = name.lastIndexOf('.');
+						const ext = name.substring(extIndex + 1);	// 扩展名 jpg mp4
 						return {
 							url: absList[index].url || '',	// 绝对路径
-							name: absList[index].name,
+							name,
 							path,	// 相对路径 id
-							isImage: this.accept === 'image' || uni.$u.test.image(absList[index].name),
-							isVideo: this.accept === 'video' || uni.$u.test.video(absList[index].name),
+							isImage: this.accept === 'image' || uni.$u.test.image(name),
+							isVideo: this.accept === 'video' || uni.$u.test.video(name),
 							deletable: this.deletable,
+							ext
 						};
 					});
 				},
@@ -337,101 +341,16 @@
 				this.previewVideoVis =  true;
 				this.previewVideoUrl = item.url;
 			},
-			async onPreviewFile(item) {
+			onPreviewFile(item) {
 				// 预览文件
-				// #ifdef MP-WEIXIN
-				this.onPreviewFile__uni(item);
-				// #endif
-				// #ifdef H5
-				this.onPreviewFile__hybrid(item);
-				// #endif
-				// #ifdef APP
-				this.onPreviewFile__uni(item);
-				// this.onPreviewFile__app(item);
-				// #endif
-			},
-			async onPreviewFile__uni(item) {
-				console.log(item);
 				const arr = ['doc', 'xls', 'ppt', 'pdf', 'docx', 'xlsx', 'pptx'];	// uni.openDocument 支持格式
 				if (item.ext && arr.includes(item.ext)) {
-					if (!item.tempFilePath) {
-						const filePath = await downloadFile(item.url);
-						// const filePath = item.url;
-						const index = this.lists.findIndex(it => (it === item));
-						if (index !== -1) {
-							this.lists.splice(index, 1, Object.assign({}, item, {
-								tempFilePath: filePath
-							}));
-							item = this.lists[index];
-						}
-					}
-					if (item.tempFilePath) {
-						openDocument(item.tempFilePath);
-						return;
-					}
-				}
-				uni.$u.toast('该文件不支持预览');
-			},
-			// #ifdef H5
-			onPreviewFile__hybrid(item) {
-				const arr = ['pdf'];	// 只支持pdf
-				if (item.ext && arr.includes(item.ext)) {
-					uni.$u.route('/uni_modules/hf-ui/pages/preview/preview', {
-						url: encodeURIComponent(item.url)
-					});
-				}
-				uni.$u.toast('该文件不支持预览');
-			},
-			// #endif
-			// #ifdef APP
-			onPreviewFile__app(item) {
-				// uni.shareWithSystem({
-				// 	href: item.url
-				// })
-				// plus.share.sendWithSystem(item.url, (res), errorCB);
-			}
-			// #endif
-		}
-	}
-	
-	function downloadFile (url) {
-		return new Promise((resolve, reject) => {
-			console.log('--- 下载文件 uni.downloadFile --->', url)
-			// 下载文件
-			uni.downloadFile({
-				url,
-				success: (res) => {
-					console.log(res);
-					if (res.statusCode === 200) {
-						resolve(res.tempFilePath);
-					} else {
-						reject(res);
-					}
-				},
-				fail: (err) => {
-					console.log(err);
-					reject(err);
-				}
-			})
-		})
-	}
-	function openDocument (url, ) {
-		return new Promise((resolve, reject) => {
-			// 新开页面打开文档，支持格式：doc, xls, ppt, pdf, docx, xlsx, pptx
-			uni.openDocument({
-				filePath: url,
-				showMenu: false,
-				success: (res) => {
-					console.log('--- 打开文档成功 --->', res);
-					resolve(res);
-				},
-				fail: (err) => {
-					console.log(err);
+					openDocument({ path: item.url });
+				} else {
 					uni.$u.toast('该文件不支持预览');
-					reject(err);
 				}
-			})
-		})
+			},
+		}
 	}
 </script>
 

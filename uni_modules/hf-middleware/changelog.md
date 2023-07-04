@@ -1,3 +1,7 @@
+## 1.1.7（2023-07-04）
+- 添加方法：
+	- getRecord：录音
+	- openDocument：文档预览
 ## 1.1.6（2023-06-14）
 - 微信小程序选择文件改用：wx.chooseMessageFile
 - 自研chooseMedia 选择切换添加等待样式过渡时间 .3s

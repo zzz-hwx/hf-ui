@@ -69,6 +69,16 @@ export function chooseFile(...args) {
 }
 
 /**
+ * 录音
+ */
+export function getRecord(...args) {
+	if (!apiMap[config.usedApi].getRecord) {
+		throw new Error(`${config.usedApi} is not has getRecord`);
+	}
+	return apiMap[config.usedApi].getRecord(...args);
+}
+
+/**
  * @description 定位
  */
 export function getLocation(...args) {
@@ -195,4 +205,16 @@ export function softInputMode(...args) {
 		throw new Error(`${config.usedApi} is not has softInputMode`);
 	}
 	return apiMap[config.usedApi].softInputMode(...args);
+}
+
+/**
+ * @description 文档预览
+ * @param {Object} params 参数
+ * 	@param {String} path 文件地址
+ */
+export function openDocument(...args) {
+	if (!apiMap[config.usedApi].openDocument) {
+		throw new Error(`${config.usedApi} is not has openDocument`);
+	}
+	return apiMap[config.usedApi].openDocument(...args);
 }

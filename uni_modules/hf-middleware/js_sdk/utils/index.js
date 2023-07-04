@@ -5,7 +5,9 @@ const mimeType = new Map([	// 类型 - MIME类型 对应关系
 	['PNG', 'image/png'],
 	['GIF', 'image/gif'],
 	// 视频 video
-	['MP4', 'video/mp4']
+	['MP4', 'video/mp4'],
+	// 音频 audit
+	['MP3', 'audio/mpeg']
 ]);
 
 const typeMap = new Map([	// 文件类型 - 类型 对应关系
@@ -19,7 +21,9 @@ const typeMap = new Map([	// 文件类型 - 类型 对应关系
 	// gif
 	['gif', 'GIF'],
 	// mp4
-	['mp4', 'MP4']
+	['mp4', 'MP4'],
+	// mp3
+	['mp3', 'MP3']
 ])
 
 /**

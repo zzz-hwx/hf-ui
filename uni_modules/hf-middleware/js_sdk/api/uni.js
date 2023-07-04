@@ -182,6 +182,25 @@ export function scanCode(params) {
 	});
 }
 
+/**
+ * @description 新开页面打开文档，支持格式：doc, xls, ppt, pdf, docx, xlsx, pptx。
+ * @param {Object} params 参数
+ * 	@param {String} path 文件路径
+ * 	@param {Boolean} showMenu 右上角是否有可以转发分享的功能(仅微信小程序)
+ * 
+ */
+// #ifndef H5
+export async function openDocument({ path = '', showMenu = false } = {}) {
+	if (!path) {
+		throw new Error('缺少参数 path');
+	}
+	const filePath = await uniDownloadFile({ url: path });
+	await uniOpenDocument({ filePath });
+	// const arr = ['doc', 'xls', 'ppt', 'pdf', 'docx', 'xlsx', 'pptx'];	// uni.openDocument 支持格式
+	// uni.$u.toast('该文件不支持预览');
+}
+// #endif
+
 /* ====================
 		一些工具方法
  ==================== */
@@ -199,6 +218,48 @@ function chooseMessageFile({ count }) {
 			fail: (err) => {
 				console.log(err);
 				reject();
+			}
+		});
+	});
+}
+// #endif
+
+// #ifndef H5
+function uniDownloadFile({ url } = {}) {
+	return new Promise((resolve, reject) => {
+		// 下载文件
+		uni.downloadFile({
+			url,
+			success: (res) => {
+				console.log(res);
+				if (res.statusCode === 200) {
+					resolve(res.tempFilePath);
+				} else {
+					reject(res);
+				}
+			},
+			fail: (err) => {
+				console.log(err);
+				reject(err);
+			}
+		});
+	});
+}
+
+function uniOpenDocument({ filePath, showMenu = false } = {}) {
+	return new Promise((resolve, reject) => {
+		// 新开页面打开文档，支持格式：doc, xls, ppt, pdf, docx, xlsx, pptx
+		uni.openDocument({
+			filePath,
+			showMenu,
+			success: (res) => {
+				console.log('--- 打开文档成功 --->', res);
+				resolve(res);
+			},
+			fail: (err) => {
+				console.log(err);
+				uni.$u.toast('该文件不支持预览');
+				reject(err);
 			}
 		});
 	});

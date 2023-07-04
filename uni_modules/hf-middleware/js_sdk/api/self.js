@@ -113,6 +113,20 @@ export async function chooseFile() {
 }
 
 /**
+ * 录音
+ */
+export async function getRecord() {
+	const res = await useBase('record');
+	console.log('--- 录音 --->', { ...res, fileBase64: '' });
+	return [{
+		path: base64ToPath(res.fileBase64, res.fileType, res.fileName),
+		name: res.fileName,
+		size: res.fileSize,
+		type: getFileType(res.fileType)
+	}];
+}
+
+/**
  * @description 定位
  */
 export async function getLocation() {
@@ -120,7 +134,7 @@ export async function getLocation() {
 	console.log('--- 定位 --->', res);
 	// 底座返回经纬度坐标系为gcj02(高德)
 	// PC端坐标系为wgs84
-	// ∴ 转换为gcj02
+	// ∴ 转换为wgs84
 	const [longitude, latitude] = gcj02towgs84(res.longitude, res.latitude);
 	return {
 		latitude,	// 纬度
@@ -201,6 +215,20 @@ export async function scanCode() {
 	return {
 		result: res.codeInfo
 	};
+}
+
+/**
+ * @description 文档预览
+ * @param {Object} params 参数
+ * 	@param {String} path 文件地址
+ */
+export async function openDocument({ path = '' } = {}) {
+	if (!path) {
+		throw new Error('缺少参数 path');
+	}
+	await useBase('document', {
+		documentPath: path	// 文档下载地址
+	}, true);
 }
 
 /**
