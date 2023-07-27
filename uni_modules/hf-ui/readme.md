@@ -195,6 +195,12 @@ export default {
 | count         | 是否显示统计字数                                | Boolean        | false | true\|false            |
 | height        | 输入框高度                                   | String\|Number | 70    |                        |
 
+**slots**
+
+| 名称  | 说明         |
+| ----- | ------------ |
+| label | 左侧提示文字 |
+
 ### hf-form-datetime 时间日期选择器
 
 **示例1**
@@ -359,6 +365,12 @@ export default {
 | labelPosition | label的位置 | String | top                | left\|top |
 | confirmColor  | 多选框颜色  | String | color['u-primary'] |           |
 
+**slots**
+
+| 名称  | 说明         |
+| ----- | ------------ |
+| label | 左侧提示文字 |
+
 ### hf-form-select 列表选择器
 
 **示例**1
@@ -466,6 +478,12 @@ export default {
 说明：
 
 - 优先级：`dictCode` > `options`
+
+**slots**
+
+| 名称  | 说明         |
+| ----- | ------------ |
+| label | 左侧提示文字 |
 
 **scoped-slot**
 
@@ -1089,6 +1107,12 @@ export default {
 | maxCount      | 最大选择图片的数量                   | Number         | 9                |                     |
 | bizPath       | 控制文件上传的业务路径                 | String         | 'temp'           |                     |
 | maxSize       | 选择单个文件的最大大小，单位B(byte)，默认50M | String\|Number | 50 * 1024 * 1024 |                     |
+
+**slots**
+
+| 名称 | 说明                          |
+| ---- | ----------------------------- |
+| tip  | 左侧提示文字左侧的提示文字... |
 
 ### hf-form-avatar 头像
 

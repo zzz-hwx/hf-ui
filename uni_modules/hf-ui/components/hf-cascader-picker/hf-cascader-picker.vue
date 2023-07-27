@@ -170,8 +170,9 @@
 				this.onSelectedChange(node, (!hasNodes || isleaf));
 			},
 			onSelectedChange(node, isleaf) {
-				if (this.selectParent || isleaf) {
-					// 任意一级可选择 || 叶子节点
+				const isEmpty = this.selected.length && this.selected[0].value === null;	// 是否没选择为空
+				if (this.selectParent || isleaf || isEmpty) {
+					// 任意一级可选择 || 叶子节点 || 没有选择
 					this._dispatchEvent();
 				}
 				if (node) {
@@ -201,7 +202,11 @@
 			_dispatchEvent() {
 				// if 任意一级可选择 过滤掉最后一级[请选择]
 				const path = this.selected.filter((item) => (item[this.idKey] !== null));
-				const value = path[path.length - 1][this.idKey];
+				let value = '';
+				if (path.length) {
+					// 第1级反选 重复点击取消选择 path为空数组
+					value = path[path.length - 1][this.idKey];
+				}
 				this.$emit('change', path);
 				this.$emit('input', value);
 			},

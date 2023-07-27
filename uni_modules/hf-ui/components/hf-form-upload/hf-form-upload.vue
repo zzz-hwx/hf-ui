@@ -1,6 +1,5 @@
 <template>
-	<view class="hf-form-upload" v-show="!disabled || (disabled && value)">
-		<!-- hf-upload 添加属性: disable-no-show-btn, 禁用状态 && 没有文件 => 不显示表单项 -->
+	<view class="hf-form-upload">
 		<u-form-item :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom">
 			<template #label>
 				<view class="left-content" :style="labelStyle">
@@ -71,7 +70,7 @@
 			},
 			maxSize: {
 				type: [String, Number],
-				default: 50 * 1024 * 1024	// 50M
+				default: 10 * 1024 * 1024	// 10M
 			}
 		},
 		// #ifdef MP-WEIXIN

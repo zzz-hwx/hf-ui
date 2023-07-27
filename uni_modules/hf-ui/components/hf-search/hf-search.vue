@@ -12,7 +12,7 @@
 			@blur="handleBlur"
 			@search="handleSearch"
 			@custom="handleSearch"
-			@clear="handleSearch"></u-search>
+			@clear="handleSearch()"></u-search>
 	</view>
 </template>
 
@@ -60,7 +60,7 @@ export default {
 		handleBlur() {
 			this.focus = false;
 		},
-		handleSearch(val) {
+		handleSearch(val = '') {
 			this.$emit('search', val);
 		}
 	}

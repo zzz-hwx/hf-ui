@@ -1,3 +1,21 @@
+
+/**
+ * 验证十进制数字
+ */
+function number(value) {
+    return /^[\+-]?(\d+\.?\d*|\.\d+|\d\.\d+e\+\d+)$/.test(value)
+}
+
+/**
+ * 是否数组
+ */
+function array(value) {
+    if (typeof Array.isArray === 'function') {
+        return Array.isArray(value)
+    }
+    return Object.prototype.toString.call(value) === '[object Array]'
+}
+
 export function idCard(num) {
 	let factorArr = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1);
 	let varArray = new Array();
@@ -79,3 +97,8 @@ function isDate8(sDate) {
 		return false
 	return true
 }
+
+export default {
+	number,
+	array
+};

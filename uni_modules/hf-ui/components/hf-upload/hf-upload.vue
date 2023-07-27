@@ -251,7 +251,7 @@
 						res = await chooseVideo();
 						break;
 					case 'media':
-						res = await chooseMedia();
+						res = await chooseMedia({ count: this.maxCount - this.lists.length });
 						break;
 					case 'file':
 						res = await chooseFile();

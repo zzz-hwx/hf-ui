@@ -1,10 +1,6 @@
 // 消息提示
 import modal from './js_sdk/message/modal';
 import toast from './js_sdk/message/toast';
-export {
-	modal,
-	toast
-};
 
 // 对数据存储Storage的封装
 import * as storage from './js_sdk/storage/storage';
@@ -28,6 +24,15 @@ export * from './js_sdk/tools/uviewTools';
 // 校验方法
 import * as test from './js_sdk/test.js';
 export * from './js_sdk/test.js';
+
+// dayjs
+import dayjs from './utils/dayjs.js';
+
+export {
+	modal,
+	toast,
+	dayjs
+};
 
 const $z = {
 	modal,

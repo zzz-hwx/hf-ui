@@ -1,6 +1,17 @@
 <template>
 	<view class="hf-form-textarea">
 		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :label-width="labelWidth" :borderBottom="borderBottom">
+			<template #label>
+				<view class="left-content" :style="labelStyle">
+					<text v-if="required" class="left-content__required">*</text>
+					<template v-if="$slots.label">
+						<slot name="label"></slot>
+					</template>
+					<template v-else>
+						<view class="" :style="[parentData.labelStyle]">{{ label }}</view>
+					</template>
+				</view>
+			</template>
 			<u-textarea
 				:value="value"
 				:placeholder="placeholder"
@@ -77,6 +88,7 @@
 </script>
 
 <style lang="scss" scoped>
+	@import '../../libs/css/form.scss';
 	.hf-form-textarea {
 		/deep/ .u-textarea {
 			margin-top: $sm;
