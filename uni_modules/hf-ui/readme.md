@@ -357,13 +357,15 @@ export default {
 
 **props**
 
-| 参数          | 说明        | 类型   | 默认值             | 可选值    |
-| ------------- | ----------- | ------ | ------------------ | --------- |
-| dictCode      | 字典code    | String |                    |           |
-| options       | 选项        | Array  | []                 |           |
-| separator     | 选项分隔符  | String | ,                  |           |
-| labelPosition | label的位置 | String | top                | left\|top |
-| confirmColor  | 多选框颜色  | String | color['u-primary'] |           |
+| 参数          | 说明           | 类型   | 默认值             | 可选值    |
+| ------------- | -------------- | ------ | ------------------ | --------- |
+| dictCode      | 字典code       | String |                    |           |
+| options       | 选项           | Array  | []                 |           |
+| keyName       | 控制显示的字段 | String | label              |           |
+| keyValue      | 控制取值的字段 | String | value              |           |
+| separator     | 选项分隔符     | String | ,                  |           |
+| confirmColor  | 多选框颜色     | String | color['u-primary'] |           |
+| labelPosition | label的位置    | String | top                | left\|top |
 
 **slots**
 
@@ -1100,13 +1102,14 @@ export default {
 
 **props**
 
-| 参数            | 说明                          | 类型             | 默认值              | 可选值                 |
-| ------------- | --------------------------- | -------------- | ---------------- | ------------------- |
-| labelPosition | label的位置                    | String         | top              | left\|top           |
-| accept        | 接受的文件类型                     | String         | image            | image\|video\|media |
-| maxCount      | 最大选择图片的数量                   | Number         | 9                |                     |
-| bizPath       | 控制文件上传的业务路径                 | String         | 'temp'           |                     |
-| maxSize       | 选择单个文件的最大大小，单位B(byte)，默认50M | String\|Number | 50 * 1024 * 1024 |                     |
+| 参数          | 说明                                         | 类型           | 默认值                 | 可选值              |
+| ------------- | -------------------------------------------- | -------------- | ---------------------- | ------------------- |
+| labelPosition | label的位置                                  | String         | top                    | left\|top           |
+| accept        | 接受的文件类型                               | String         | image                  | image\|video\|media |
+| maxCount      | 最大选择图片的数量                           | Number         | 9                      |                     |
+| bizPath       | 控制文件上传的业务路径                       | String         | 'temp'                 |                     |
+| maxSize       | 选择单个文件的最大大小，单位B(byte)，默认10M | String\|Number | 10 * 1024 * 1024       |                     |
+| uploadingText | 文件上传中提示                               | String         | 文件上传中，请稍后再试 |                     |
 
 **slots**
 
@@ -1320,29 +1323,26 @@ export default {
 
 ### hf-upload 文件上传
 
-逻辑从`<u-upload>`拷贝粘贴
-
-参数和`<u-upload>`一致(可能部分没有复制 没有实现)
-
 **示例**
 
 > 参考`<hf-form-upload>`、`<hf-form-avatar>`
 
 **props**
 
-| 参数             | 说明                                            | 类型           | 默认值           | 可选值                    |
-| ---------------- | ----------------------------------------------- | -------------- | ---------------- | ------------------------- |
-| value            | 绑定值                                          | String         |                  |                           |
-| accept           | 接受的文件类型                                  | String         | image            | image\|video\|media\|file |
-| maxCount         | 最大选择图片的数量                              | Number         | 9                |                           |
-| separator        | 分隔符                                          | String         | ,                |                           |
-| bizPath          | 控制文件上传的业务路径                          | String         | 'temp'           |                           |
-| maxSize          | 选择单个文件的最大大小，单位B(byte)，默认不限制 | String\|Number | Number.MAX_VALUE |                           |
-| disableNoShowBtn | 禁用状态，是否不显示选择文件按钮                | Boolean        | false            | true\|false               |
-| useBeforeRead    | 是否开启读取前的处理函数                        | Boolean        | false            | true\|false               |
-| beforeRead       | 读取前的处理函数                                | Function       |                  |                           |
-| useBeforePreview | 是否开启预览前的处理函数                        | Boolean        | false            | true\|false               |
-| beforePreview    | 预览前的处理函数                                | Function       |                  |                           |
+| 参数             | 说明                                            | 类型           | 默认值                 | 可选值                    |
+| ---------------- | ----------------------------------------------- | -------------- | ---------------------- | ------------------------- |
+| value            | 绑定值                                          | String         |                        |                           |
+| accept           | 接受的文件类型                                  | String         | image                  | image\|video\|media\|file |
+| maxCount         | 最大选择图片的数量                              | Number         | 9                      |                           |
+| separator        | 分隔符                                          | String         | ,                      |                           |
+| bizPath          | 控制文件上传的业务路径                          | String         | 'temp'                 |                           |
+| maxSize          | 选择单个文件的最大大小，单位B(byte)，默认不限制 | String\|Number | Number.MAX_VALUE       |                           |
+| disableNoShowBtn | 禁用状态，是否不显示选择文件按钮                | Boolean        | false                  | true\|false               |
+| useBeforeRead    | 是否开启读取前的处理函数                        | Boolean        | false                  | true\|false               |
+| beforeRead       | 读取前的处理函数                                | Function       |                        |                           |
+| useBeforePreview | 是否开启预览前的处理函数                        | Boolean        | false                  | true\|false               |
+| beforePreview    | 预览前的处理函数                                | Function       |                        |                           |
+| uploadingText    | 文件上传中提示                                  | String         | 文件上传中，请稍后再试 |                           |
 
 **accept 合法值**
 
@@ -1356,6 +1356,8 @@ export default {
 > 说明：
 >
 > - 如果需要pdf文件预览，需要配置页面：`uni_modules/hf-ui/pages/preview/preview` ！！！
+> - 逻辑从`<u-upload>`拷贝粘贴，参数和`<u-upload>`一致(可能部分没有复制 没有实现)
+> - 文件上传中，不允许新增、删除文件，可能会导致数据错乱，∴ 文件上传结束后，才能进行其他操作
 
 ### hf-preview 附件预览
 
@@ -1757,5 +1759,10 @@ export default {
 
 ## 说明
 
+1. 弹框选择的两种规范
 
+   - 点击【取消】，忽略用户操作，以上一次点击【完成】的结果为准。
+   - 点击【取消】，保留当前操作选项，不做清空处理。
+
+   按第一种规范
 

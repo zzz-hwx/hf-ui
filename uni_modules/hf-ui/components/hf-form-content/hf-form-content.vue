@@ -1,8 +1,10 @@
 <template>
-	<view class="hf-form-content">
+	<!-- <view class="hf-form-content">
 		<text v-if="value" class="value">{{ value }}</text>
 		<text v-else class="placeholder">{{ placeholder }}</text>
-	</view>
+	</view> -->
+	<u-input :value="value" :placeholder="placeholder" disabled border="none" disabledColor="#fff"></u-input>
+	<!-- 文字溢出隐藏 改为 禁用的input框 可拖动查看完整信息 -->
 </template>
 
 <script>

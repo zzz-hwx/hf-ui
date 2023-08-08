@@ -90,6 +90,20 @@ export function blobToPath(blob, fileName) {
  * @param {Object} fileType 文件类型
  */
 export function base64ToPath(base64, fileType, fileName) {
+	if (base64.split(',').length === 2) {
+		// 完整的base64 copy from 'mmmm-image-tools/index.js' base64ToPath
+		if (typeof window === 'object' && 'document' in window) {
+			base64 = base64.split(',')
+			var type = base64[0].match(/:(.*?);/)[1]
+			var str = atob(base64[1])
+			var n = str.length
+			var array = new Uint8Array(n)
+			while (n--) {
+					array[n] = str.charCodeAt(n)
+			}
+			return (window.URL || window.webkitURL).createObjectURL(new Blob([array], { type: type }));
+		}
+	}
 	const blob = base64ToBlob(base64, fileType);
 	return blobToPath(blob, fileName);
 }

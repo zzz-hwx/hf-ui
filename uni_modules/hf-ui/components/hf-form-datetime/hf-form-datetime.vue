@@ -56,10 +56,12 @@
 				// year-month 年月选择
 			},
 			minDate: {
-				type: Number
+				type: Number,
+				default: uni.$u.props.datetimePicker.minDate
 			},
 			maxDate: {
-				type: Number
+				type: Number,
+				default: uni.$u.props.datetimePicker.maxDate
 			}
 		},
 		data() {

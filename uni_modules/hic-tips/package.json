@@ -1,7 +1,7 @@
 {
 	"id": "hic-tips",
-	"displayName": "页面底部提示",
-	"version": "1.0.1",
+	"displayName": "hic-tips",
+	"version": "1.0.2",
 	"description": "分页加载，底部提示信息组件",
 	"keywords": [
         "提示",
@@ -12,12 +12,8 @@
 	"engines": {
 		"HBuilderX": "^3.1.0"
 	},
-	"dcloudext": {
-		"category": [
-			"前端组件",
-			"通用组件"
-		],
-		"sale": {
+    "dcloudext": {
+        "sale": {
 			"regular": {
 				"price": "0.00"
 			},
@@ -33,7 +29,8 @@
 			"data": "插件不采集任何数据",
 			"permissions": "无"
 		},
-		"npmurl": ""
+        "npmurl": "",
+        "type": "component-vue"
 	},
 	"uni_modules": {
 		"dependencies": [],
@@ -46,7 +43,7 @@
 			"client": {
 				"Vue": {
 					"vue2": "y",
-					"vue3": "u"
+					"vue3": "y"
 				},
 				"App": {
 					"app-vue": "y",
@@ -59,7 +56,7 @@
 					"QQ浏览器(Android)": "u"
 				},
 				"H5-pc": {
-					"Chrome": "u",
+					"Chrome": "y",
 					"IE": "u",
 					"Edge": "u",
 					"Firefox": "u",

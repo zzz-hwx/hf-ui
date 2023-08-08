@@ -28,6 +28,7 @@
 					:max-size="maxSize"
 					:biz-path="bizPath"
 					disable-no-show-btn
+					:uploading-text="uploadingText"
 					@input="handleInput">
 					<view class="button">
 						<template v-if="accept === 'video'">
@@ -71,6 +72,10 @@
 			maxSize: {
 				type: [String, Number],
 				default: 10 * 1024 * 1024	// 10M
+			},
+			uploadingText: {
+				type: String,
+				default: '文件上传中，请稍后再试'
 			}
 		},
 		// #ifdef MP-WEIXIN

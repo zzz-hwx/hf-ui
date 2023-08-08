@@ -179,6 +179,10 @@
 				// 预览前的处理函数
 				type: Function,
 				default: null
+			},
+			uploadingText: {
+				type: String,
+				default: '文件上传中，请稍后再试'
 			}
 		},
 		data() {
@@ -202,6 +206,7 @@
 				 */
 				previewVideoVis: false,
 				previewVideoUrl: '',
+				uploading: false,	// 上传中 不可选择文件
 			}
 		},
 		watch: {
@@ -242,6 +247,10 @@
 		methods: {
 			async chooseFile() {
 				if (this.disabled) return;
+				if (this.uploading) {
+					uni.$u.toast(this.uploadingText);
+					return;
+				}
 				let res;
 				switch (this.accept) {
 					case 'image':
@@ -283,6 +292,7 @@
 					};
 				})
 				this.lists.push(...list);
+				this.uploading = true;
 				for (let i = 0; i < fileArr.length; i++) {
 					const index = fileListLen + i;
 					const item = this.lists[index];
@@ -309,11 +319,15 @@
 						}));
 					}
 				}
-				
+				this.uploading = false;
 				this.handleInput();
 			},
 			deleteItem(index) {
 				// 删除图片
+				if (this.uploading) {
+					uni.$u.toast(this.uploadingText);
+					return;
+				}
 				this.lists.splice(index, 1);
 				this.handleInput();
 			},

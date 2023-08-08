@@ -24,7 +24,7 @@ API
 | getLocation   | ✔    | ✔    | ✔      | 定位           |
 | makePhoneCall |      | ✔    | ✔      | 拨打电话       |
 | anyRtc        |      | ✔    |        | 视频、语音     |
-| scanCode      |      | ✔    | ✔      | 扫码           |
+| scanCode      | ✔    | ✔    | ✔      | 扫码           |
 | getSystemInfo | ✔    |      |        | 获取系统信息   |
 | getVersion    |      | ✔    |        | 获取版本号     |
 | softInputMode |      | ✔    |        | 布局静默       |
@@ -428,9 +428,9 @@ anyRtc({userId: 'xxx', type: 1});
 
 **平台差异说明**
 
-| 快应  | 自研  | uniapp |
-| --- | --- | ------ |
-|     | ✔   | ✔      |
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+| ✔    | ✔    | ✔      |
 
 **OBJECT 参数说明**
 

@@ -7,7 +7,7 @@
 			</template>
 		</u-form-item>
 		
-		<u-popup :show="visible" @close="handleClose">
+		<u-popup :show="visible" :close-on-click-overlay="false" @close="handleClose">
 			<view class="top">
 				<view @click="handleClose">
 					<text class="cancel">{{ cancelText }}</text>

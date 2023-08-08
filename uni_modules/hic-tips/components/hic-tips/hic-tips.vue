@@ -192,6 +192,7 @@
 				return this.page * this.limit >= this.total;
 			}
 		},
+		emits: ['load', 'loadmore'],
 		methods: {
 			load() {
 				if (this.loading) return;

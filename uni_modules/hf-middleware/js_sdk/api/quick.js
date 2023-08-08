@@ -120,6 +120,24 @@ export async function getLocation() {
 }
 
 /**
+ * @description 调起客户端扫码界面，扫码成功后返回对应的结果
+ * @param {Object} params 参数
+ * @return {Object} 扫码对应结果
+ * 	@param {String} result 所扫码的内容
+ */
+export async function scanCode() {
+	const res = await useBase('scan', {
+		action: 1	// 0-默认跳转 1-返回文字
+	});
+	if (!(res && res.result)) {
+		throw new Error('二维码扫描失败', res);
+	}
+	return {
+		result: res.result
+	};
+}
+
+/**
  * @description 获取token
  */
 export async function getToken() {
