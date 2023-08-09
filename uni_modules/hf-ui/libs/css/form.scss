@@ -5,6 +5,7 @@
 	position: relative;
 	padding-right: 10rpx;
 	box-sizing: border-box;
+	font-size: 15px;	// u-form-item .u-form-item__body__left__content__label { font-size }
 	&__required {
 		position: absolute;
 		left: -9px;

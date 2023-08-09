@@ -154,6 +154,13 @@ export default {
 }
 ```
 
+**props**
+
+| 参数     | 说明                                 | 类型    | 默认值 | 可选值                                |
+| -------- | ------------------------------------ | ------- | ------ | ------------------------------------- |
+| type     | 输入框类型，见uview的u-input组件文档 | String  | text   | text\|number\|idcard\|digit\|password |
+| password | 是否密码类型                         | Boolean | false  | true\|false                           |
+
 ### hf-form-textarea 文本域
 
 **示例**
