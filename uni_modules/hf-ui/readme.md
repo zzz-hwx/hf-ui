@@ -631,18 +631,21 @@ export default {
 | ---- | ---------------- | ------------ |
 | item | 自定义选项的内容 | {item: 选项} |
 
-### hf-form-area 省市县选择器
+### hf-form-area 省市县
 
 **示例**
 
 ```html
 <hf-form-area
-    v-model="model.area"
-    label="省市县"
-    prop="area"
-    :required="!disabled"
-    :disabled="disabled"
-    placeholder="请选择"
+	v-model="model.str1"
+	label="最后一级"
+	placeholder="请选择"
+></hf-form-area>
+<hf-form-area
+	v-model="model.str2"
+	label="全路径"
+	placeholder="请选择"
+	full-path
 ></hf-form-area>
 ```
 
@@ -651,9 +654,9 @@ export default {
     data() {
         return {
             model: {
-                area: ''
-            },
-            disabled: false
+                str1: '350403',
+				str2: '350000,350400,350403'
+            }
         };
     }
 }
@@ -661,10 +664,12 @@ export default {
 
 **props**
 
-| 参数        | 说明                 | 类型     | 默认值 | 可选值     |
-| --------- | ------------------ | ------ | --- | ------- |
-| level     | 级数，默认显示 省市县 三级行政区划 | Number | 3   | 1\|2\|3 |
-| separator | 分隔符，显示文字的中文符       | String | /   |         |
+| 参数          | 说明                               | 类型    | 默认值 | 可选值      |
+| ------------- | ---------------------------------- | ------- | ------ | ----------- |
+| level         | 级数，默认显示 省市县 三级行政区划 | Number  | 3      | 1\|2\|3     |
+| fullPath      | 是否全路径                         | Boolean | false  | true\|false |
+| separator     | 分隔符                             | String  | ,      |             |
+| textSeparator | 分隔符，显示文字的中文符           | String  | /      |             |
 
 ### hf-form-cascader 级联选择
 

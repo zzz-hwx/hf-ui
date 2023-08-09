@@ -54,6 +54,10 @@
 							path: '/pages/componentsB/checkbox',
 							icon: 'checkbox'
 						}, {
+							title: 'area 省市县',
+							path: '/pages/componentsB/area',
+							icon: 'picker'
+						}, {
 							title: 'upload 上传',
 							path: '/pages/componentsB/upload',
 							icon: 'upload'

@@ -1,6 +1,6 @@
 <template>
 	<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom">
-		<u-input :value="value" :placeholder="placeholder" :disabled="disabled" border="none" disabled-color="#ffffff" @input="handleInput"></u-input>
+		<u-input :value="value" :placeholder="placeholder" :disabled="disabled" :type="type" :password="password" border="none" disabled-color="#ffffff" @input="handleInput"></u-input>
 	</u-form-item>
 </template>
 

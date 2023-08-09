@@ -36,16 +36,7 @@
 			"style": {
 				"navigationBarTitleText": "上传"
 			}
-		}
-		// #ifdef H5 || APP
-		, {
-			"path": "uni_modules/hf-ui/pages/preview/preview",
-			"style": {
-				"navigationBarTitleText": "文件预览"
-			}
-		}
-		// #endif
-		, {
+		}, {
 			"path": "pages/componentsC/list",
 			"style": {
 				"navigationBarTitleText": "列表",
@@ -60,6 +51,11 @@
 			"path": "pages/componentsA/amap",
 			"style": {
 				"navigationBarTitleText": "高德地图"
+			}
+		}, {
+			"path": "pages/componentsB/area",
+			"style": {
+				"navigationBarTitleText": "省市县"
 			}
 		}
 	],

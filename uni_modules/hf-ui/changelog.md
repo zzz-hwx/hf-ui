@@ -1,6 +1,13 @@
+## 2.0.10（2023-08-09）
+- hf-form-area 添加props
+	- fullPath：是否全路径
+## 2.0.9（2023-08-09）
+- hf-form-input 添加props
+	- type：输入框类型
+	- password：是否密码类型
 ## 2.0.8（2023-08-09）
 - 修改表单组件label字体大小不一样的bug
-- hf-form-input 添加prop
+- hf-form-input 添加props
 	- type：输入框类型
 	- password：是否密码类型
 ## 2.0.7（2023-08-08）

@@ -32,14 +32,27 @@
 		name: 'HfFormArea',
 		mixins: [mixin],
 		props: {
-			level: {	// 默认显示 省/市/区三级的行政区划
+			level: {
+				// 默认显示 省/市/区三级的行政区划
 				type: Number,
 				default: 3,
 				validator: (val) => {
 					return val <= 3;	// 最多3级
 				}
 			},
-			separator: {	// 分隔符
+			fullPath: {
+				// 是否全路径 '350000,350400,350403'
+				// 默认最后一级 '350403'
+				type: Boolean,
+				default: false
+			},
+			separator: {
+				// 分隔符
+				type: String,
+				default: ','
+			},
+			textSeparator: {
+				// 选项名的分隔符
 				type: String,
 				default: '/'
 			}
@@ -58,7 +71,7 @@
 					return this.innerValue.map((value, index) => {
 						const item = all.find(item => (item.value === value && item.level === index + 1));
 						if (item) return item.label;
-					}).filter(Boolean).join(this.separator);
+					}).filter(Boolean).join(this.textSeparator);
 				}
 				return '';
 			}
@@ -94,9 +107,17 @@
 				}
 			},
 			loadDataByValue(value) {
-				// 通过 value 反推
 				if (value) {
-					const arr = this.getRealCode(value, this.level);
+					let arr = [];
+					if (this.fullPath) {
+						arr = value.split(this.separator).map((value, index) => {
+							const item = all.find(item => (item.value === value && item.level === (index + 1)));
+							return item;
+						}).filter(Boolean);
+					} else {
+						// 通过 value 反推
+						arr = this.getRealCode(value, this.level);
+					}
 					this.innerValue = arr.map((item) => (item.value));
 					this.defaultIndex = arr.map((item) => (item.index));
 				} else {
@@ -136,8 +157,13 @@
 			handleConfirm(event) {
 				const arr = event.value;
 				if (arr.length) {
-					const item = arr[arr.length - 1];
-					this.$emit('input', item.value);
+					if (this.fullPath) {
+						const val = arr.map(item => (item.value)).join(this.separator);
+						this.$emit('input', val, arr);
+					} else {
+						const item = arr[arr.length - 1];
+						this.$emit('input', item.value, arr);
+					}
 				}
 				this.handleClose();
 			},

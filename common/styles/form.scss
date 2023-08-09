@@ -5,6 +5,7 @@
 .title {
 	padding: $df;
 	color: $u-info;
+	background-color: $u-bg-color;
 }
 
 /**
@@ -29,6 +30,7 @@
 .btns {
 	padding: $df;
 	display: flex;
+	align-items: center;
 	/deep/.u-button + .u-button {
 		margin-left: $df;
 	}
@@ -93,4 +95,25 @@
 		background-color: $u-primary;
 		border-radius: 0 $radius $radius 0;
 	}
+}
+
+/**
+ * 固定按钮 新增按钮
+	<view class="fixed-add" @click="add">
+		<u-icon name="plus" color="#fff" :size="24"></u-icon>
+	</view>
+ */
+.fixed-add {
+	position: fixed;
+	z-index: 970;
+	bottom: 200rpx;
+	right: 50rpx;
+	width: 100rpx;
+	height: 100rpx;
+	border-radius: 50%;
+	background-color: $u-primary;
+	box-shadow: 0 0 16rpx $u-primary;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
