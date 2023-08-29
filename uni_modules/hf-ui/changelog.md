@@ -1,3 +1,5 @@
+## 2.0.11（2023-08-29）
+- hf-tree.defaultProps 添加 noShowLastIcon
 ## 2.0.10（2023-08-09）
 - hf-form-area 添加props
 	- fullPath：是否全路径

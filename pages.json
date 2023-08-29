@@ -57,6 +57,11 @@
 			"style": {
 				"navigationBarTitleText": "省市县"
 			}
+		}, {
+			"path": "pages/componentsB/tree",
+			"style": {
+				"navigationBarTitleText": "树形组件"
+			}
 		}
 	],
 	"globalStyle": {

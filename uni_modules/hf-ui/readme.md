@@ -886,7 +886,8 @@ export default {
 			defaultProps: {
 				text: 'text',
 				value: 'value',
-				children: 'children'
+				children: 'children',
+				noShowLastIcon: 'noShowLastIcon'
 			},
 			options: [{
 					value: '1',
@@ -900,7 +901,6 @@ export default {
 									children: [
 										{ value: '1-1-1-1', text: '刘一' },
 										{ value: '1-1-1-2', text: '陈二' },
-										
 									]
 								}, {
 									value: '1-1-2',
@@ -939,6 +939,10 @@ export default {
 									]
 								},
 							]
+						}, {
+							value: '1-3',
+							text: '社区名称(叶子节点 不显示icon)',
+							noShowLastIcon: true
 						}
 					]
 				}, {
@@ -947,31 +951,10 @@ export default {
 					children: [{
 							value: '2-1',
 							text: '社区名称',
-							children: [{
-									value: '2-1-1',
-									text: '第一网格',
-									children: [
-										{ value: '2-1-1-1', text: '张三丰' },
-										{ value: '2-1-1-2', text: '张三丰' },
-										
-									]
-								}, {
-									value: '2-1-2',
-									text: '第二网格',
-									children: [
-										{ value: '2-1-2-1', text: '张三丰' },
-										{ value: '2-1-2-2', text: '张三丰' },
-										{ value: '2-1-2-3', text: '张三丰' },
-									]
-								}, {
-									value: '2-1-3',
-									text: '第三网格',
-									children: [
-										{ value: '2-1-3-1', text: '张三丰' },
-										{ value: '2-1-3-2', text: '张三丰' },
-										{ value: '2-1-3-3', text: '张三丰' },
-									]
-								}
+							children: [
+								{ value: '2-1-1', text: '第一网格', noShowLastIcon: true }, 
+								{ value: '2-1-2', text: '第二网格', noShowLastIcon: true },
+								{ value: '2-1-3', text: '第三网格', noShowLastIcon: true }
 							]
 						},
 					]
@@ -1754,14 +1737,19 @@ export default {
 | lastIconColor  | 没有子集的icon颜色                              | String                |                    |             |
 
 **defaultProps Options**
-默认值：`{ text: 'text', value: 'value', children: 'children' }`
+默认值：`{ text: 'text', value: 'value', children: 'children', noShowLastIcon: 'noShowLastIcon' }`
 
-| 参数     | 说明             | 类型   | 默认值   |
-| -------- | ---------------- | ------ | -------- |
-| text     | 选项的标签       | String | text     |
-| value    | 选项值           | String | value    |
-| children | 子集             | String | children |
-| disabled | 是否禁用指定节点 | String | disabled |
+| 参数           | 说明                       | 类型   | 默认值       |
+| -------------- | -------------------------- | ------ | ------------ |
+| text           | 选项的标签                 | String | text         |
+| value          | 选项值                     | String | value        |
+| children       | 子集                       | String | children     |
+| disabled       | 是否禁用指定节点           | String | disabled     |
+| noShowLastIcon | 叶子节点是否不显示lastIcon | String | showLastIcon |
+
+> 注意：
+>
+> - 配了`lastIcon`，默认最后一级显示icon；节点数据可配置`noShowLastIcon`，标识最后一级是否不显示icon
 
 **slot**
 

@@ -58,6 +58,10 @@
 							path: '/pages/componentsB/area',
 							icon: 'picker'
 						}, {
+							title: 'tree 树形组件',
+							path: '/pages/componentsB/tree',
+							icon: 'list'
+						}, {
 							title: 'upload 上传',
 							path: '/pages/componentsB/upload',
 							icon: 'upload'

@@ -18,7 +18,7 @@
 				<view class="hf-tree-label" @click.stop="_treeItemTap(item)">
 					<view class="hf-tree-label__icon">
 						<template v-if="item.lastRank">
-							<hf-icon v-if="lastIcon" :name="lastIcon" :color="lastIconColor"></hf-icon>
+							<hf-icon v-if="lastIcon && !item.noShowLastIcon" :name="lastIcon" :color="lastIconColor"></hf-icon>
 						</template>
 						<template v-else>
 							<hf-icon :name="item.showChild ? 'arrow-down-fill' : 'arrow-right-fill'" :size="8"></hf-icon>
@@ -169,6 +169,9 @@
 			disabledKey() {
 				return this.defaultProps.disabled || 'disabled';
 			},
+			noShowLastIconKey() {
+				return this.defaultProps.noShowLastIcon || 'noShowLastIcon';
+			},
 			propsChange() {
 				return [this.multiple, this.selectParent];
 			},
@@ -278,6 +281,7 @@
 						id: item[this.idKey],
 						name: item[this.textKey],
 						disabled: item[this.disabledKey],
+						noShowLastIcon: item[this.noShowLastIconKey] || false,
 						source: item,
 						parentId,	// 父级id数组
 						parents,	// 父级id数组

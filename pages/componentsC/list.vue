@@ -24,6 +24,11 @@
 				}
 			};
 		},
+		// #ifdef MP-WEIXIN
+		mounted() {
+			this.$refs.hfList.setFetchList(this.getList);
+		},
+		// #endif
 		methods: {
 			getList(pagination) {
 				const params = {

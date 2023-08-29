@@ -1,6 +1,6 @@
 <template>
 	<view class="hf-form-tree">
-		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :borderBottom="borderBottom" @click="popupShow">
+		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :label-width="labelWidth" :borderBottom="borderBottom" @click="popupShow">
 			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 			<template #right>
 				<slot name="right"></slot>
@@ -195,41 +195,6 @@
 				display: flex;
 				/deep/ .u-button + .u-button {
 					margin-left: $df;
-				}
-			}
-			
-			/**
-			 * 胶囊按钮 重置 | 搜索
-				<view class="btns capsule">
-					<view class="info" @click="reset">重置</view>
-					<view class="primary" @click="search">搜索</view>
-				</view>
-			 */
-			.btns.capsule {
-				padding: $lg $df;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				$h: 88rpx;
-				$radius: 0.5* $h;
-				& > view {
-					height: $h;
-					font-size: $font-lg;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-				}
-				.info {
-					flex: 2;
-					color: $u-main-color;
-					background-color: #EEEEEE;
-					border-radius: $radius 0 0 $radius;
-				}
-				.primary {
-					flex: 3;
-					color: $bg-white;
-					background-color: $u-primary;
-					border-radius: 0 $radius $radius 0;
 				}
 			}
 		}
