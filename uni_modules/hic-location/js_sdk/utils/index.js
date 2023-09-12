@@ -9,7 +9,7 @@ let SYS_INFO;
 export function getLocation () {
 	return new Promise((resolve, reject) => {
 		uni.getLocation({
-			type: 'gcj02',
+			type: 'wgs84',
 			success: (res) => {
 				// console.log(res);
 				resolve({

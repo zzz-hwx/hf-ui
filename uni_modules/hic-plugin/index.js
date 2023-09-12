@@ -45,10 +45,10 @@ const $z = {
 	...test
 };
 
-// 挂载到uni对象上
-uni.$z = $z;
 
 const install = (Vue) => {
+	// 挂载到uni对象上
+	uni.$z = $z;
 	Vue.prototype.$z = $z;
 }
 

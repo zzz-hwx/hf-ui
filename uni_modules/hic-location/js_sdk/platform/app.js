@@ -37,11 +37,11 @@ export async function getLocation (loading = false, noHideLoading = false) {
  * 地址逆解析
  * @param {*} param 经纬度
  */
-export async function reverseGeocoder ({ latitude, longitude } = {}) {
+export async function reverseGeocoder ({ latitude, longitude, loading = true } = {}) {
 	try {
 		let param = { latitude, longitude };
 		if (typeof(latitude) === 'undefined' || typeof(longitude) === 'undefined') {
-			param = await getLocation(true, true);
+			param = await getLocation(loading, true);
 		}
 		const result = await map.reverseGeocoder(param);
 		return result;

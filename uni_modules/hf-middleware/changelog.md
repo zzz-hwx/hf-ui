@@ -1,3 +1,5 @@
+## 1.1.9（2023-08-10）
+- quick删除方法chooseFile，APP不支持uni.chooseFile
 ## 1.1.8（2023-08-02）
 - 添加方法：
 	- scanCode：扫码

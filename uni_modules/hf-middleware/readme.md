@@ -19,7 +19,7 @@ API
 | chooseImage   | ✔    | ✔    | ✔      | 选择图片 拍照  |
 | chooseVideo   | ✔    | ✔    | ✔      | 选择视频       |
 | chooseMedia   | ✔    | ✔    | ✔      | 选择图片或视频 |
-| chooseFile    | ✔    | ✔    | ✔      | 选择文件       |
+| chooseFile    |      | ✔    | ✔      | 选择文件       |
 | getRecord     |      | ✔    |        | 录音           |
 | getLocation   | ✔    | ✔    | ✔      | 定位           |
 | makePhoneCall |      | ✔    | ✔      | 拨打电话       |

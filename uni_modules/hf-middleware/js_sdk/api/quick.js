@@ -42,30 +42,18 @@ export async function chooseImage({ count = 9 } = {}) {
  */
 export async function chooseVideo() {
 	const count = 1;	// 只允许选择1个
-	const res = await useBase('selectFiles', {
+	const res = await useBase('selectVideo', {
 		maxCount: count
 	});
-	console.log('--- chooseVideo --->', res);
-	let tip = false;
 	const fileArr = res.map((item) => {
-		if (item.fileType !== 'mp4') {
-			tip = true;
-			return;
-		}
 		return {
-			path: base64ToPath(item.file, item.fileType, item.name),	// 不知道怎么拼文件类型 (埋雷 T^T)
+			path: base64ToPath(item.video, item.fileType, item.name),	// 不知道怎么拼文件类型 (埋雷 T^T)
 			name: item.name,
 			size: item.size,
 			type: getFileType(item.fileType)
 		}
 	}).filter(Boolean);
-	if (tip) {
-		modal({
-			title: '提示',
-			content: '请选择MP4格式视频',
-			showCancel: false
-		});
-	}
+	console.log('--- quick.chooseVideo --->', JSON.stringify(fileArr));
 	return fileArr;
 }
 
@@ -89,23 +77,23 @@ export async function chooseMedia({ count = 9 } = {}) {
  * @param {Object} params 参数
  * 	@param {Number} count 文件支持最多可选的个数
  */
-export async function chooseFile({ count = 1 } = {}) {
-	if (count !== 1) count = 1;	// 底座目前仅支持1个
-	const res = await useBase('selectFiles', {
-		maxCount: count
-	});
-	// [{"name":"文件名","size":单位字节,"fileType":"文件类型","file":"不完整的base64"}]
-	const fileArr = res.map((item) => {
-		return {
-			path: base64ToPath(item.file, item.fileType, item.name),	// 不知道怎么拼文件类型 (埋雷 T^T)
-			name: item.name,
-			size: item.size,
-			type: getFileType(item.fileType)
-		};
-	})
-	console.log('--- chooseFile --->', fileArr);
-	return fileArr;
-}
+// export async function chooseFile({ count = 1 } = {}) {
+// 	if (count !== 1) count = 1;	// 底座目前仅支持1个
+// 	const res = await useBase('selectFiles', {
+// 		maxCount: count
+// 	});
+// 	// [{"name":"文件名","size":单位字节,"fileType":"文件类型","file":"不完整的base64"}]
+// 	const fileArr = res.map((item) => {
+// 		return {
+// 			path: base64ToPath(item.file, item.fileType, item.name),	// 不知道怎么拼文件类型 (埋雷 T^T)
+// 			name: item.name,
+// 			size: item.size,
+// 			type: getFileType(item.fileType)
+// 		};
+// 	})
+// 	console.log('--- chooseFile --->', fileArr);
+// 	return fileArr;
+// }
 
 /**
  * @description 获取当前的地理位置
