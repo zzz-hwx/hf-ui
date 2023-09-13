@@ -1011,11 +1011,14 @@ export default {
 
 **props**
 
-| 参数                 | 说明                      | 类型             | 默认值   | 可选值         |
-| ------------------ | ----------------------- | -------------- | ----- | ----------- |
-| latitude           | 纬度                      | String\|Number |       |             |
-| longitude          | 经度                      | String\|Number |       |             |
-| initializeLocation | 是否初始化位置信息 详情、修改 不主动获取定位 | Boolean        | false | true\|false |
+| 参数               | 说明                                         | 类型           | 默认值 | 可选值      |
+| ------------------ | -------------------------------------------- | -------------- | ------ | ----------- |
+| latitude           | 纬度                                         | String\|Number |        |             |
+| longitude          | 经度                                         | String\|Number |        |             |
+| initializeLocation | 是否初始化位置信息 详情、修改 不主动获取定位 | Boolean        | false  | true\|false |
+| coordinateSystem   | 经纬度坐标系                                 | String         |        |             |
+
+> coordinateSystem 默认值为中间件`hf-middleware`配置的`coordinateSystem`
 
 ### hf-form-upload 文件上传
 
@@ -1104,6 +1107,7 @@ export default {
 | maxCount      | 最大选择图片的数量                           | Number         | 9                      |                     |
 | bizPath       | 控制文件上传的业务路径                       | String         | 'temp'                 |                     |
 | maxSize       | 选择单个文件的最大大小，单位B(byte)，默认10M | String\|Number | 10 * 1024 * 1024       |                     |
+| maxDuration   | 拍摄视频最长拍摄时间，单位秒                 | Number         | 60                     |                     |
 | uploadingText | 文件上传中提示                               | String         | 文件上传中，请稍后再试 |                     |
 
 **slots**
@@ -1332,6 +1336,7 @@ export default {
 | separator        | 分隔符                                          | String         | ,                      |                           |
 | bizPath          | 控制文件上传的业务路径                          | String         | 'temp'                 |                           |
 | maxSize          | 选择单个文件的最大大小，单位B(byte)，默认不限制 | String\|Number | Number.MAX_VALUE       |                           |
+| maxDuration      | 拍摄视频最长拍摄时间，单位秒                    | Number         | 60                     |                           |
 | disableNoShowBtn | 禁用状态，是否不显示选择文件按钮                | Boolean        | false                  | true\|false               |
 | useBeforeRead    | 是否开启读取前的处理函数                        | Boolean        | false                  | true\|false               |
 | beforeRead       | 读取前的处理函数                                | Function       |                        |                           |

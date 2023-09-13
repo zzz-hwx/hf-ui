@@ -1,3 +1,10 @@
+## 2.0.12（2023-09-13）
+- hf-upload 添加props
+	- maxDuration：拍摄视频最长拍摄时间
+- hf-form-upload 添加props
+	- maxDuration：拍摄视频最长拍摄时间
+- hf-form-location 添加props
+	- coordinateSystem: 经纬度坐标系
 ## 2.0.11（2023-08-29）
 - hf-tree.defaultProps 添加 noShowLastIcon
 ## 2.0.10（2023-08-09）

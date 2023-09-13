@@ -1,6 +1,7 @@
+import { config } from '../config.js';
 import { useBase } from '../utils/base.js';
 import { base64ToPath, getFileType } from '../utils/index.js';
-import { gcj02towgs84 } from '../utils/mapConversion.js';
+import { mapConversion } from '../utils/mapConversion.js';
 import { showActionSheet as uniShowActionSheet, delay } from '@/uni_modules/hic-plugin';
 
 /* ====================
@@ -128,14 +129,17 @@ export async function getRecord() {
 
 /**
  * @description 定位
+ * @param {Object} params 参数
+ * 	@param {String} coordinateSystem 返回的经纬度坐标系 默认值为空 不进行坐标系转换
  */
-export async function getLocation() {
+export async function getLocation({ coordinateSystem = config.coordinateSystem } = {}) {
 	const res = await useBase('location');
+	res.coordinateSystem = res.coordinateSystem || 'gcj02';	// 如果底座没有返回 设置默认值 'gcj02'
 	console.log('--- 定位 --->', res);
 	// 底座返回经纬度坐标系为gcj02(高德)
 	// PC端坐标系为wgs84
 	// ∴ 转换为wgs84
-	const [longitude, latitude] = gcj02towgs84(res.longitude, res.latitude);
+	const [longitude, latitude] = mapConversion(res.longitude, res.latitude, res.coordinateSystem, coordinateSystem);
 	return {
 		latitude,	// 纬度
 		longitude,	// 经度

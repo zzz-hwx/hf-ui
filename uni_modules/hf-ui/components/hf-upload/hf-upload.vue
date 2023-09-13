@@ -155,6 +155,11 @@
 				type: [String, Number],
 				default: Number.MAX_VALUE
 			},
+			maxDuration: {
+				// 拍摄视频最长拍摄时间，单位秒
+				type: Number,
+				default: uni.$u.props.upload.maxDuration
+			},
 			disableNoShowBtn: {
 				// 禁用状态 是否不显示选择文件按钮
 				type: Boolean,
@@ -257,10 +262,10 @@
 						res = await chooseImage({ count: this.maxCount - this.lists.length });
 						break;
 					case 'video':
-						res = await chooseVideo();
+						res = await chooseVideo({ maxDuration: this.maxDuration });
 						break;
 					case 'media':
-						res = await chooseMedia({ count: this.maxCount - this.lists.length });
+						res = await chooseMedia({ count: this.maxCount - this.lists.length, maxDuration: this.maxDuration });
 						break;
 					case 'file':
 						res = await chooseFile();

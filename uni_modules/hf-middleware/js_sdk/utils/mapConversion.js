@@ -279,3 +279,45 @@ export function webMercator2LngLat(x, y) { // [12727039.383734727, 3579066.68940
 	lat = 180 / Math.PI * (2 * Math.atan(Math.exp(lat * Math.PI / 180)) - Math.PI / 2);
 	return [lng, lat]; // [114.32894001591471, 30.58574800385281]
 }
+
+const coordinateSystemMap = new Map([
+	[
+		'wgs84',	// GPS坐标
+		new Map([
+			['gcj02', wgs84togcj02]
+		])
+	], [
+		'gcj02',	// 国测局坐标 火星坐标
+		new Map([
+			['bd09', gcj02tobd09],
+			['wgs84', gcj02towgs84]
+		]),
+	], [
+		'bd09',		// 百度坐标
+		new Map([
+			['gcj02', bd09togcj02],
+		])
+	]
+]);
+
+/**
+ * @description 经纬度坐标系转换工具
+ * @param {String|Number} lng 待转换经度
+ * @param {String|Number} lat 待转换纬度
+ * @param {String} from 待转换坐标类型
+ * @param {String} to 转换后坐标类型
+ * @return {Array} 转换或未转换的经纬度 [lng, lat]
+ */
+export function mapConversion(lng, lat, from, to) {
+	if (!coordinateSystemMap.has(from)) {
+		console.warn(`不支持转换${from}坐标系`);
+		return [lng, lat];
+	}
+	const map = coordinateSystemMap.get(from);
+	if (!map.has(to)) {
+		console.warn(`不支持转换成${to}坐标系`);
+		return [lng, lat];
+	}
+	const func = map.get(to);
+	return func(lng, lat);
+}

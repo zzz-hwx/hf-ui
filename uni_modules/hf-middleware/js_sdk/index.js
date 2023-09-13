@@ -89,6 +89,16 @@ export function getLocation(...args) {
 }
 
 /**
+ * @description 打开地图选择位置
+ */
+export function chooseLocation(...args) {
+	if (!apiMap[config.usedApi].chooseLocation) {
+		throw new Error(`${config.usedApi} is not has chooseLocation`);
+	}
+	return apiMap[config.usedApi].chooseLocation(...args);
+}
+
+/**
  * @description 拨打电话
  * @param {String} phoneNumber 需要拨打的电话号码
  */

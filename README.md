@@ -18,14 +18,14 @@
 
 > [uniapp 下拉刷新](https://uniapp.dcloud.net.cn/api/ui/pulldown.html)
 
-- 文件`pages.json`，找到的当前页面的`pages`节点
+- 文件`pages.json`，找到的当前页面的`pages`节点，添加`"enablePullDownRefresh": true` 开启下拉刷新
   
   ```json
   {
     "path": "pages/xx/xx",
     "style": {
-        "navigationBarTitleText": "",
-        "enablePullDownRefresh": true    // 开启下拉刷新
+      "navigationBarTitleText": "",
+      "enablePullDownRefresh": true
     }
   }
   ```
@@ -216,8 +216,8 @@ u-form validateField 逻辑错误
 
 ```js
 export default {
-    computed: {
-        hasAsyncRule() {
+	computed: {
+		hasAsyncRule() {
 			// 是否有异步校验函数 asyncValidator
 			if (!this.rules) return false;
 			for (let key in this.rules) {
@@ -227,16 +227,16 @@ export default {
 			}
 			return false;
 		}
-    },
-    methods: {
-        myValidate() {
+	},
+	methods: {
+		myValidate() {
 			// 自己写的validate
 			const uFormItems = this.$refs.uForm.children;
 			const rules = {};
 			uFormItems.forEach((child) => {
 				// 历遍 u-form 所有 u-form-item
 				// 过滤掉没有对应表单项的校验规则
-				const prop = child.prop;	// 获取对应的属性
+				const prop = child.prop; // 获取对应的属性
 				if (this.rules[prop]) {
 					rules[prop] = this.rules[prop];
 				}
@@ -258,7 +258,8 @@ export default {
 					return this.model;
 				});
 			}
-    }
+		}
+	}
 }
 ```
 

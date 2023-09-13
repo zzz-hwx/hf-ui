@@ -14,26 +14,27 @@ API
 
 - uniapp
 
-|               | 快应 | 自研 | uniapp |                |
-| ------------- | ---- | ---- | ------ | -------------- |
-| chooseImage   | ✔    | ✔    | ✔      | 选择图片 拍照  |
-| chooseVideo   | ✔    | ✔    | ✔      | 选择视频       |
-| chooseMedia   | ✔    | ✔    | ✔      | 选择图片或视频 |
-| chooseFile    |      | ✔    | ✔      | 选择文件       |
-| getRecord     |      | ✔    |        | 录音           |
-| getLocation   | ✔    | ✔    | ✔      | 定位           |
-| makePhoneCall |      | ✔    | ✔      | 拨打电话       |
-| anyRtc        |      | ✔    |        | 视频、语音     |
-| scanCode      | ✔    | ✔    | ✔      | 扫码           |
-| getSystemInfo | ✔    |      |        | 获取系统信息   |
-| getVersion    |      | ✔    |        | 获取版本号     |
-| softInputMode |      | ✔    |        | 布局静默       |
-| openDocument  |      | ✔    | ✔      | 打开文档       |
-| logout        |      | ✔    |        | 退出登录       |
-| getUserInfo   |      | ✔    |        | 获取用户信息   |
-| getIdCardOcr  |      | ✔    |        | 证件OCR正/反面 |
-| getToken      | ✔    | ✔    |        | 获取token      |
-| refreshToken  | ✔    | ✔    |        | 刷新token      |
+|                | 快应 | 自研 | uniapp |                  |
+| -------------- | ---- | ---- | ------ | ---------------- |
+| chooseImage    | ✔    | ✔    | ✔      | 选择图片 拍照    |
+| chooseVideo    | ✔    | ✔    | ✔      | 选择视频         |
+| chooseMedia    | ✔    | ✔    | ✔      | 选择图片或视频   |
+| chooseFile     |      | ✔    | ✔      | 选择文件         |
+| getRecord      |      | ✔    |        | 录音             |
+| getLocation    | ✔    | ✔    | ✔      | 定位             |
+| chooseLocation |      |      | ✔      | 打开地图选择位置 |
+| makePhoneCall  |      | ✔    | ✔      | 拨打电话         |
+| anyRtc         |      | ✔    |        | 视频、语音       |
+| scanCode       | ✔    | ✔    | ✔      | 扫码             |
+| getSystemInfo  | ✔    |      |        | 获取系统信息     |
+| getVersion     |      | ✔    |        | 获取版本号       |
+| softInputMode  |      | ✔    |        | 布局静默         |
+| openDocument   |      | ✔    | ✔      | 打开文档         |
+| logout         |      | ✔    |        | 退出登录         |
+| getUserInfo    |      | ✔    |        | 获取用户信息     |
+| getIdCardOcr   |      | ✔    |        | 证件OCR正/反面   |
+| getToken       | ✔    | ✔    |        | 获取token        |
+| refreshToken   | ✔    | ✔    |        | 刷新token        |
 
 ## 使用
 
@@ -54,7 +55,8 @@ import { setConfig } from '@/uni_modules/hf-middleware';
 
 setConfig({
     usedApi: configService.usedApi,
-    usedConfig: configService.usedConfig
+    usedConfig: configService.usedConfig,
+    coordinateSystem: configService.coordinateSystem
 });
 ```
 
@@ -68,7 +70,8 @@ export default {
     usedConfig: {
         protocol: 'kysk-fzsy-app://',    // app自定义协议
         path: 'native',
-    }
+    },
+    coordinateSystem: 'wgs84'	// 中间件返回的经纬度坐标系
 }
 ```
 
@@ -197,7 +200,7 @@ chooseImage({ count: 2 }).then((res) => {
 });
 ```
 
-#### chooseVideo()
+#### chooseVideo(OBJECT)
 
 拍摄视频或从手机相册中选视频，返回视频的临时文件路径。
 
@@ -206,6 +209,12 @@ chooseImage({ count: 2 }).then((res) => {
 | 快应 | 自研 | uniapp |
 | ---- | ---- | ------ |
 | ✔    | ✔    | ✔      |
+
+**OBJECT 参数说明**
+
+| 参数名      | 类型   | 默认值 | 说明                         | 平台差异说明 |
+| ----------- | ------ | ------ | ---------------------------- | ------------ |
+| maxDuration | Number | 10     | 拍摄视频最长拍摄时间，单位秒 |              |
 
 **返回参数说明**
 
@@ -241,9 +250,10 @@ chooseVideo().then((res) => {
 
 Array 选择的视频列表
 
-| 参数  | 类型   | 说明                                   |
-| ----- | ------ | -------------------------------------- |
-| count | Number | 最多可选择的数量，默认9，视频只可选择1 |
+| 参数        | 类型   | 说明                                   |
+| ----------- | ------ | -------------------------------------- |
+| count       | Number | 最多可选择的数量，默认9，视频只可选择1 |
+| maxDuration | Number | 10                                     |
 
 **示例**
 
@@ -348,7 +358,9 @@ export default {
 
 ### 位置
 
-#### getLocation()
+> 注意：`H5 端` 使用地图和定位相关，需要在 [manifest.json](https://uniapp.dcloud.net.cn/collocation/manifest#h5sdkconfig) 内配置腾讯或谷歌等三方地图服务商申请的秘钥（key）
+
+#### getLocation(OBJECT)
 
 获取当前的地理位置
 
@@ -357,6 +369,12 @@ export default {
 | 快应  | 自研  | uniapp |
 | --- | --- | ------ |
 | ✔   | ✔   | ✔      |
+
+**OBJECT 参数说明**
+
+| 参数名           | 类型   | 默认值 | 说明                                             | 平台差异说明 |
+| ---------------- | ------ | ------ | ------------------------------------------------ | ------------ |
+| coordinateSystem | String |        | 返回的经纬度坐标系，默认值为空，不进行坐标系转换 |              |
 
 **返回参数说明**
 
@@ -370,6 +388,41 @@ export default {
 
 ```js
 getLocation().then((res) => {
+    console.log(res);
+    // {latitude: 57.123456, longitude:123.123456, address: 'xxx'}
+});
+```
+
+#### chooseLocation(OBJECT)
+
+打开地图选择位置
+
+**平台差异说明**
+
+| 快应 | 自研 | uniapp |
+| ---- | ---- | ------ |
+|      |      | ✔      |
+
+**OBJECT 参数说明**
+
+| 参数名           | 类型   | 默认值 | 说明   | 平台差异说明 |
+| ---------------- | ------ | ------ | ------ | ------------ |
+| latitude         | String |        | 纬度   |              |
+| longitude        | String |        | 经度   |              |
+| coordinateSystem | String |        | 坐标系 |              |
+
+**返回参数说明**
+
+| 参数      | 类型   | 说明     |
+| --------- | ------ | -------- |
+| latitude  | Number | 纬度     |
+| longitude | Number | 经度     |
+| address   | String | 地址信息 |
+
+**示例**
+
+```js
+chooseLocation({ latitude: 57.123456, longitude:123.123456 }).then((res) => {
     console.log(res);
     // {latitude: 57.123456, longitude:123.123456, address: 'xxx'}
 });

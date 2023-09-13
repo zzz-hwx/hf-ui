@@ -1,7 +1,7 @@
 {
 	"id": "hf-ui",
 	"displayName": "hf-ui",
-	"version": "2.0.11",
+	"version": "2.0.12",
 	"description": "基于uview 2.0 封装的组件库",
 	"keywords": [
         "hf-ui,ui,uni-app"
@@ -46,7 +46,7 @@
 			"client": {
 				"Vue": {
 					"vue2": "y",
-					"vue3": "u"
+					"vue3": "n"
 				},
 				"App": {
 					"app-vue": "u",

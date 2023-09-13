@@ -11,7 +11,7 @@
 
 <script>
 	import mixin from '../../libs/mixins/form.js';
-	import { getLocation } from '@/uni_modules/hf-middleware';
+	import { getLocation, chooseLocation, config } from '@/uni_modules/hf-middleware';
 	export default {
 		name: 'HfFormLocation',
 		mixins: [mixin],
@@ -28,6 +28,11 @@
 				// 是否初始化位置信息 详情、修改 不主动获取定位
 				type: Boolean,
 				default: false
+			},
+			coordinateSystem: {
+				// 经纬度坐标系
+				type: String,
+				default: config.coordinateSystem
 			}
 		},
 		data() {
@@ -43,7 +48,7 @@
 		methods: {
 			getLocation() {
 				if (this.disabled) return;
-				getLocation().then(res => {
+				getLocation({ coordinateSystem: this.coordinateSystem }).then(res => {
 					this.$emit('input', res.address);
 					this.$emit('update:latitude', res.latitude);
 					this.$emit('update:longitude', res.longitude);
@@ -52,16 +57,15 @@
 			},
 			chooseLocation() {
 				if (this.disabled) return;
-				uni.chooseLocation({
+				chooseLocation({
 					latitude: this.latitude,
 					longitude: this.longitude,
-					success: (res) => {
-						res.location = res.name;
-						this.$emit('input', res.address);
-						this.$emit('update:latitude', res.latitude);
-						this.$emit('update:longitude', res.longitude);
-						this.$emit('change', res);
-					}
+					coordinateSystem: this.coordinateSystem
+				}).then((res) => {
+					this.$emit('input', res.address);
+					this.$emit('update:latitude', res.latitude);
+					this.$emit('update:longitude', res.longitude);
+					this.$emit('change', res);
 				});
 			},
 			handleInput(val) {

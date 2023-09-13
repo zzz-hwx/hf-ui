@@ -19,7 +19,8 @@ const apiConfig = {
 
 export const config = {
 	usedApi: UNI_API,
-	usedConfig: apiConfig[UNI_API]
+	usedConfig: apiConfig[UNI_API],
+	coordinateSystem: ''	// getLocation 参数 coordinateSystem 默认值 (转换后坐标类型)
 };
 
 /**
@@ -31,4 +32,5 @@ export const config = {
 export function setConfig(options) {
 	config.usedApi = options.usedApi || UNI_API;
 	config.usedConfig = options.usedConfig || {};
+	config.coordinateSystem = options.coordinateSystem || '';
 }

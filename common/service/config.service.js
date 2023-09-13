@@ -17,7 +17,8 @@ const base = {
 	usedConfig: {
 		protocol: 'syzl-app://',	// app自定义协议
 		path: 'native',				// path
-	}
+	},
+	coordinateSystem: 'wgs84'	// 中间件返回的经纬度坐标系
 }
 
 // 各环境不同的配置

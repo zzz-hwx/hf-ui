@@ -1,3 +1,14 @@
+## 1.1.10（2023-09-13）
+- getLocation添加参数：
+	- coordinateSystem：设置返回的经纬度坐标系
+- chooseVideo添加参数：
+	- maxDuration：拍摄视频最长拍摄时间，单位秒
+- chooseMedia添加参数：
+	- maxDuration：拍摄视频最长拍摄时间，单位秒
+- 添加方法：
+	- chooseLocation：打开地图选择位置
+- 添加配置coordinateSystem：设置中间件默认返回的经纬度坐标系
+- 坐标系转换添加方法：mapConversion
 ## 1.1.9（2023-08-10）
 - quick删除方法chooseFile，APP不支持uni.chooseFile
 ## 1.1.8（2023-08-02）

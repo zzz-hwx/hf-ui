@@ -4,5 +4,6 @@ import { setConfig } from '@/uni_modules/hf-middleware';
 
 setConfig({
 	usedApi: configService.usedApi,
-	usedConfig: configService.usedConfig
+	usedConfig: configService.usedConfig,
+	coordinateSystem: configService.coordinateSystem
 });

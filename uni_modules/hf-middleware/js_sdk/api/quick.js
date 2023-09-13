@@ -1,5 +1,7 @@
+import { config } from '../config.js';
 import { useBase } from '../utils/base.js';
 import { base64ToPath, getFileType } from '../utils/index.js';
+import { mapConversion } from '../utils/mapConversion.js';
 import {
 	modal,
 	showActionSheet as uniShowActionSheet
@@ -37,13 +39,15 @@ export async function chooseImage({ count = 9 } = {}) {
 }
 
 /**
- * @description 选择视频 (只允许MP4格式)
- * 使用选择文件接口, 快应没有提供选择视频的api
+ * @description 拍摄视频或从手机相册中选视频
+ * @param {Object} params 参数
+ * 	@param {Number} maxDuration 拍摄视频最长拍摄时间，单位秒
  */
-export async function chooseVideo() {
+export async function chooseVideo({ maxDuration = 10 } = {}) {
 	const count = 1;	// 只允许选择1个
 	const res = await useBase('selectVideo', {
-		maxCount: count
+		maxCount: count,
+		maxDuration
 	});
 	const fileArr = res.map((item) => {
 		return {
@@ -61,14 +65,15 @@ export async function chooseVideo() {
  * @description 选择图片或视频
  * @param {Object} params 参数
  * 	@param {Number} count = [9] 最多可选择的数量，默认9，视频只可选择1
+ * 	@param {Number} maxDuration 拍摄视频最长拍摄时间，单位秒
  */
-export async function chooseMedia({ count = 9 } = {}) {
+export async function chooseMedia({ count = 9, maxDuration = 10 } = {}) {
 	const tapIndex = await uniShowActionSheet({ itemList: ['图片', '视频']});
 	switch (tapIndex) {
 		case 0:
 			return chooseImage({ count });
 		case 1:
-			return chooseVideo();
+			return chooseVideo({ maxDuration });
 	}
 }
 
@@ -97,12 +102,16 @@ export async function chooseMedia({ count = 9 } = {}) {
 
 /**
  * @description 获取当前的地理位置
+ * @param {Object} params 参数
+ * 	@param {String} coordinateSystem 返回的经纬度坐标系 默认值为空 不进行坐标系转换
  */
-export async function getLocation() {
+export async function getLocation({ coordinateSystem = config.coordinateSystem } = {}) {
 	const res = await useBase('location');
+	res.coordinateSystem = res.coordinateSystem || 'wgs84';	// 如果底座没有返回 设置默认值 'wgs84'
+	const [longitude, latitude] = mapConversion(res.lon, res.lat, res.coordinateSystem, coordinateSystem);
 	return {
-		latitude: res.lat,	// 纬度
-		longitude: res.lon,	// 经度
+		latitude,	// 纬度
+		longitude,
 		address: res.address	// 地址信息
 	};
 }

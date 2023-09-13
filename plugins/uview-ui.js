@@ -50,6 +50,9 @@ uni.$u.setConfig({
 		},
 		cell: {
 			rightIconStyle: 'color: #ccc'
+		},
+		upload: {
+			maxDuration: 15
 		}
 	}
 });

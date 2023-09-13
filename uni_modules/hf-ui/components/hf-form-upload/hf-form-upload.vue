@@ -26,6 +26,7 @@
 					:accept="accept"
 					:max-count="maxCount"
 					:max-size="maxSize"
+					:max-duration="maxDuration"
 					:biz-path="bizPath"
 					disable-no-show-btn
 					:uploading-text="uploadingText"
@@ -72,6 +73,11 @@
 			maxSize: {
 				type: [String, Number],
 				default: 10 * 1024 * 1024	// 10M
+			},
+			maxDuration: {
+				// 拍摄视频最长拍摄时间，单位秒
+				type: Number,
+				default: uni.$u.props.upload.maxDuration
 			},
 			uploadingText: {
 				type: String,

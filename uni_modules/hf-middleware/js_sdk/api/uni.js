@@ -1,7 +1,9 @@
+import { config } from '../config.js';
 // #ifdef H5
 import { compressAccurately } from '../utils/image-conversion/conversion.js';
 // #endif
 import { blobToPath, getFileInfo } from '../utils/index.js';
+import { mapConversion } from '../utils/mapConversion.js';
 import location from '@/uni_modules/hic-location/js_sdk/index.js';
 import {
 	chooseImage as uniChooseImage,
@@ -52,6 +54,8 @@ export async function chooseImage({ count = 9, compress = true, size = 200 } = {
 
 /**
  * @description 拍摄视频或从手机相册中选视频，返回视频的临时文件路径
+ * @param {Object} params 参数
+ * 	@param {Number} maxDuration 拍摄视频最长拍摄时间，单位秒
  */
 export async function chooseVideo({ maxDuration = 10 } = {}) {
 	const res = await uniChooseVideo({
@@ -71,6 +75,7 @@ export async function chooseVideo({ maxDuration = 10 } = {}) {
  * @description 选择图片或视频
  * @param {Object} params 参数
  * 	@param {Number} count = [9] 最多可选择的数量，默认9，视频只可选择1
+ * 	@param {Number} maxDuration 拍摄视频最长拍摄时间，单位秒
  */
 export async function chooseMedia({ count = 9, maxDuration = 10 } = {}) {
 	// #ifdef MP-WEIXIN
@@ -94,7 +99,7 @@ export async function chooseMedia({ count = 9, maxDuration = 10 } = {}) {
 		case 0:
 			return chooseImage({ count });
 		case 1:
-			return chooseVideo();
+			return chooseVideo({ maxDuration });
 	}
 	// #endif
 }
@@ -138,16 +143,52 @@ export async function chooseFile({ count = 1 } = {}) {
 
 /**
  * @description 获取当前的地理位置
+ * @param {Object} params 参数
+ * 	@param {String} coordinateSystem 返回的经纬度坐标系 默认值为空 不进行坐标系转换
  * uni.getLocation 默认为 wgs84 (小程序 腾讯/高德地图 坐标系gcj02 返回的经纬度是什么坐标系 ???)
  */
-export async function getLocation() {
+export async function getLocation({ coordinateSystem = config.coordinateSystem } = {}) {
 	const res = await location.reverseGeocoder();
+	res.coordinateSystem = 'wgs84';	// 设置默认值 (uni.getLocation默认返回wgs84坐标)
+	const [longitude, latitude] = mapConversion(res.longitude, res.latitude, res.coordinateSystem, coordinateSystem);
 	return {
 		...res,
-		latitude: res.latitude,
-		longitude: res.longitude,
+		latitude,
+		longitude,
 		address: res.address,
 	};
+}
+
+/**
+ * @description 打开地图选择位置
+ * @param {Object} params 参数
+ * 	@param {String | Number} latitude 纬度
+ * 	@param {String | Number} longitude 经度
+ * 	@param {String} coordinateSystem 坐标系
+ */
+export function chooseLocation({ latitude = '', longitude = '', coordinateSystem = config.coordinateSystem } = {}) {
+	return new Promise((resolve, reject) => {
+		const coord = 'gcj02';
+		// 微信小程序 默认打开腾讯地图 坐标系: gcj02
+		// APP 默认打开高德地图 坐标系: gcj02
+		// uni.chooseLocation 返回经纬度 使用 gcj02 国测局坐标系
+		[latitude, longitude] = mapConversion(longitude, latitude, coordinateSystem, coord);	// 坐标系转换
+		uni.chooseLocation({
+			latitude,
+			longitude,
+			success: (res) => {
+				const [lat, lng] = mapConversion(res.longitude, res.latitude, coord, coordinateSystem);
+				resolve({
+					latitude: lat,
+					longitude: lng,
+					address: res.address
+				});
+			},
+			fail: (err) => {
+				reject(err);
+			}
+		});
+	})
 }
 
 /**
