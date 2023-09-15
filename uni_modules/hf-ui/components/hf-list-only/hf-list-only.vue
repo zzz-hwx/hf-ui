@@ -42,7 +42,11 @@
 				<template #empty>
 					<!-- empty 自定义空提示 -->
 					<template v-if="!$slots.empty">
-						<u-empty mode="data" text="暂无数据"></u-empty>
+						<!-- 兼容微信小程序 没传插槽empty 显示为空 -->
+						<!-- <template v-if="!$slots.empty" #empty>
+							<slot name="empty"></slot>
+						</template> -->
+						<hic-tips :total="0" :emptyText="emptyText"></hic-tips>
 					</template>
 					<slot v-else name="empty"></slot>
 				</template>
