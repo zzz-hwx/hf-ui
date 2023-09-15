@@ -21,22 +21,22 @@
 - 文件`pages.json`，找到的当前页面的`pages`节点，添加`"enablePullDownRefresh": true` 开启下拉刷新
   
   ```json
-  {
-    "path": "pages/xx/xx",
-    "style": {
-      "navigationBarTitleText": "",
-      "enablePullDownRefresh": true
-    }
-  }
+	{
+		"path": "pages/xx/xx",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": true
+		}
+	}
   ```
 
 - 页面文件
   
   ```js
-  async onPullDownRefresh() {
-    await this.getList(true);    // 请求刷新列表数据
-    uni.stopPullDownRefresh();    // 停止当前页面下拉刷新
-  },
+	async onPullDownRefresh() {
+		await this.getList(true);    // 请求刷新列表数据
+		uni.stopPullDownRefresh();    // 停止当前页面下拉刷新
+	},
   ```
 
 ## 列表刷新
@@ -46,7 +46,7 @@
 
 ```js
 onShow() {
-    this.refreshList();
+	this.refreshList();
 }
 ```
 
@@ -58,8 +58,8 @@ onShow() {
 
 ``` js
 export const xxx = (params = {}) => {
-    // 请求地址, 请求参数, 请求配置(放在custom里)
-    http.get('/xxx/xxx', params, { custom: { loading: false } });
+	// 请求地址, 请求参数, 请求配置(放在custom里)
+	http.get('/xxx/xxx', params, { custom: { loading: false } });
 }
 ```
 
@@ -76,8 +76,8 @@ export const xxx = (params = {}) => {
 `gcj04`：高德地图、底座返回（底座使用高德地图定位）
 
 - 用途一：获取定位（都是`wgs84`，不用做坐标系转换）
-  - 调用中间件方法`getLocation`返回定位
-  - 请求后端接口保存数据
+	- 调用中间件方法`getLocation`返回定位
+	- 请求后端接口保存数据
 
 - 用途二：展示地图
   - 使用的功能模块：地图打点、网格巡查、地图轨迹...
@@ -106,6 +106,18 @@ let lnglat = [119.123, 26.123];	// 从地图返回的经纬度
 lnglat = gcj02towgs84(lnglat[0], lnglat[1])	// 坐标系转换
 // 请求后端接口保存数据
 ```
+
+### 坐标系转换
+
+- H5调用底座方法获取定位，添加返回`coordinateSystem`坐标系
+- 中间件方法`getLocation`、`chooseLocation`添加参数`coordinateSystem`，可设置方法返回的经纬度坐标系
+- 中间件可统一配置默认返回的经纬度坐标系
+- 组件`hf-form-location`可配置props参数`coordinateSystem`，设置组件返回的经纬度坐标系
+  - 组件参数`coordinateSystem`，默认值取中间件配置的参数`coordinateSystem`
+
+- 经纬度坐标系优先级
+  - `props.coordinateSystem` > 中间默认配置`coordinateSystem` > `getLocation`、`chooseLocation`方法形参`coordinateSystem`
+
 
 # 踩坑
 

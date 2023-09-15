@@ -39,10 +39,12 @@
 				:emptyText="emptyText"
 				@load="getList"
 				@loadmore="loadmore">
-				<!-- ??? 空提示....和UI一致 -->
-				<template v-if="$slots.empty" #empty>
+				<template #empty>
 					<!-- empty 自定义空提示 -->
-					<slot name="empty"></slot>
+					<template v-if="!$slots.empty">
+						<u-empty mode="data" text="暂无数据"></u-empty>
+					</template>
+					<slot v-else name="empty"></slot>
 				</template>
 			</hic-tips>
 		</u-list>
