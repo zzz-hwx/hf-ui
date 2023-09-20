@@ -1,3 +1,7 @@
+## 1.1.12（2023-09-19）
+- quick添加方法：openDocument：文档预览
+## 1.1.11（2023-09-15）
+- 自研底座二维码扫描添加.replace(/^\uFEFF/, '')
 ## 1.1.10（2023-09-13）
 - getLocation添加参数：
 	- coordinateSystem：设置返回的经纬度坐标系

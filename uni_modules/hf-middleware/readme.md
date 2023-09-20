@@ -29,7 +29,7 @@ API
 | getSystemInfo  | ✔    |      |        | 获取系统信息     |
 | getVersion     |      | ✔    |        | 获取版本号       |
 | softInputMode  |      | ✔    |        | 布局静默         |
-| openDocument   |      | ✔    | ✔      | 打开文档         |
+| openDocument   | ✔    | ✔    | ✔      | 打开文档         |
 | logout         |      | ✔    |        | 退出登录         |
 | getUserInfo    |      | ✔    |        | 获取用户信息     |
 | getIdCardOcr   |      | ✔    |        | 证件OCR正/反面   |
@@ -576,7 +576,7 @@ softInputMode({ type: 1 });
 
 | 快应 | 自研 | uniapp |
 | ---- | ---- | ------ |
-|      | ✔    | ✔      |
+| ✔    | ✔    | ✔      |
 
 **OBJECT 参数说明**
 

@@ -135,6 +135,20 @@ export async function scanCode() {
 }
 
 /**
+ * @description 文档预览
+ * @param {Object} params 参数
+ * 	@param {String} path 文件地址
+ */
+export async function openDocument({ path = '' } = {}) {
+	if (!path) {
+		throw new Error('缺少参数 path');
+	}
+	await useBase('document', {
+		documentPath: encodeURIComponent(path)	// 文档下载地址
+	}, true);
+}
+
+/**
  * @description 获取token
  */
 export async function getToken() {

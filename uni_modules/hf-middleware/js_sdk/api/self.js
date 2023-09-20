@@ -217,7 +217,7 @@ export async function scanCode() {
 		throw new Error('二维码扫描失败', res);
 	}
 	return {
-		result: res.codeInfo
+		result: res.codeInfo.replace(/^\uFEFF/, '')
 	};
 }
 
