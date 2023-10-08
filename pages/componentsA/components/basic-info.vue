@@ -134,7 +134,7 @@
 				:required="!disabled"
 				:disabled="disabled"
 			></hf-form-avatar>
-			<!-- #ifdef MP-WEIXIN -->
+			<!-- #ifndef H5 -->
 			<hf-form-location
 				v-model="model.location"
 				label="地点"
@@ -171,6 +171,8 @@
 					name: '',
 					introduction: '',
 					// sex: '1',
+					latitude: '119.21183303843688',
+					longitude: '26.043699914865964'
 				},
 				rules: {
 					name: [{ type: 'string', required: true, message: '请输入', trigger: ['blur', 'change'] }],

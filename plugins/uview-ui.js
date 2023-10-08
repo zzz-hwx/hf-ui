@@ -53,6 +53,29 @@ uni.$u.setConfig({
 		},
 		upload: {
 			maxDuration: 15
+		},
+		/**
+		 * uni 几个交互组件 z-index 都为 999
+		 * modal/actionsheet/preview-image
+		 * uview的 z-index 需要设置为低于uni的z-index
+		 */
+		toast: {
+			zIndex: 990,
+		},
+		popup: {
+			zIndex: 975,
+		},
+		keyboard: {
+			zIndex: 975,
+		},
+		overlay: {
+			zIndex: 970,	// mask
+		},
+		tooltip: {
+			zIndex: 971,
+		},
+		sticky: {
+			zIndex: 10	// u-navbar_z-index: 11, ∴ 设置为10
 		}
 	}
 });
