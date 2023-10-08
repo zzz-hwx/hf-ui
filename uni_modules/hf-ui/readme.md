@@ -364,15 +364,14 @@ export default {
 
 **props**
 
-| 参数          | 说明           | 类型   | 默认值             | 可选值    |
-| ------------- | -------------- | ------ | ------------------ | --------- |
-| dictCode      | 字典code       | String |                    |           |
-| options       | 选项           | Array  | []                 |           |
-| keyName       | 控制显示的字段 | String | label              |           |
-| keyValue      | 控制取值的字段 | String | value              |           |
-| separator     | 选项分隔符     | String | ,                  |           |
-| confirmColor  | 多选框颜色     | String | color['u-primary'] |           |
-| labelPosition | label的位置    | String | top                | left\|top |
+| 参数          | 说明           | 类型   | 默认值 | 可选值    |
+| ------------- | -------------- | ------ | ------ | --------- |
+| dictCode      | 字典code       | String |        |           |
+| options       | 选项           | Array  | []     |           |
+| keyName       | 控制显示的字段 | String | label  |           |
+| keyValue      | 控制取值的字段 | String | value  |           |
+| separator     | 选项分隔符     | String | ,      |           |
+| labelPosition | label的位置    | String | top    | left\|top |
 
 **slots**
 

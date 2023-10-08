@@ -48,17 +48,19 @@
 					<hf-search v-if="search" v-model="searchForm.keyword" placeholder="请输入关键词"></hf-search>
 					<u-list custom-style="flex: 1; height: 0 !important;">
 						<u-list-item v-for="item in renderList" :key="item[keyValue]">
-							<view class="item" @click="handleClickItem(item)">
-								<view class="slot">
-									<slot name="item" :item="item">
-										<view class="text">{{ item[keyName] }}</view>
-									</slot>
+							<view class="item-wrap">
+								<view class="item" @click="handleClickItem(item)">
+									<view class="slot">
+										<slot name="item" :item="item">
+											<u-text :text="item[keyName]" :type="item.selected ? 'primary' : ''"></u-text>
+										</slot>
+									</view>
+									<template v-if="item.selected">
+										<u-icon name="checkbox-mark" :size="20" color="primary"></u-icon>
+									</template>
 								</view>
-								<template v-if="item.selected">
-									<u-icon name="checkbox-mark" :size="20"></u-icon>
-								</template>
+								<u-line></u-line>
 							</view>
-							<u-line></u-line>
 						</u-list-item>
 					</u-list>
 					<view v-if="multiple" class="btns">
@@ -317,8 +319,11 @@
 			background-color: $bg-white;
 			display: flex;
 			flex-direction: column;
+			.item-wrap {
+				margin: 0 $sm;
+			}
 			.item {
-				padding: $sm $lg;
+				padding: $sm $xs;
 				display: flex;
 				.slot {
 					flex: 1;

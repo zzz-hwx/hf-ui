@@ -17,11 +17,16 @@
 				<view
 					v-for="(item, index) in dataList_" :key="item.value"
 					:id="'_' + item.value"
-					class="item"
-					:class="{'is-disabled': !!item.disabled}" 
+					class="item-wrap"
+					:class="{'is-disabled': !!item.disabled}"
 					@click="handleNodeClick(item, index)">
-					<text class="item-text">{{ item.text }}</text>
-					<view class="check" v-if="item.value == selected_[selectedIndex].value"></view>
+					<view class="item">
+						<u-text :text="item.text" :type="item.selected ? 'primary' : ''"></u-text>
+						<template v-if="item.selected">
+							<u-icon name="checkbox-mark" :size="20" color="primary"></u-icon>
+						</template>
+					</view>
+					<u-line></u-line>
 				</view>
 			</scroll-view>
 		</view>
@@ -98,7 +103,8 @@
 					text: item[this.textKey],
 					value: item[this.idKey],
 					isleaf: item.isleaf,
-					disabled: item.disabled
+					disabled: item.disabled,
+					selected: item.value == this.selected_[i].value
 				}));
 			},
 			idKey() {
@@ -325,16 +331,16 @@
 			position: relative;
 			overflow: hidden;
 			.list {
+				.item-wrap {
+					margin: 0 $sm;
+				}
 				.item {
-					padding: $sm $lg;
+					padding: $sm $xs;
 					display: flex;
 					flex-direction: row;
 					justify-content: space-between;
 					&.is-disabled {
 						opacity: .5;
-					}
-					.item-text {
-						color: $u-main-color;
 					}
 					.check {
 						margin-right: $xs;

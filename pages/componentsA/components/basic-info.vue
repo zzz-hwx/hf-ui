@@ -90,8 +90,8 @@
 				search
 			>
 				<template v-slot:item="{ item }">
-					<u-text :text="item.title" bold></u-text>
-					<u-text :text="item.content" type="info"></u-text>
+					<u-text :text="item.title" bold :type="item.selected ? 'primary' : ''"></u-text>
+					<u-text :text="item.content" :type="item.selected ? 'primary' : 'info'"></u-text>
 				</template>
 			</hf-form-autocomplete>
 			<hf-form-area

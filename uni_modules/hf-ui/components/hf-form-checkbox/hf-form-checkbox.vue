@@ -45,19 +45,23 @@
 					<u-text :text="confirmText" type="primary" @click="handleConfirm"></u-text>
 				</view>
 			</view>
-			<scroll-view scroll-y style="height: 50vh;">
-				<u-checkbox-group v-model="selected" icon-placement="right" placement="column" border-bottom>
-					<u-checkbox
-						v-for="(item, index) in list_"
-						:key="index"
-						:label="item[keyName]"
-						:name="item[keyValue]"
-						shape="circle"
-						:activeColor="confirmColor"
-						:customStyle="checkboxStyle"
-					></u-checkbox>
-				</u-checkbox-group>
-			</scroll-view>
+			<u-list custom-style="height: 50vh !important;">
+				<u-list-item v-for="item in list_" :key="item[keyValue]">
+					<view class="item-wrap">
+						<view class="item" @click="handleClickItem(item)">
+							<view class="slot">
+								<slot name="item" :item="item">
+									<u-text :text="item[keyName]" :type="item.selected ? 'primary' : ''"></u-text>
+								</slot>
+							</view>
+							<template v-if="item.selected">
+								<u-icon name="checkbox-mark" :size="20" color="primary"></u-icon>
+							</template>
+						</view>
+						<u-line></u-line>
+					</view>
+				</u-list-item>
+			</u-list>
 		</u-popup>
 	</view>
 </template>
@@ -94,10 +98,6 @@
 				type: String,
 				default: ','
 			},
-			confirmColor: {
-				type: String,
-				default: uni.$u.config.color['u-primary']
-			},
 			labelPosition: {
 				type: String,
 				default: 'top'
@@ -115,16 +115,16 @@
 				list: [],
 				selected: [],
 				visible: false,
-				
-				checkboxStyle: {
-					padding: '24rpx 30rpx',
-					paddingBottom: '24rpx'	// vue有做合并 ?
-				}
 			};
 		},
 		computed: {
 			list_() {
-				return this.list;
+				return this.list.map(item => {
+					return {
+						...item,
+						selected: this.selected.includes(item[this.keyValue])
+					};
+				});
 			},
 			valueName() {
 				// 选中的选项名
@@ -169,6 +169,15 @@
 				if (this.disabled) return;
 				this.visible = true; 
 				uni.hideKeyboard();
+			},
+			handleClickItem(item) {
+				const value = item[this.keyValue];
+				const index = this.selected.indexOf(value);
+				if (index === -1) {
+					this.selected.push(value);
+				} else {
+					this.selected.splice(index, 1);
+				}
 			},
 			handleConfirm() {
 				const selected = this.selected.join(this.separator);
@@ -243,6 +252,17 @@
 			.title {
 				font-size: $font-lg;
 				font-weight: bold;
+			}
+		}
+		.item-wrap {
+			margin: 0 $sm;
+			.item {
+				padding: $sm $xs;
+				display: flex;
+				.slot {
+					flex: 1;
+					width: 0;
+				}
 			}
 		}
 	}
