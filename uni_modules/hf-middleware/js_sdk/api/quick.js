@@ -117,6 +117,31 @@ export async function getLocation({ coordinateSystem = config.coordinateSystem }
 }
 
 /**
+ * @description 打开地图选择位置
+ * @param {Object} params 参数
+ * 	@param {String | Number} latitude 纬度
+ * 	@param {String | Number} longitude 经度
+ * 	@param {String} coordinateSystem 坐标系
+ */
+export async function chooseLocation({ latitude = '', longitude = '', coordinateSystem = config.coordinateSystem } = {}) {
+	const coord = 'gcj02';
+	// 微信小程序 默认打开腾讯地图 坐标系: gcj02
+	// APP 默认打开高德地图 坐标系: gcj02
+	// uni.chooseLocation 返回经纬度 使用 gcj02 国测局坐标系
+	[longitude, latitude] = mapConversion(longitude, latitude, coordinateSystem, coord);	// 坐标系转换
+	const res = await useBase('chooseLocation', {
+		latitude,
+		longitude,
+	});
+	const [lng, lat] = mapConversion(res.longitude, res.latitude, coord, coordinateSystem);
+	return {
+		latitude: lat,
+		longitude: lng,
+		address: res.address
+	};
+}
+
+/**
  * @description 调起客户端扫码界面，扫码成功后返回对应的结果
  * @param {Object} params 参数
  * @return {Object} 扫码对应结果

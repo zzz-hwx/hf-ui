@@ -148,6 +148,11 @@ export async function chooseFile({ count = 1 } = {}) {
  * uni.getLocation 默认为 wgs84 (小程序 腾讯/高德地图 坐标系gcj02 返回的经纬度是什么坐标系 ???)
  */
 export async function getLocation({ coordinateSystem = config.coordinateSystem } = {}) {
+	// return {
+	// 	latitude: '26.001892',
+	// 	longitude: '119.192047',
+	// 	address: '临时...'
+	// }
 	const res = await location.reverseGeocoder();
 	res.coordinateSystem = 'wgs84';	// 设置默认值 (uni.getLocation默认返回wgs84坐标)
 	const [longitude, latitude] = mapConversion(res.longitude, res.latitude, res.coordinateSystem, coordinateSystem);
@@ -179,7 +184,7 @@ export function chooseLocation({ latitude = '', longitude = '', coordinateSystem
 			longitude,
 			success: (res) => {
 				// console.log('--- uni.chooseLocation --->', res, coord)
-				const [lat, lng] = mapConversion(res.longitude, res.latitude, coord, coordinateSystem);
+				const [lng, lat] = mapConversion(res.longitude, res.latitude, coord, coordinateSystem);
 				resolve({
 					latitude: lat,
 					longitude: lng,

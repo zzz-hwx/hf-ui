@@ -22,7 +22,7 @@ API
 | chooseFile     |      | ✔    | ✔      | 选择文件         |
 | getRecord      |      | ✔    |        | 录音             |
 | getLocation    | ✔    | ✔    | ✔      | 定位             |
-| chooseLocation |      |      | ✔      | 打开地图选择位置 |
+| chooseLocation | ✔    |      | ✔      | 打开地图选择位置 |
 | makePhoneCall  |      | ✔    | ✔      | 拨打电话         |
 | anyRtc         |      | ✔    |        | 视频、语音       |
 | scanCode       | ✔    | ✔    | ✔      | 扫码             |
@@ -401,7 +401,7 @@ getLocation().then((res) => {
 
 | 快应 | 自研 | uniapp |
 | ---- | ---- | ------ |
-|      |      | ✔      |
+| ✔    |      | ✔      |
 
 **OBJECT 参数说明**
 
