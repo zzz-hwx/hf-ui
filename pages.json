@@ -1,69 +1,82 @@
 {
-	"pages": [ // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "hf-ui"
-			}
-		}, {
-			"path": "pages/componentsA/form",
+	"pages": [{
+		"path": "pages/index/index",
+		"style": {
+			"navigationBarTitleText": "hf-ui"
+		}
+	}],
+	"subPackages": [{
+		"root": "pages/componentsA",
+		"pages": [{
+			"path": "form",
 			"style": {
 				"navigationBarTitleText": "表单"
 			}
 		}, {
-			"path": "pages/componentsA/test",
+			"path": "push",
 			"style": {
-				"navigationBarTitleText": "测试",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "uniPush 推送"
 			}
 		}, {
-			"path": "pages/componentsB/datetime",
-			"style": {
-				"navigationBarTitleText": "时间日期选择器"
-			}
-		}, {
-			"path": "pages/componentsB/radio",
-			"style": {
-				"navigationBarTitleText": "单选框"
-			}
-		}, {
-			"path": "pages/componentsB/checkbox",
-			"style": {
-				"navigationBarTitleText": "复选框"
-			}
-		}, {
-			"path": "pages/componentsB/upload",
-			"style": {
-				"navigationBarTitleText": "上传"
-			}
-		}, {
-			"path": "pages/componentsC/list",
-			"style": {
-				"navigationBarTitleText": "列表",
-				"enablePullDownRefresh": true
-			}
-		}, {
-			"path": "pages/componentsA/map",
+			"path": "map",
 			"style": {
 				"navigationBarTitleText": "地图组件"
 			}
 		}, {
-			"path": "pages/componentsA/amap",
+			"path": "amap",
 			"style": {
 				"navigationBarTitleText": "高德地图"
 			}
 		}, {
-			"path": "pages/componentsB/area",
+			"path": "test",
+			"style": {
+				"navigationBarTitleText": "测试",
+				"enablePullDownRefresh": true
+			}
+		}]
+	}, {
+		"root": "pages/componentsB",
+		"pages": [{
+			"path": "datetime",
+			"style": {
+				"navigationBarTitleText": "时间日期选择器"
+			}
+		}, {
+			"path": "radio",
+			"style": {
+				"navigationBarTitleText": "单选框"
+			}
+		}, {
+			"path": "checkbox",
+			"style": {
+				"navigationBarTitleText": "复选框"
+			}
+		}, {
+			"path": "upload",
+			"style": {
+				"navigationBarTitleText": "上传"
+			}
+		}, {
+			"path": "area",
 			"style": {
 				"navigationBarTitleText": "省市县"
 			}
 		}, {
-			"path": "pages/componentsB/tree",
+			"path": "tree",
 			"style": {
 				"navigationBarTitleText": "树形组件"
 			}
-		}
-	],
+		}]
+	}, {
+		"root": "pages/componentsC",
+		"pages": [{
+			"path": "list",
+			"style": {
+				"navigationBarTitleText": "列表",
+				"enablePullDownRefresh": true
+			}
+		}]
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "hf-ui",

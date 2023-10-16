@@ -27,6 +27,10 @@
 							path: '/pages/componentsA/form',
 							icon: 'form'
 						}, {
+							title: 'uni push 推送',
+							path: '/pages/componentsA/push',
+							icon: 'button'
+						}, {
 							title: 'map 地图',
 							path: '/pages/componentsA/map',
 							icon: 'navbar'

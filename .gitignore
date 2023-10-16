@@ -1,4 +1,9 @@
-/unpackage/
 /.idea/
-# /uni_modules/
 /node_modules/
+
+# /unpackage/
+/unpackage/cache/
+/unpackage/debug/
+/unpackage/dist/
+/unpackage/release/
+/unpackage/resources/

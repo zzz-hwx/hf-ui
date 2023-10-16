@@ -2,6 +2,20 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+			// #ifdef APP-PLUS
+			const msgData = [];
+			// 启动监听推送消息事件
+			uni.onPushMessage((res) => {
+				console.log('--- 收到推送消息 --->', res);
+				uni.$emit('onPushMessage', res);
+				msgData.push(res);
+			});
+			
+			uni.$on('onResendAllData', () => {
+				// 监听 重新发送全部数据
+				uni.$emit('onPushMessage', msgData);
+			});
+			// #endif
 		},
 		onShow: function() {
 			console.log('App Show')
