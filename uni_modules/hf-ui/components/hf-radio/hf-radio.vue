@@ -11,7 +11,7 @@
 					v-for="item in list"
 					:key="item.value"
 					:text="item.label"
-					:type="item.disabled ? '' : (item.value === value ? 'primary' : '')"
+					:type="(item.value === value && !item.disabled) ? 'primary' : ''"
 					:color="item.disabled ? disabledColor : undefined"
 					@click="handleInput(item.value)"></u-text>
 			</view>
@@ -49,6 +49,21 @@
 			options: {	// 选项 格式: {label: '', value: '', disabled: false}
 				type: Array,
 				default: () => ([])
+			},
+			keyName: {
+				// 控制显示的字段
+				type: String,
+				default: 'label'
+			},
+			keyValue: {
+				// 控制取值的字段
+				type: String,
+				default: 'value'
+			},
+			keyDisabled: {
+				// 控制禁用的字段
+				type: String,
+				default: 'disabled'
 			}
 		},
 		// #ifdef MP-WEIXIN
@@ -65,18 +80,18 @@
 			list() {
 				return this.options.map(item => {
 					return {
-						label: item.label,
-						value: item.value,
-						disabled: !!item.disabled
+						label: item[this.keyName],
+						value: item[this.keyValue],
+						disabled: !!item[this.keyDisabled]
 					};
 				});
 			}
 		},
 		methods: {
 			handleInput(val) {
-				const item = this.list.find(item => (item.value == val));
-				if (item.disabled) return;
-				this.$emit('input', val);
+				const item = this.options.find(item => (item[this.keyValue] == val));
+				if (!!item[this.keyDisabled]) return;
+				this.$emit('input', val, item);
 			}
 		}
 	}

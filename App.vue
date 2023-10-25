@@ -27,7 +27,7 @@
 </script>
 
 <style lang="scss">
-	/*每个页面公共css */
+	/* 每个页面公共css */
 	@import "@/uni_modules/uview-ui/index.scss";
 	
 	body {
@@ -37,10 +37,30 @@
 		font-family: Helvetica Neue, Helvetica, sans-serif;
 	}
 	
+	/**
+	 * 一些共用样式
+	 */
+	.sub-title {
+		padding-top: $sm;
+		padding-bottom: $sm;
+		color: $u-primary;
+	}
+	.section {
+		padding: $df;
+		background-color: $bg-white;
+	}
+	.flex {
+		display: flex;
+	}
+	
 	.bg-white {
 		background-color: $bg-white;
 	}
 	
+	
+	/**
+	 * 字体样式
+	 */
 	.font-xl {
 		font-size: $font-xl;
 	}
@@ -55,5 +75,33 @@
 	}
 	.font-xs {
 		font-size: $font-xs;
+	}
+	
+	/**
+	 * 一些边距样式
+	 */
+	.padding-sm {
+		padding: $sm;
+	}
+	.p-tb-xs {
+		padding-top: $xs;
+		padding-bottom: $xs;
+	}
+	.p-tb-sm {
+		padding-top: $sm;
+		padding-bottom: $sm;
+	}
+	.p-l-xs {
+		padding-left: $xs;
+	}
+	.p-r-xs {
+		padding-right: $xs;
+	}
+
+	/**
+	 * 重写uni样式
+	 */
+	uni-page-head .uni-page-head {
+		z-index: 970;
 	}
 </style>

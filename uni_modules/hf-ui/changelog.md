@@ -1,3 +1,23 @@
+## 2.0.16（2023-10-25）
+- hf-form-datetime 添加作用域插槽display-section
+- hf-radio 添加props
+	- keyName：控制显示的字段
+	- keyValue：控制取值的字段
+	- keyDisabled：控制禁用的字段
+- hf-form-radio 添加props
+	- keyName：控制显示的字段
+	- keyValue：控制取值的字段
+	- keyDisabled：控制禁用的字段
+- hf-form-checkbox 添加props
+	- keyDisabled：控制禁用的字段
+- hf-form-select 添加props
+	- keyDisabled：控制禁用的字段
+- hf-upload 添加props
+	- uploading 是否加载中
+- hf-form-upload 添加props
+	- uploading 是否加载中
+- hf-upload 添加props
+	- uploading 是否加载中
 ## 2.0.15（2023-10-08）
 - 列表选择样式优化
 ## 2.0.14（2023-09-15）

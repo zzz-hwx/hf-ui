@@ -1,10 +1,20 @@
 <template>
 	<view class="hf-form-select">
-		<template v-if="$scopedSlots['display-section']">
-			<view class="" @click="pickerShow">
+		<!-- #ifdef MP-WEIXIN -->
+		<template v-if="$slots['display-section']">
+			<view class="flex" @click="pickerShow">
 				<slot name="display-section" :valueName="valueName" :visible="visible"></slot>
 			</view>
 		</template>
+		<!-- #endif -->
+		<!-- #ifndef MP-WEIXIN -->
+		<template v-if="$scopedSlots['display-section']">
+			<view class="flex" @click="pickerShow">
+				<slot name="display-section" :valueName="valueName" :visible="visible"></slot>
+			</view>
+		</template>
+		<!-- #endif -->
+		
 		<template v-else>
 			<u-form-item :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
 				<template #label>
@@ -30,14 +40,15 @@
 				:title="label"
 				:columns="columns"
 				:defaultIndex="defaultIndex"
-				keyName="label"
+				:keyName="keyName"
 				immediateChange
 				@confirm="pickerConfirm"
 				@cancel="handleClose"
-				@close="handleClose"></u-picker>
+				@close="handleClose"
+			></u-picker>
 		</template>
 		<template v-else-if="mode === 'right'">
-			<u-popup :show="visible" mode="right" @close="handleClose">
+			<u-popup :show="visible" mode="right" :close-on-click-overlay="!multiple" @close="handleClose">
 				<view class="u-popup-slot">
 					<u-navbar :fixed="false" titleWidth="0rpx" @rightClick="handleClose">
 						<template #left>{{ label }}</template>
@@ -47,16 +58,19 @@
 					</u-navbar>
 					<hf-search v-if="search" v-model="searchForm.keyword" placeholder="请输入关键词"></hf-search>
 					<u-list custom-style="flex: 1; height: 0 !important;">
-						<u-list-item v-for="item in renderList" :key="item[keyValue]">
+						<u-list-item v-for="item in renderList" :key="item.value">
 							<view class="item-wrap">
 								<view class="item" @click="handleClickItem(item)">
-									<view class="slot">
-										<slot name="item" :item="item">
-											<u-text :text="item[keyName]" :type="item.selected ? 'primary' : ''"></u-text>
+									<view
+										class="slot"
+										:class="{selected: item.selected, disabled: item.disabled}"
+									>
+										<slot name="item" :item="item.source">
+											<text>{{ item.label }}</text>
 										</slot>
 									</view>
 									<template v-if="item.selected">
-										<u-icon name="checkbox-mark" :size="20" color="primary"></u-icon>
+										<u-icon name="checkbox-mark" :size="20" :color="item.disabled ? disabledColor : 'primary'"></u-icon>
 									</template>
 								</view>
 								<u-line></u-line>
@@ -129,6 +143,11 @@
 				type: String,
 				default: 'value'
 			},
+			keyDisabled: {
+				// 控制禁用的字段
+				type: String,
+				default: 'disabled'
+			},
 			separator: {
 				// 选项分隔符
 				type: String,
@@ -144,6 +163,7 @@
 			return {
 				cancelText: uni.$u.props.picker.cancelText,		// 取消按钮的文字
 				// confirmText: uni.$u.props.picker.confirmText,	// 确认按钮的文字
+				disabledColor: uni.$u.config.color['u-disabled-color'],
 				visible: false,
 				searchForm: {
 					keyword: ''
@@ -174,7 +194,7 @@
 					// u-picker
 					const item = this.list_.find(item => (item[this.keyValue] == this.value));
 					if (!item) return '';
-					return item.label;
+					return item[this.keyName];
 				} else {
 					// 右侧弹框
 					const selected = (this.value || '').split(this.separator);
@@ -212,8 +232,11 @@
 					});
 				}
 				return renderList.map((item) => ({
-					...item,
-					selected: this.selected.indexOf(item[this.keyValue]) !== -1
+					source: item,
+					label: item[this.keyName],
+					value: item[this.keyValue],
+					disabled: !!item[this.keyDisabled],
+					selected: this.selected.includes(item[this.keyValue]),
 				}));
 			}
 		},
@@ -260,14 +283,15 @@
 			pickerConfirm(event) {
 				// u-picker 确定
 				if (event.value.length) {
-					this.$emit('input', event.value[0].value);
+					this.$emit('input', event.value[0][this.keyValue]);
 					this.$emit('confirm', event.value[0]);
 				}
 				this.handleClose();
 			},
 			handleClickItem(item) {
+				if (item.disabled) return;
 				// 右侧弹框 点击选项
-				const value = item[this.keyValue];
+				const value = item.value;
 				if (this.multiple) {
 					// 多选
 					const index = this.selected.indexOf(value);
@@ -328,6 +352,12 @@
 				.slot {
 					flex: 1;
 					width: 0;
+					&.selected {
+						color: $u-primary;
+					}
+					&.disabled {
+						color: $u-disabled-color;
+					}
 				}
 			}
 			.btns {
@@ -338,5 +368,8 @@
 				}
 			}
 		}
+	}
+	.flex {
+		display: flex;
 	}
 </style>

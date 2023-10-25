@@ -4,7 +4,14 @@
 			<view>{{ valueName }}</view>
 		</template>
 		<template v-else>
-			<hf-radio :value="value" :options="list" @input="handleInput"></hf-radio>
+			<hf-radio
+				:value="value"
+				:options="list"
+				:key-name="keyName"
+				:key-value="keyValue"
+				:key-disabled="keyDisabled"
+				@input="handleInput"
+			></hf-radio>
 		</template>
 	</u-form-item>
 </template>
@@ -24,10 +31,25 @@
 				type: Array,
 				default: () => ([])
 			},
+			keyName: {
+				// 控制显示的字段
+				type: String,
+				default: 'label'
+			},
+			keyValue: {
+				// 控制取值的字段
+				type: String,
+				default: 'value'
+			},
+			keyDisabled: {
+				// 控制禁用的字段
+				type: String,
+				default: 'disabled'
+			}
 		},
 		data() {
 			return {
-				list: []	// {value: '', label: ''}
+				list: []
 			}
 		},
 		watch: {
@@ -57,8 +79,8 @@
 					this.list = await loadData.loadDictOptions(this.dictCode);
 				}
 			},
-			handleInput(val) {
-				this.$emit('input', val);
+			handleInput(val, item) {
+				this.$emit('input', val, item);
 			}
 		}
 	}

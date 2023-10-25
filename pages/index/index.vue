@@ -58,6 +58,10 @@
 							path: '/pages/componentsB/checkbox',
 							icon: 'checkbox'
 						}, {
+							title: 'select 列表选择器',
+							path: '/pages/componentsB/select',
+							icon: 'list'
+						}, {
 							title: 'area 省市县',
 							path: '/pages/componentsB/area',
 							icon: 'picker'

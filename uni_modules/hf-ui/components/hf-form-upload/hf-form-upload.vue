@@ -29,8 +29,11 @@
 					:max-duration="maxDuration"
 					:biz-path="bizPath"
 					disable-no-show-btn
+					:uploading="uploading"
 					:uploading-text="uploadingText"
-					@input="handleInput">
+					@input="handleInput"
+					@update:uploading="handleUploading"
+				>
 					<view class="button">
 						<template v-if="accept === 'video'">
 							<hf-icon name="video-square" size="44" :color="tipsColor"></hf-icon>
@@ -79,6 +82,11 @@
 				type: Number,
 				default: uni.$u.props.upload.maxDuration
 			},
+			uploading: {
+				// 是否上传中
+				type: Boolean,
+				default: false
+			},
 			uploadingText: {
 				type: String,
 				default: '文件上传中，请稍后再试'
@@ -115,6 +123,9 @@
 					uni.$u.formValidate(this.$refs.hfUpload, 'change');
 				});
 			},
+			handleUploading(val) {
+				this.$emit('update:uploading', val);
+			}
 		}
 	}
 </script>

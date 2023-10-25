@@ -2,15 +2,15 @@
 	<view class="hf-form-datetime">
 		<!-- #ifdef MP-WEIXIN -->
 		<template v-if="$slots['display-section']">
-			<view class="" @click="pickerShow">
-				<slot name="display-section" :valueName="valueShow"></slot>
+			<view class="flex" @click="pickerShow">
+				<slot name="display-section" :valueName="valueShow" :visible="visible"></slot>
 			</view>
 		</template>
 		<!-- #endif -->
 		<!-- #ifndef MP-WEIXIN -->
 		<template v-if="$scopedSlots['display-section']">
-			<view class="" @click="pickerShow">
-				<slot name="display-section" :valueName="valueShow"></slot>
+			<view class="flex" @click="pickerShow">
+				<slot name="display-section" :valueName="valueShow" :visible="visible"></slot>
 			</view>
 		</template>
 		<!-- #endif -->
@@ -124,4 +124,7 @@
 </script>
 
 <style lang="scss" scoped>
+.flex {
+	display: flex;
+}
 </style>

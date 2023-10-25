@@ -54,9 +54,13 @@ uni.$u.setConfig({
 		upload: {
 			maxDuration: 15
 		},
+		navbar: {
+			safeAreaInsetTop: false
+		},
 		/**
-		 * uni 几个交互组件 z-index 都为 999
-		 * modal/actionsheet/preview-image
+		 * uni 几个交互组件 z-index
+		 * 	999: modal/actionsheet/preview-image
+		 * 	998: navbar顶部导航栏
 		 * uview的 z-index 需要设置为低于uni的z-index
 		 */
 		toast: {

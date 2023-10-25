@@ -26,8 +26,8 @@
 				<view class="scroll-wrap">
 					<scroll-view ref="input" scroll-x class="check-area">
 						<view class="check-list">
-							<slot name="checkList" :info="valueName">
-								<view v-for="(item, index) in valueName" :key="index" class="check-item">{{ item }}</view>
+							<slot name="check-list" :list="selectList">
+								<view v-for="item in selectList" :key="item[keyValue]" class="check-item">{{ item[keyName] }}</view>
 							</slot>
 						</view>
 					</scroll-view>
@@ -35,33 +35,50 @@
 			</view>
 		</u-form-item>
 		
-		<u-popup :show="visible" :close-on-click-overlay="false" @close="handleClose">
-			<view class="top">
-				<view @click="handleCancel">
-					<text class="cancel">{{ cancelText }}</text>
+		<u-popup :show="visible" :mode="mode" :close-on-click-overlay="false" @close="handleClose">
+			<view class="u-popup-slot" :class="'u-popup-slot__' + mode">
+				<view v-if="mode === 'bottom'" class="top">
+					<view @click="handleCancel">
+						<text class="cancel">{{ cancelText }}</text>
+					</view>
+					<view class="title">{{ label }}</view>
+					<view>
+						<u-text :text="confirmText" type="primary" @click="handleConfirm"></u-text>
+					</view>
 				</view>
-				<view class="title">{{ label }}</view>
-				<view>
-					<u-text :text="confirmText" type="primary" @click="handleConfirm"></u-text>
+				<template v-else-if="mode === 'right'">
+					<u-navbar :fixed="false" titleWidth="0rpx" @rightClick="handleClose">
+						<template #left>{{ label }}</template>
+						<template #right>
+							<u-icon name="close"></u-icon>
+						</template>
+					</u-navbar>
+				</template>
+				<u-list :custom-style="mode === 'bottom' ? 'height: 50vh !important;' : 'flex: 1; height: 0 !important;'">
+					<u-list-item v-for="item in list_" :key="item.value">
+						<view class="item-wrap">
+							<view class="item" @click="handleClickItem(item)">
+								<view
+									class="slot"
+									:class="{selected: item.selected, disabled: item.disabled}"
+								>
+									<slot name="item" :item="item.source">
+										<text>{{ item.label }}</text>
+									</slot>
+								</view>
+								<template v-if="item.selected">
+									<u-icon name="checkbox-mark" :size="20" :color="item.disabled ? disabledColor : 'primary'"></u-icon>
+								</template>
+							</view>
+							<u-line></u-line>
+						</view>
+					</u-list-item>
+				</u-list>
+				<view v-if="mode === 'right'" class="btns">
+					<u-button @click="handleClose">{{ cancelText }}</u-button>
+					<u-button type="primary" @click="handleConfirm">确定</u-button>
 				</view>
 			</view>
-			<u-list custom-style="height: 50vh !important;">
-				<u-list-item v-for="item in list_" :key="item[keyValue]">
-					<view class="item-wrap">
-						<view class="item" @click="handleClickItem(item)">
-							<view class="slot">
-								<slot name="item" :item="item">
-									<u-text :text="item[keyName]" :type="item.selected ? 'primary' : ''"></u-text>
-								</slot>
-							</view>
-							<template v-if="item.selected">
-								<u-icon name="checkbox-mark" :size="20" color="primary"></u-icon>
-							</template>
-						</view>
-						<u-line></u-line>
-					</view>
-				</u-list-item>
-			</u-list>
 		</u-popup>
 	</view>
 </template>
@@ -93,6 +110,11 @@
 				type: String,
 				default: 'value'
 			},
+			keyDisabled: {
+				// 控制禁用的字段
+				type: String,
+				default: 'disabled'
+			},
 			separator: {
 				// 选项分隔符
 				type: String,
@@ -101,6 +123,14 @@
 			labelPosition: {
 				type: String,
 				default: 'top'
+			},
+			mode: {
+				// 弹出方向
+				type: String,
+				default: 'bottom',
+				validator: (val) => {
+					return ['bottom', 'right'].includes(val);
+				}
 			},
 		},
 		// #ifdef MP-WEIXIN
@@ -112,6 +142,7 @@
 			return {
 				cancelText: uni.$u.props.picker.cancelText,		// 取消按钮的文字
 				confirmText: uni.$u.props.picker.confirmText,	// 确认按钮的文字
+				disabledColor: uni.$u.config.color['u-disabled-color'],
 				list: [],
 				selected: [],
 				visible: false,
@@ -121,15 +152,18 @@
 			list_() {
 				return this.list.map(item => {
 					return {
-						...item,
+						source: item,
+						label: item[this.keyName],
+						value: item[this.keyValue],
+						disabled: !!item[this.keyDisabled],
 						selected: this.selected.includes(item[this.keyValue])
 					};
 				});
 			},
-			valueName() {
+			selectList() {
 				// 选中的选项名
 				const selected = (this.value || '').split(this.separator);
-				return this.list_.filter(item => (selected.indexOf(item[this.keyValue]) !== -1)).map(item => (item[this.keyName]));
+				return this.list.filter(item => (selected.indexOf(item[this.keyValue]) !== -1));
 			}
 		},
 		watch: {
@@ -171,7 +205,8 @@
 				uni.hideKeyboard();
 			},
 			handleClickItem(item) {
-				const value = item[this.keyValue];
+				if (item.disabled) return;
+				const value = item.value;
 				const index = this.selected.indexOf(value);
 				if (index === -1) {
 					this.selected.push(value);
@@ -240,28 +275,52 @@
 				}
 			}
 		}
-		.top {
-			height: 100rpx;
-			padding: 0 $df;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			.cancel {
-				color: $u-tips-color;
+		.u-popup-slot {
+			&__bottom {
+				// 
 			}
-			.title {
-				font-size: $font-lg;
-				font-weight: bold;
-			}
-		}
-		.item-wrap {
-			margin: 0 $sm;
-			.item {
-				padding: $sm $xs;
+			&__right {
+				width: 90vw;
+				height: 100vh;
 				display: flex;
-				.slot {
-					flex: 1;
-					width: 0;
+				flex-direction: column;
+			}
+			.top {
+				height: 100rpx;
+				padding: 0 $df;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				.cancel {
+					color: $u-tips-color;
+				}
+				.title {
+					font-size: $font-lg;
+					font-weight: bold;
+				}
+			}
+			.item-wrap {
+				margin: 0 $sm;
+				.item {
+					padding: $sm $xs;
+					display: flex;
+					.slot {
+						flex: 1;
+						width: 0;
+						&.selected {
+							color: $u-primary;
+						}
+						&.disabled {
+							color: $u-disabled-color;
+						}
+					}
+				}
+			}
+			.btns {
+				padding: $df;
+				display: flex;
+				/deep/ .u-button + .u-button {
+					margin-left: $df;
 				}
 			}
 		}

@@ -1,20 +1,13 @@
 <template>
 	<view>
 		<!-- #ifdef APP-PLUS -->
-		<view class="cid" @click="copyCid">
-			<text>{{ cid }}</text>
-		</view>
+		<temp-data :info="cid"></temp-data>
 		<u-gap></u-gap>
 		<u-button text="创建本地通知栏消息" @click="handleTest"></u-button>
 		<u-button text="获取全部通知" @click="handleAll"></u-button>
 		<u-button text="清空数据" @click="handleClear"></u-button>
 		<!-- #endif -->
-		<u-gap></u-gap>
-		<view class="temp-data" @click="copyPushData">
-			<scroll-view scroll-x>
-				<text class="temp-data__content">{{ pushData }}</text>
-			</scroll-view>
-		</view>
+		<temp-data :info="pushData"></temp-data>
 	</view>
 </template>
 
@@ -30,11 +23,13 @@
 		onLoad() {
 			// #ifdef APP-PLUS
 			this.getCid();
-			// #endif
 			uni.$on('onPushMessage', this.onPushMessage);
+			// #endif
 		},
 		onUnload() {
+			// #ifdef APP-PLUS
 			uni.$off('onPushMessage', this.onPushMessage);
+			// #endif
 		},
 		methods: {
 			// #ifdef APP-PLUS

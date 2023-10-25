@@ -66,6 +66,11 @@
 			"style": {
 				"navigationBarTitleText": "树形组件"
 			}
+		}, {
+			"path": "select",
+			"style": {
+				"navigationBarTitleText": "列表选择器"
+			}
 		}]
 	}, {
 		"root": "pages/componentsC",
@@ -82,6 +87,12 @@
 		"navigationBarTitleText": "hf-ui",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF"
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"temp-data": "@/components/temp-data.vue"
+		}
 	},
 	"uniIdRouter": {}
 }

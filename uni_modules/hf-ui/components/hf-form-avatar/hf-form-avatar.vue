@@ -14,7 +14,10 @@
 					use-before-read
 					:before-read="beforeRead"
 					:deletable="false"
-					@input="handleInput">
+					:uploading="uploading"
+					@input="handleInput"
+					@update:uploading="handleUploading"
+				>
 					<u-avatar icon="account-fill" size="60" font-size="50" bg-color="#EDEEF5" color="#586ABA"></u-avatar>
 				</hf-upload>
 			</view>
@@ -30,6 +33,13 @@
 	export default {
 		name: 'HfFormAvatar',
 		mixins: [mixin],
+		props: {
+			uploading: {
+				// 是否上传中
+				type: Boolean,
+				default: false
+			},
+		},
 		// #ifdef MP-WEIXIN
 		options: {
 			styleIsolation: 'shared'
@@ -62,6 +72,9 @@
 				// 微信小程序 this 指向当前组件实例 hf-upload
 				this.chooseFile();
 				// #endif
+			},
+			handleUploading(val) {
+				this.$emit('update:uploading', val);
 			}
 		}
 	}

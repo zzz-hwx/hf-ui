@@ -1,7 +1,22 @@
 <template>
 	<view class="">
-		<view class="form">
-			<u-form ref="uForm" :model="model" :rules="rules">
+		<view class="section">
+			<hf-upload
+				v-model="model.upload"
+				label="图片"
+				prop="image"
+				:required="!disabled"
+				:disabled="disabled"
+				accept="image"
+				:max-count="3"
+				biz-path="image"
+				:max-size="maxSize"
+				:uploading.sync="uploadUploading"
+			></hf-upload>
+		</view>
+		<u-gap></u-gap>
+		<u-form ref="uForm" :model="model" :rules="rules">
+			<view class="form">
 				<hf-form-upload
 					v-model="model.image"
 					label="图片"
@@ -12,6 +27,7 @@
 					:max-count="3"
 					biz-path="image"
 					:max-size="maxSize"
+					:uploading.sync="imageUploading"
 				></hf-form-upload>
 				
 				<hf-form-upload
@@ -49,8 +65,21 @@
 					biz-path="file"
 					:max-size="maxSize"
 				></hf-form-upload>
-			</u-form>
-		</view>
+			</view>
+			<u-gap></u-gap>
+			<view class="form">
+				<hf-form-avatar
+					v-model="model.avatar"
+					label="头像"
+					prop="avatar"
+					:required="!disabled"
+					:disabled="disabled"
+					biz-path="avatar"
+					:max-size="maxSize"
+					:uploading.sync="avatarUploading"
+				></hf-form-avatar>
+			</view>
+		</u-form>
 		
 	</view>
 </template>
@@ -60,16 +89,22 @@
 		data() {
 			return {
 				model: {
+					upload: '',
 					image: '',
 					video: '',
 					media: '',
-					file: ''
+					file: '',
+					avatar: ''
 				},
 				rules: {
 					// 
 				},
 				disabled: false,
 				maxSize: 5 * 1024 * 1024, // 5M
+				
+				uploadUploading: false,
+				imageUploading: false,
+				avatarUploading: false,
 			};
 		},
 		methods: {

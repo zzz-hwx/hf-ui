@@ -255,11 +255,11 @@ export default {
 | minDate | 可选的最小时间(时间戳毫秒) | Number | 默认为前50年  |                                  |
 | maxDate | 可选的最大时间(时间戳毫秒) | Number | 默认为后十年   |                                  |
 
-**slot**
+**scoped-slot**
 
-| 名称              | 说明   |
-| --------------- | ---- |
-| display-section | 展示部分 |
+| 名称            | 说明     | 参数                                                 |
+| --------------- | -------- | ---------------------------------------------------- |
+| display-section | 展示部分 | {valueName: '选中的选项名', visible: '是否显示弹窗'} |
 
 ### hf-form-radio 单选框
 
@@ -304,10 +304,13 @@ export default {
 
 **props**
 
-| 参数     | 说明     | 类型   | 默认值 | 可选值 |
-| -------- | -------- | ------ | ------ | ------ |
-| dictCode | 字典code | String |        |        |
-| options  | 选项     | Array  | []     |        |
+| 参数        | 说明           | 类型   | 默认值   | 可选值 |
+| ----------- | -------------- | ------ | -------- | ------ |
+| dictCode    | 字典code       | String |          |        |
+| options     | 选项           | Array  | []       |        |
+| keyName     | 控制显示的字段 | String | label    |        |
+| keyValue    | 控制取值的字段 | String | value    |        |
+| keyDisabled | 控制禁用的字段 | String | disabled |        |
 
 ### hf-form-checkbox 复选框
 
@@ -364,20 +367,29 @@ export default {
 
 **props**
 
-| 参数          | 说明           | 类型   | 默认值 | 可选值    |
-| ------------- | -------------- | ------ | ------ | --------- |
-| dictCode      | 字典code       | String |        |           |
-| options       | 选项           | Array  | []     |           |
-| keyName       | 控制显示的字段 | String | label  |           |
-| keyValue      | 控制取值的字段 | String | value  |           |
-| separator     | 选项分隔符     | String | ,      |           |
-| labelPosition | label的位置    | String | top    | left\|top |
+| 参数          | 说明           | 类型   | 默认值   | 可选值        |
+| ------------- | -------------- | ------ | -------- | ------------- |
+| dictCode      | 字典code       | String |          |               |
+| options       | 选项           | Array  | []       |               |
+| keyName       | 控制显示的字段 | String | label    |               |
+| keyValue      | 控制取值的字段 | String | value    |               |
+| keyDisabled   | 控制禁用的字段 | String | disabled |               |
+| separator     | 选项分隔符     | String | ,        |               |
+| labelPosition | label的位置    | String | top      | left\|top     |
+| mode          | 弹出方向       | String | bottom   | bottom\|right |
 
 **slots**
 
 | 名称  | 说明         |
 | ----- | ------------ |
 | label | 左侧提示文字 |
+
+**scoped-slot**
+
+| 名称       | 说明       | 参数                    |
+| ---------- | ---------- | ----------------------- |
+| check-list | 选择的列表 | {list: '选中的数组'}    |
+| item       | 列表项     | {item: 'options列表项'} |
 
 ### hf-form-select 列表选择器
 
@@ -470,18 +482,19 @@ export default {
 
 **props**
 
-| 参数      | 说明                             | 类型    | 默认值 | 可选值        |
-| --------- | -------------------------------- | ------- | ------ | ------------- |
-| dictCode  | 字典code                         | String  |        |               |
-| options   | 选项                             | Array   | []     |               |
-| showAll   | 是否添加选项：“全部”             | Boolean | false  | true\|false   |
-| mode      | 弹出方向                         | String  | bottom | bottom\|right |
-| search    | 是否显示搜索(仅mode='right'有效) | Boolean | false  | true\|false   |
-| pinyin    | 是否拼音搜索(仅mode='right'有效) | Boolean | false  | true\|false   |
-| multiple  | 是否多选(仅mode='right'有效)     | Boolean | false  | true\|false   |
-| keyName   | 控制显示的字段                   | String  | label  |               |
-| keyValue  | 控制取值的字段                   | String  | value  |               |
-| separator | 选项分隔符(仅mode='right'有效)   | String  | ,      |               |
+| 参数        | 说明                                | 类型    | 默认值   | 可选值        |
+| ----------- | ----------------------------------- | ------- | -------- | ------------- |
+| dictCode    | 字典code                            | String  |          |               |
+| options     | 选项                                | Array   | []       |               |
+| showAll     | 是否添加选项：“全部”                | Boolean | false    | true\|false   |
+| mode        | 弹出方向                            | String  | bottom   | bottom\|right |
+| search      | 是否显示搜索 (仅mode='right'有效)   | Boolean | false    | true\|false   |
+| pinyin      | 是否拼音搜索 (仅mode='right'有效)   | Boolean | false    | true\|false   |
+| multiple    | 是否多选 (仅mode='right'有效)       | Boolean | false    | true\|false   |
+| keyName     | 控制显示的字段                      | String  | label    |               |
+| keyValue    | 控制取值的字段                      | String  | value    |               |
+| keyDisabled | 控制禁用的字段 (仅mode='right'有效) | String  | disabled |               |
+| separator   | 选项分隔符 (仅mode='right'有效)     | String  | ,        |               |
 
 说明：
 
@@ -489,15 +502,17 @@ export default {
 
 **slots**
 
-| 名称  | 说明         |
-| ----- | ------------ |
-| label | 左侧提示文字 |
+| 名称  | 说明           |
+| ----- | -------------- |
+| label | 左侧提示文字   |
+| right | 右侧自定义内容 |
 
 **scoped-slot**
 
-| 名称              | 说明   | 参数                                       |
-| --------------- | ---- | ---------------------------------------- |
+| 名称            | 说明     | 参数                                                 |
+| --------------- | -------- | ---------------------------------------------------- |
 | display-section | 展示部分 | {valueName: '选中的选项名', visible: '是否显示弹窗'} |
+| item            | 列表项   | {item: 'options列表项'}                              |
 
 ### hf-form-tselect 多列..
 
@@ -1107,6 +1122,7 @@ export default {
 | bizPath       | 控制文件上传的业务路径                       | String         | 'temp'                 |                     |
 | maxSize       | 选择单个文件的最大大小，单位B(byte)，默认10M | String\|Number | 10 * 1024 * 1024       |                     |
 | maxDuration   | 拍摄视频最长拍摄时间，单位秒                 | Number         | 60                     |                     |
+| uploading     | 是否上传中，支持 .sync 修饰符                | Boolean        | false                  | true\|false         |
 | uploadingText | 文件上传中提示                               | String         | 文件上传中，请稍后再试 |                     |
 
 **slots**
@@ -1143,6 +1159,12 @@ export default {
     }
 }
 ```
+
+**props**
+
+| 参数      | 说明                          | 类型    | 默认值 | 可选值      |
+| --------- | ----------------------------- | ------- | ------ | ----------- |
+| uploading | 是否上传中，支持 .sync 修饰符 | Boolean | false  | true\|false |
 
 ## 显示组件
 
@@ -1220,11 +1242,14 @@ export default {
 
 **props**
 
-| 参数      | 说明   | 类型     | 默认值   | 可选值              |
-| ------- | ---- | ------ | ----- | ---------------- |
-| value   | 绑定值  | String |       |                  |
-| mode    | 展示方式 | String | radio | radio\|text\|btn |
-| options | 选项   | Array  | []    |                  |
+| 参数        | 说明           | 类型   | 默认值   | 可选值           |
+| ----------- | -------------- | ------ | -------- | ---------------- |
+| value       | 绑定值         | String |          |                  |
+| mode        | 展示方式       | String | radio    | radio\|text\|btn |
+| options     | 选项           | Array  | []       |                  |
+| keyName     | 控制显示的字段 | String | label    |                  |
+| keyValue    | 控制取值的字段 | String | value    |                  |
+| keyDisabled | 控制禁用的字段 | String | disabled |                  |
 
 ### hf-cascader-picker 级联选择
 
@@ -1341,6 +1366,7 @@ export default {
 | beforeRead       | 读取前的处理函数                                | Function       |                        |                           |
 | useBeforePreview | 是否开启预览前的处理函数                        | Boolean        | false                  | true\|false               |
 | beforePreview    | 预览前的处理函数                                | Function       |                        |                           |
+| uploading        | 是否上传中，支持 .sync 修饰符                   | Boolean        | false                  | true\|false               |
 | uploadingText    | 文件上传中提示                                  | String         | 文件上传中，请稍后再试 |                           |
 
 **accept 合法值**

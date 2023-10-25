@@ -1,23 +1,86 @@
 <template>
 	<view>
-		<view class="title">表单</view>
-		<view class="form">
-			<u-form :model="model">
+		<view class="title">表单 (复选框)</view>
+		<u-form :model="model">
+			<view class="form">
+				<view class="sub-title">基本用法</view>
 				<hf-form-checkbox
-					v-model="model.str"
+					v-model="model.str1"
 					label="多选"
 					placeholder="请选择"
-					:options="options"
+					dict-code="GENERALS_RANKING"
 				></hf-form-checkbox>
 				<hf-form-checkbox
-					v-model="model.str"
-					label="多选 必填"
-					required
+					v-model="model.str2"
+					label="多选"
+					placeholder="请选择"
+					dict-code="GENERALS_RANKING"
+				></hf-form-checkbox>
+				<hf-form-checkbox
+					v-model="model.str3"
+					label="options"
 					placeholder="请选择"
 					:options="options"
 				></hf-form-checkbox>
-			</u-form>
-		</view>
+				
+				<view class="sub-title">右侧弹出</view>
+				<hf-form-checkbox
+					v-model="model.str4"
+					label="右侧弹出"
+					placeholder="请选择"
+					dict-code="GENERALS_RANKING"
+					mode="right"
+				></hf-form-checkbox>
+				
+				<view class="sub-title">控制显示字段名</view>
+				<hf-form-checkbox
+					v-model="model.str5"
+					label="控制显示字段名"
+					required
+					placeholder="请选择"
+					:options="options2"
+					key-name="text"
+					key-value="id"
+					key-disabled="disabled"
+				></hf-form-checkbox>
+				
+				<view class="sub-title">禁用样式</view>
+				<hf-form-checkbox
+					v-model="model.str6"
+					label="禁用"
+					required
+					placeholder="请选择"
+					disabled
+					:options="options"
+				></hf-form-checkbox>
+			</view>
+			
+			<view class="title">作用域插槽</view>
+			<view class="form">
+				<hf-form-checkbox
+					v-model="model.str7"
+					label="多选"
+					required
+					placeholder="请选择"
+					:options="options2"
+					key-name="text"
+					key-value="id"
+					key-disabled="disabled"
+				>
+					<template v-slot:check-list="{ list }">
+						<view v-for="item in list" :key="item.id" class="check-item">
+							<text>{{ item.text }}</text>
+						</view>
+					</template>
+					<template v-slot:item="{ item }">
+						<text>{{ item.text }}</text>
+						<text v-if="item.disabled" class="p-l-xs"> --- 不可选择</text>
+					</template>
+				</hf-form-checkbox>
+			</view>
+		</u-form>
+		
+		<temp-data :info="model"></temp-data>
 	</view>
 </template>
 
@@ -26,34 +89,25 @@ export default {
 	data() {
 		return {
 			model: {
-				str: '3,5,8,b,e,n'
+				str1: '',
+				str2: '3,5,8,b,e,n',
+				str3: '2,3',
+				str4: '3,5,8',
+				str5: '2,3,4',
+				str6: '2,3',
+				str7: '3,4,5'
 			},
 			options: [
-				{ value: '1', label: '吕布吕奉先' },
-				{ value: '2', label: '赵云赵子龙' },
-				{ value: '3', label: '典韦' },
-				{ value: '4', label: '关羽关云长' },
-				{ value: '5', label: '马超马孟起' },
-				{ value: '6', label: '张飞张翼德', disabled: true },
-				{ value: '7', label: '黄忠' },
-				{ value: '8', label: '许褚' },
-				{ value: '9', label: '孙策' },
-				{ value: 'a', label: '太史慈' },
-				{ value: 'b', label: '夏侯惇' },
-				{ value: 'c', label: '夏侯渊' },
-				{ value: 'd', label: '张辽' },
-				
-				{ value: 'e', label: '曹操曹孟德' },
-				{ value: 'f', label: '曹丕' },
-				{ value: 'g', label: '曹植' },
-				{ value: 'h', label: '曹冲' },
-				{ value: 'i', label: '曹昂' },
-				{ value: 'j', label: '曹安民' },
-				{ value: 'k', label: '郭嘉' },
-				{ value: 'l', label: '孙权孙仲谋' },
-				{ value: 'm', label: '孙坚' },
-				{ value: 'n', label: '周瑜周公瑾' },
-				{ value: 'o', label: '刘备刘玄德' },
+				{ label: '选项1', value: '1' },
+				{ label: '选项2', value: '2' },
+				{ label: '选项3', value: '3' },
+			],
+			options2: [
+				{ text: '选项1', id: '1' },
+				{ text: '选项2', id: '2' },
+				{ text: '选项3', id: '3' },
+				{ text: '选项4', id: '4', disabled: true },
+				{ text: '选项5', id: '5' },
 			]
 		};
 	}
@@ -62,4 +116,12 @@ export default {
 
 <style lang="scss" scoped>
 	@import '@/common/styles/form.scss';
+	.check-item {
+		margin-right: $xs;
+		background-color: $u-warning-light;
+		border: 1px solid $u-warning;
+		border-radius: 8rpx;
+		padding: $xs $sm;
+		color: $u-warning;
+	}
 </style>
