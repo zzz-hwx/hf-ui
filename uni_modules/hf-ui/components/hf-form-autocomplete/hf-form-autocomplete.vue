@@ -4,6 +4,7 @@
 			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
 		</u-form-item>
 		<u-popup
+			ref="uPopup"
 			:show="visible"
 			mode="right"
 			@close="handleClose">
@@ -53,6 +54,16 @@
 		</u-popup>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uPopup.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	/**
@@ -232,23 +243,22 @@
 </script>
 
 <style lang="scss" scoped>
-	.hf-autocomplete {
-		.u-popup-slot {
-			width: 90vw;
-			height: 100vh;
-			background-color: $bg-white;
+	// .hf-autocomplete {}
+	.u-popup-slot {
+		width: 90vw;
+		height: 100vh;
+		background-color: $bg-white;
+		display: flex;
+		flex-direction: column;
+		.item-wrap {
+			margin: 0 $sm;
+		}
+		.item {
+			padding: $sm $xs;
 			display: flex;
-			flex-direction: column;
-			.item-wrap {
-				margin: 0 $sm;
-			}
-			.item {
-				padding: $sm $xs;
-				display: flex;
-				.slot {
-					flex: 1;
-					width: 0;
-				}
+			.slot {
+				flex: 1;
+				width: 0;
 			}
 		}
 	}

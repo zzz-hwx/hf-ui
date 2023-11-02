@@ -7,7 +7,7 @@
 			</template>
 		</u-form-item>
 		
-		<u-popup :show="visible" mode="right" @close="handleClose">
+		<u-popup ref="uPopup" :show="visible" mode="right" :close-on-click-overlay="false" @close="handleClose">
 			<view class="u-popup-slot">
 				<u-navbar :fixed="false" titleWidth="0rpx" @rightClick="handleClose">
 					<template #left>{{ label }}</template>
@@ -40,6 +40,16 @@
 		</u-popup>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uPopup.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	/**
@@ -103,6 +113,11 @@
 				type: String
 			}
 		},
+		// #ifdef MP-WEIXIN
+		options: {
+			styleIsolation: 'shared'
+		},
+		// #endif
 		data() {
 			return {
 				cancelText: uni.$u.props.picker.cancelText,		// 取消按钮的文字
@@ -179,23 +194,22 @@
 </script>
 
 <style lang="scss" scoped>
-	.hf-form-tree {
-		.u-popup-slot {
-			width: 90vw;
-			height: 100vh;
-			background-color: $bg-white;
+	// .hf-form-tree {}
+	.u-popup-slot {
+		width: 90vw;
+		height: 100vh;
+		background-color: $bg-white;
+		display: flex;
+		flex-direction: column;
+		scroll-view {
+			flex: 1;
+			height: 0;
+		}
+		.btns {
+			padding: $df;
 			display: flex;
-			flex-direction: column;
-			scroll-view {
-				flex: 1;
-				height: 0;
-			}
-			.btns {
-				padding: $df;
-				display: flex;
-				/deep/ .u-button + .u-button {
-					margin-left: $df;
-				}
+			/deep/ .u-button + .u-button {
+				margin-left: $df;
 			}
 		}
 	}

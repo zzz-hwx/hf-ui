@@ -7,7 +7,7 @@
 			</template>
 		</u-form-item>
 		
-		<u-popup :show="visible" :close-on-click-overlay="false" @close="handleClose">
+		<u-popup ref="uPopup" :show="visible" :close-on-click-overlay="false" @close="handleClose">
 			<view class="top">
 				<view @click="handleClose">
 					<text class="cancel">{{ cancelText }}</text>
@@ -26,6 +26,16 @@
 		</u-popup>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uPopup.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	/**
@@ -109,20 +119,19 @@
 </script>
 
 <style lang="scss" scoped>
-	.hf-form-cascader {
-		.top {
-			height: 100rpx;
-			padding: 0 $df;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			.cancel {
-				color: $u-tips-color;
-			}
-			.title {
-				font-size: $font-lg;
-				font-weight: bold;
-			}
+	// .hf-form-cascader {}
+	.top {
+		height: 100rpx;
+		padding: 0 $df;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.cancel {
+			color: $u-tips-color;
+		}
+		.title {
+			font-size: $font-lg;
+			font-weight: bold;
 		}
 	}
 </style>

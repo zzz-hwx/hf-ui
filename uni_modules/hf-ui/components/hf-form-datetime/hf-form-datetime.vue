@@ -29,12 +29,21 @@
 			:mode="mode"
 			:min-date="minDate"
 			:max-date="maxDate"
-			closeOnClickOverlay
 			@confirm="handleConfirm"
 			@cancel="handleClose"
 			@close="handleClose"></u-datetime-picker>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uDatetimePicker.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	import mixin from '../../libs/mixins/form.js';

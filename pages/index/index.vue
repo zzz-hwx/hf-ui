@@ -84,6 +84,14 @@
 							title: 'hf-list 列表页',
 							path: '/pages/componentsC/list',
 							icon: 'list'
+						}, {
+							title: 'hf-list-only 列表页',
+							path: '/pages/componentsC/listOnly',
+							icon: 'text'
+						}, {
+							title: 'hf-preview 附件预览',
+							path: '/pages/componentsC/preview',
+							icon: 'album'
 						}]
 					}
 				]

@@ -26,8 +26,10 @@
 				</template>
 			</template>
 		</view>
+		<!-- 占位 没有不展示...不晓得原因 -->
+		<view class=""></view>
 		
-		<u-overlay :show="previewVideoVis" @click="previewVideoVis = false">
+		<u-overlay ref="uOverlay" :show="previewVideoVis" @click="previewVideoVis = false">
 			<view class="hf-preview__overlay">
 				<view class="hf-preview__overlay__video" @tap.stop>
 					<hf-video :videoSrc="previewVideoUrl"></hf-video>
@@ -36,6 +38,16 @@
 		</u-overlay>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uOverlay.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	import HfVideo from '../hf-upload/hf-video.vue'
@@ -88,11 +100,13 @@
 						if (i !== -1) {
 							return this.lists[i];
 						}
+						const name = absList[index].name;
 						return {
 							url: absList[index].url || '',
+							name,
 							path,
-							isImage: uni.$u.test.image(absList[index].name),
-							isVideo: uni.$u.test.video(absList[index].name),
+							isImage: uni.$u.test.image(name),
+							isVideo: uni.$u.test.video(name),
 							deletable: this.deletable,
 						};
 					});
@@ -103,11 +117,10 @@
 		methods: {
 			onPreviewImage(item) {
 				// 预览图片
-				console.log('onPreviewImage', item);
 				if (!item.isImage) return;
 				uni.previewImage({
 					// 先filter找出为图片的item，再返回filter结果中的图片url
-					urls: this.lists.filter((item) => this.accept === 'image' || uni.$u.test.image(item.url || item.thumb)).map((item) => item.url || item.thumb),
+					urls: this.lists.filter((item) => (item.isImage)).map((item) => (item.url || item.thumb)),
 					current: item.url || item.thumb,
 					fail: () => {
 						uni.$u.toast('预览图片失败');

@@ -18,6 +18,16 @@
 	</view>
 </template>
 
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uPicker.$el);
+		},
+	}
+</script>
+<!-- #endif -->
+
 <script>
 	/**
 	 * 省市县三级选择 picker-view

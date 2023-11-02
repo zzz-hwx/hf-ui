@@ -35,7 +35,7 @@
 			</view>
 		</u-form-item>
 		
-		<u-popup :show="visible" :mode="mode" :close-on-click-overlay="false" @close="handleClose">
+		<u-popup ref="uPopup" :show="visible" :mode="mode" :close-on-click-overlay="false" @close="handleClose">
 			<view class="u-popup-slot" :class="'u-popup-slot__' + mode">
 				<view v-if="mode === 'bottom'" class="top">
 					<view @click="handleCancel">
@@ -82,6 +82,16 @@
 		</u-popup>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uPopup.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	import mixin from '../../libs/mixins/form.js';
@@ -275,53 +285,54 @@
 				}
 			}
 		}
-		.u-popup-slot {
-			&__bottom {
-				// 
+	}
+	
+	.u-popup-slot {
+		&__bottom {
+			// 
+		}
+		&__right {
+			width: 90vw;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
+		.top {
+			height: 100rpx;
+			padding: 0 $df;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			.cancel {
+				color: $u-tips-color;
 			}
-			&__right {
-				width: 90vw;
-				height: 100vh;
+			.title {
+				font-size: $font-lg;
+				font-weight: bold;
+			}
+		}
+		.item-wrap {
+			margin: 0 $sm;
+			.item {
+				padding: $sm $xs;
 				display: flex;
-				flex-direction: column;
-			}
-			.top {
-				height: 100rpx;
-				padding: 0 $df;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				.cancel {
-					color: $u-tips-color;
-				}
-				.title {
-					font-size: $font-lg;
-					font-weight: bold;
-				}
-			}
-			.item-wrap {
-				margin: 0 $sm;
-				.item {
-					padding: $sm $xs;
-					display: flex;
-					.slot {
-						flex: 1;
-						width: 0;
-						&.selected {
-							color: $u-primary;
-						}
-						&.disabled {
-							color: $u-disabled-color;
-						}
+				.slot {
+					flex: 1;
+					width: 0;
+					&.selected {
+						color: $u-primary;
+					}
+					&.disabled {
+						color: $u-disabled-color;
 					}
 				}
 			}
-			.btns {
-				padding: $df;
-				display: flex;
-				/deep/ .u-button + .u-button {
-					margin-left: $df;
-				}
+		}
+		.btns {
+			padding: $df;
+			display: flex;
+			/deep/ .u-button + .u-button {
+				margin-left: $df;
 			}
 		}
 	}

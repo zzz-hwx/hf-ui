@@ -65,5 +65,17 @@ hfui.setUtils({
 			url: path,	// 图片可访问绝对路径
 			path: path	// 相对路径(保存)
 		};
-	}
+	},
+	async getAbsPath(val) {
+		return val.split(',').map((url) => {
+			const nameIndex = url.lastIndexOf('/');
+			const name = url.substring(nameIndex + 1);
+			const extIndex = name.lastIndexOf('.');
+			const ext = name.substring(extIndex + 1);	// 扩展名 jpg mp4
+			return {
+				url,
+				name,
+			}
+		});
+	},
 });

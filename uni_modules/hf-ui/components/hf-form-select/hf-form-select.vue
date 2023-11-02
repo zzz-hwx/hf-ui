@@ -36,6 +36,7 @@
 		</template>
 		<template v-if="mode === 'bottom'">
 			<u-picker
+				ref="uPopup"
 				:show="visible"
 				:title="label"
 				:columns="columns"
@@ -48,7 +49,7 @@
 			></u-picker>
 		</template>
 		<template v-else-if="mode === 'right'">
-			<u-popup :show="visible" mode="right" :close-on-click-overlay="!multiple" @close="handleClose">
+			<u-popup ref="uPopup" :show="visible" mode="right" :close-on-click-overlay="!multiple" @close="handleClose">
 				<view class="u-popup-slot">
 					<u-navbar :fixed="false" titleWidth="0rpx" @rightClick="handleClose">
 						<template #left>{{ label }}</template>
@@ -86,6 +87,17 @@
 		</template>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uPopup.$el);
+			// 不支持切换修改mode
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	import mixin from '../../libs/mixins/form.js';
@@ -337,39 +349,39 @@
 <style lang="scss" scoped>
 	@import '../../libs/css/form.scss';
 	.hf-form-select {
-		.u-popup-slot {
-			width: 90vw;
-			height: 100vh;
-			background-color: $bg-white;
+		.flex {
 			display: flex;
-			flex-direction: column;
-			.item-wrap {
-				margin: 0 $sm;
-			}
-			.item {
-				padding: $sm $xs;
-				display: flex;
-				.slot {
-					flex: 1;
-					width: 0;
-					&.selected {
-						color: $u-primary;
-					}
-					&.disabled {
-						color: $u-disabled-color;
-					}
+		}
+	}
+	.u-popup-slot {
+		width: 90vw;
+		height: 100vh;
+		background-color: $bg-white;
+		display: flex;
+		flex-direction: column;
+		.item-wrap {
+			margin: 0 $sm;
+		}
+		.item {
+			padding: $sm $xs;
+			display: flex;
+			.slot {
+				flex: 1;
+				width: 0;
+				&.selected {
+					color: $u-primary;
 				}
-			}
-			.btns {
-				padding: $df;
-				display: flex;
-				/deep/ .u-button + .u-button {
-					margin-left: $df;
+				&.disabled {
+					color: $u-disabled-color;
 				}
 			}
 		}
-	}
-	.flex {
-		display: flex;
+		.btns {
+			padding: $df;
+			display: flex;
+			/deep/ .u-button + .u-button {
+				margin-left: $df;
+			}
+		}
 	}
 </style>

@@ -88,7 +88,7 @@
 		</view>
 		
 		<!-- 预览视频 -->
-		<u-overlay :show="previewVideoVis" @click="previewVideoVis = false">
+		<u-overlay ref="uOverlay" :show="previewVideoVis" @click="previewVideoVis = false">
 			<view class="hf-upload__overlay">
 				<view class="hf-upload__overlay__video" @tap.stop>
 					<hf-video :videoSrc="previewVideoUrl"></hf-video>
@@ -97,6 +97,16 @@
 		</u-overlay>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uOverlay.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	import props from '@/uni_modules/uview-ui/components/u-upload/props.js';

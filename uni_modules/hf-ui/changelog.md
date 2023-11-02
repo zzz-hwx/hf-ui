@@ -1,3 +1,6 @@
+## 3.0.0（2023-11-02）
+- 修改bug：iOS scroll-view 遮挡弹框
+	- 微信小程序在`App.vue`添加样式`.wx-scroll-view { -webkit-overflow-scrolling: auto; }`
 ## 2.0.16（2023-10-25）
 - hf-form-datetime 添加作用域插槽display-section
 - hf-radio 添加props

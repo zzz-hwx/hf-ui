@@ -75,12 +75,27 @@
 	}, {
 		"root": "pages/componentsC",
 		"pages": [{
-			"path": "list",
-			"style": {
-				"navigationBarTitleText": "列表",
-				"enablePullDownRefresh": true
+				"path": "list",
+				"style": {
+					"navigationBarTitleText": "列表",
+					"enablePullDownRefresh": true
+				}
+			},
+			{
+				"path": "listOnly",
+				"style": {
+					"navigationBarTitleText": "测试列表",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path" : "preview",
+				"style" : 
+				{
+					"navigationBarTitleText" : "附件预览"
+				}
 			}
-		}]
+		]
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

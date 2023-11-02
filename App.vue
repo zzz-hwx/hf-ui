@@ -37,6 +37,12 @@
 		font-family: Helvetica Neue, Helvetica, sans-serif;
 	}
 	
+	/* #ifdef MP-WEIXIN */
+	.wx-scroll-view {
+		-webkit-overflow-scrolling: auto;
+	}
+	/* #endif */
+	
 	/**
 	 * 一些共用样式
 	 */
