@@ -1,3 +1,18 @@
+## 3.0.2（2023-11-07）
+- 列表选择样式优化
+- hf-dropdown 添加props
+	- noShowOptionsName：是否不显示选择的选项名(默认false: 显示选择的选项名)
+- hf-dropdown-item 添加props
+	- keyName：控制显示的字段
+	- keyValue：控制取值的字段
+	- keyDisabled：控制禁用的字段
+## 3.0.1（2023-11-07）
+- hf-form-checkbox 添加props
+	- search：是否显示搜索
+	- pinyin：是否拼音搜索
+- 添加组件
+	- hf-dropdown
+	- hf-dropdown-item
 ## 3.0.0（2023-11-02）
 - 修改bug：iOS scroll-view 遮挡弹框
 	- 微信小程序在`App.vue`添加样式`.wx-scroll-view { -webkit-overflow-scrolling: auto; }`

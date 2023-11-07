@@ -62,6 +62,10 @@
 							path: '/pages/componentsB/select',
 							icon: 'list'
 						}, {
+							title: 'multi-column 多列选择器',
+							path: '/pages/componentsB/multiColumn',
+							icon: 'subsection'
+						}, {
 							title: 'area 省市县',
 							path: '/pages/componentsB/area',
 							icon: 'picker'
@@ -92,6 +96,10 @@
 							title: 'hf-preview 附件预览',
 							path: '/pages/componentsC/preview',
 							icon: 'album'
+						}, {
+							title: 'hf-dropdown 下拉菜单',
+							path: '/pages/componentsC/dropdown',
+							icon: 'dropdown'
 						}]
 					}
 				]

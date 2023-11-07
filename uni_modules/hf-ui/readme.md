@@ -332,7 +332,7 @@ export default {
 	data() {
 		return {
 			model: {
-				str: '3,5,8,b,e,n'
+				str: '3,5'
 			},
 			options: [
 				{ value: '1', label: '吕布吕奉先' },
@@ -340,25 +340,6 @@ export default {
 				{ value: '3', label: '典韦' },
 				{ value: '4', label: '关羽关云长' },
 				{ value: '5', label: '马超马孟起' },
-				{ value: '6', label: '张飞张翼德', disabled: true },
-				{ value: '7', label: '黄忠' },
-				{ value: '8', label: '许褚' },
-				{ value: '9', label: '孙策' },
-				{ value: 'a', label: '太史慈' },
-				{ value: 'b', label: '夏侯惇' },
-				{ value: 'c', label: '夏侯渊' },
-				{ value: 'd', label: '张辽' },
-				{ value: 'e', label: '曹操曹孟德' },
-				{ value: 'f', label: '曹丕' },
-				{ value: 'g', label: '曹植' },
-				{ value: 'h', label: '曹冲' },
-				{ value: 'i', label: '曹昂' },
-				{ value: 'j', label: '曹安民' },
-				{ value: 'k', label: '郭嘉' },
-				{ value: 'l', label: '孙权孙仲谋' },
-				{ value: 'm', label: '孙坚' },
-				{ value: 'n', label: '周瑜周公瑾' },
-				{ value: 'o', label: '刘备刘玄德' },
 			]
 		};
 	}
@@ -367,16 +348,18 @@ export default {
 
 **props**
 
-| 参数          | 说明           | 类型   | 默认值   | 可选值        |
-| ------------- | -------------- | ------ | -------- | ------------- |
-| dictCode      | 字典code       | String |          |               |
-| options       | 选项           | Array  | []       |               |
-| keyName       | 控制显示的字段 | String | label    |               |
-| keyValue      | 控制取值的字段 | String | value    |               |
-| keyDisabled   | 控制禁用的字段 | String | disabled |               |
-| separator     | 选项分隔符     | String | ,        |               |
-| labelPosition | label的位置    | String | top      | left\|top     |
-| mode          | 弹出方向       | String | bottom   | bottom\|right |
+| 参数          | 说明                              | 类型    | 默认值   | 可选值        |
+| ------------- | --------------------------------- | ------- | -------- | ------------- |
+| dictCode      | 字典code                          | String  |          |               |
+| options       | 选项                              | Array   | []       |               |
+| keyName       | 控制显示的字段                    | String  | label    |               |
+| keyValue      | 控制取值的字段                    | String  | value    |               |
+| keyDisabled   | 控制禁用的字段                    | String  | disabled |               |
+| separator     | 选项分隔符                        | String  | ,        |               |
+| labelPosition | label的位置                       | String  | top      | left\|top     |
+| mode          | 弹出方向                          | String  | bottom   | bottom\|right |
+| search        | 是否显示搜索 (仅mode='right'有效) | Boolean | false    | true\|false   |
+| pinyin        | 是否拼音搜索 (仅mode='right'有效) | Boolean | false    | true\|false   |
 
 **slots**
 
@@ -467,12 +450,6 @@ export default {
             	{ value: '1', label: '羽毛球' },
                 { value: '2', label: '跑步' },
                 { value: '3', label: '爬山' },
-                { value: '4', label: '游泳' },
-                { value: '5', label: '瑜伽' },
-                { value: '6', label: '舞蹈' },
-                { value: '7', label: '足球' },
-                { value: '8', label: '攀岩' },
-                { value: '9', label: '钓鱼' },
             ]
         };
     }
@@ -517,6 +494,10 @@ export default {
 ### hf-form-tselect 多列..
 
 ???
+
+### hf-form-multi-column 多列选择器 ..
+
+
 
 ### hf-form-autocomplete 列表选择器
 
@@ -1786,6 +1767,101 @@ export default {
 | 名称  | 说明                           |
 | --- | ---------------------------- |
 | —   | 自定义树节点的内容，参数为 { node, data } |
+
+### hf-dropdown 下拉菜单
+
+向下展开菜单，同时可切换多个选项卡
+
+> 参考：[uview1.0 u-dropdown](https://v1.uviewui.com/components/dropdown.html)
+
+**示例**
+
+```html
+<hf-dropdown>
+	<hf-dropdown-item v-model="model.value1" title="距离" :options="options1"></hf-dropdown-item>
+	<hf-dropdown-item v-model="model.value2" title="温度" :options="options2"></hf-dropdown-item>
+</hf-dropdown>
+```
+
+```js
+export default {
+	data() {
+		return {
+			model: {
+				value1: '',
+				value2: ''
+			},
+			options1: [
+				{ label: '选项1', value: '1' },
+				{ label: '选项2', value: '2' },
+				{ label: '选项3', value: '3' },
+			],
+			options2: [
+				{ label: '选项1', value: '1' },
+				{ label: '选项2', value: '2' },
+				{ label: '选项3', value: '3' },
+				{ label: '选项4', value: '4' },
+				{ label: '选项5', value: '5' },
+			]
+		};
+	}
+}
+```
+
+**dropdown props**
+
+| 参数                | 说明                                                      | 类型           | 默认值     | 可选值      |
+| ------------------- | --------------------------------------------------------- | -------------- | ---------- | ----------- |
+| closeOnClickOverlay | 点击遮罩是否关闭菜单                                      | Boolean        | true       | true\|false |
+| closeOnClickSelf    | 点击当前激活标题是否关闭菜单                              | Boolean        | true       | true\|false |
+| duration            | 过渡时间                                                  | Number\|String | 300        |             |
+| height              | 标题菜单的高度                                            | Number\|String | 80rpx      |             |
+| borderBottom        | 是否显示下边框                                            | Boolean        | false      | true\|false |
+| titleSize           | 标题的字体大小                                            | Number\|String | 15px       |             |
+| borderRadius        | 下拉出来的内容部分的圆角值                                | Number\|String | 0          |             |
+| menuIcon            | 菜单右侧的icon图标                                        | String         | arrow-down |             |
+| menuIconSize        | 菜单右侧图标的大小                                        | Number\|String | 14px       |             |
+| noShowOptionsName   | 是否不显示选择的选项名<br />(默认false: 显示选择的选项名) | Boolean        | false      |             |
+
+**dropdown events**
+
+| 事件名 | 说明                 | 回调参数                       |
+| ------ | -------------------- | ------------------------------ |
+| open   | 下拉菜单被打开时触发 | (index) - 当前被打开菜单的索引 |
+| close  | 下拉菜单被关闭时触发 | (index) - 当前被关闭菜单的索引 |
+
+**dropdown-item props**
+
+| 参数        | 说明                                     | 类型                  | 默认值   | 可选值      |
+| ----------- | ---------------------------------------- | --------------------- | -------- | ----------- |
+| value       | 当前选中项的value值                      | Number\|String\|Array |          |             |
+| title       | 菜单项标题                               | String\|Number        |          |             |
+| options     | 选项数据，如果传入了默认slot，此参数无效 | Array                 | []       |             |
+| disabled    | 是否禁用此菜单项                         | Boolean               | false    | true\|false |
+| height      | 下拉弹窗的高度                           | Number\|String        | auto     |             |
+| keyName     | 控制显示的字段                           | String                | label    |             |
+| keyValue    | 控制取值的字段                           | String                | value    |             |
+| keyDisabled | 控制禁用的字段                           | String                | disabled |             |
+
+**dropdown-item slots**
+
+| 名称 | 说明             |
+| ---- | ---------------- |
+| -    | 自定义选项卡内容 |
+
+**dropdown-item events**
+
+| 事件名 | 说明                                                         | 回调参数                            |
+| ------ | ------------------------------------------------------------ | ----------------------------------- |
+| change | 每个`u-dropdown-item`均有此回调，点击某个`options`选项时触发 | (value) - 点击项绑定的`value`属性值 |
+
+**dropdown-item methods**
+
+组件内部方法，需要通过`ref`调用
+
+| 方法名    | 参数    | 说明                                                         |
+| --------- | ------- | ------------------------------------------------------------ |
+| highlight | (index) | index为需要设置高亮的菜单项的索引(从0开始)，不写表示清空内部的高亮 |
 
 ## 说明
 

@@ -1,7 +1,7 @@
 {
 	"id": "hf-ui",
 	"displayName": "hf-ui",
-	"version": "3.0.0",
+	"version": "3.0.2",
 	"description": "基于uview 2.0 封装的组件库",
 	"keywords": [
         "hf-ui,ui,uni-app"
@@ -49,21 +49,21 @@
 					"vue3": "n"
 				},
 				"App": {
-					"app-vue": "u",
+					"app-vue": "y",
 					"app-nvue": "u"
 				},
 				"H5-mobile": {
-					"Safari": "u",
-					"Android Browser": "u",
-					"微信浏览器(Android)": "u",
-					"QQ浏览器(Android)": "u"
+					"Safari": "y",
+					"Android Browser": "y",
+					"微信浏览器(Android)": "y",
+					"QQ浏览器(Android)": "y"
 				},
 				"H5-pc": {
 					"Chrome": "y",
 					"IE": "u",
 					"Edge": "u",
 					"Firefox": "u",
-					"Safari": "u"
+					"Safari": "y"
 				},
 				"小程序": {
 					"微信": "y",

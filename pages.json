@@ -37,41 +37,48 @@
 	}, {
 		"root": "pages/componentsB",
 		"pages": [{
-			"path": "datetime",
-			"style": {
-				"navigationBarTitleText": "时间日期选择器"
+				"path": "datetime",
+				"style": {
+					"navigationBarTitleText": "时间日期选择器"
+				}
+			}, {
+				"path": "radio",
+				"style": {
+					"navigationBarTitleText": "单选框"
+				}
+			}, {
+				"path": "checkbox",
+				"style": {
+					"navigationBarTitleText": "复选框"
+				}
+			}, {
+				"path": "upload",
+				"style": {
+					"navigationBarTitleText": "上传"
+				}
+			}, {
+				"path": "area",
+				"style": {
+					"navigationBarTitleText": "省市县"
+				}
+			}, {
+				"path": "tree",
+				"style": {
+					"navigationBarTitleText": "树形组件"
+				}
+			}, {
+				"path": "select",
+				"style": {
+					"navigationBarTitleText": "列表选择器"
+				}
+			},
+			{
+				"path": "multiColumn",
+				"style": {
+					"navigationBarTitleText": "多列选择器"
+				}
 			}
-		}, {
-			"path": "radio",
-			"style": {
-				"navigationBarTitleText": "单选框"
-			}
-		}, {
-			"path": "checkbox",
-			"style": {
-				"navigationBarTitleText": "复选框"
-			}
-		}, {
-			"path": "upload",
-			"style": {
-				"navigationBarTitleText": "上传"
-			}
-		}, {
-			"path": "area",
-			"style": {
-				"navigationBarTitleText": "省市县"
-			}
-		}, {
-			"path": "tree",
-			"style": {
-				"navigationBarTitleText": "树形组件"
-			}
-		}, {
-			"path": "select",
-			"style": {
-				"navigationBarTitleText": "列表选择器"
-			}
-		}]
+		]
 	}, {
 		"root": "pages/componentsC",
 		"pages": [{
@@ -89,10 +96,15 @@
 				}
 			},
 			{
-				"path" : "preview",
-				"style" : 
-				{
-					"navigationBarTitleText" : "附件预览"
+				"path": "preview",
+				"style": {
+					"navigationBarTitleText": "附件预览"
+				}
+			},
+			{
+				"path": "dropdown",
+				"style": {
+					"navigationBarTitleText": "下拉菜单"
 				}
 			}
 		]

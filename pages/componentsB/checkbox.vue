@@ -30,11 +30,21 @@
 					placeholder="请选择"
 					dict-code="GENERALS_RANKING"
 					mode="right"
+					search
+				></hf-form-checkbox>
+				<hf-form-checkbox
+					v-model="model.str5"
+					label="拼音搜索"
+					placeholder="请选择"
+					dict-code="GENERALS_RANKING"
+					mode="right"
+					search
+					pinyin
 				></hf-form-checkbox>
 				
 				<view class="sub-title">控制显示字段名</view>
 				<hf-form-checkbox
-					v-model="model.str5"
+					v-model="model.str6"
 					label="控制显示字段名"
 					required
 					placeholder="请选择"
@@ -46,7 +56,7 @@
 				
 				<view class="sub-title">禁用样式</view>
 				<hf-form-checkbox
-					v-model="model.str6"
+					v-model="model.str7"
 					label="禁用"
 					required
 					placeholder="请选择"
@@ -58,7 +68,7 @@
 			<view class="title">作用域插槽</view>
 			<view class="form">
 				<hf-form-checkbox
-					v-model="model.str7"
+					v-model="model.str8"
 					label="多选"
 					required
 					placeholder="请选择"
@@ -91,11 +101,12 @@ export default {
 			model: {
 				str1: '',
 				str2: '3,5,8,b,e,n',
-				str3: '2,3',
-				str4: '3,5,8',
-				str5: '2,3,4',
-				str6: '2,3',
-				str7: '3,4,5'
+				str3: '',
+				str4: '',
+				str5: '',
+				str6: '',
+				str7: '',
+				str8: '3,4,5'
 			},
 			options: [
 				{ label: '选项1', value: '1' },

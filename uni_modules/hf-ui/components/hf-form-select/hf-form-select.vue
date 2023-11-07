@@ -231,7 +231,7 @@
 			renderList() {
 				// 渲染显示的列表
 				let renderList = [];
-				if (!this.search || !this.searchForm.keyword) {
+				if (!(this.search && this.searchForm.keyword)) {
 					// 没有搜索
 					renderList = this.list_;
 				} else if (this.pinyinObj) {
@@ -336,6 +336,9 @@
 			},
 			handleClose() {
 				this.visible = false;
+				if (this.mode == 'right') {
+					this.selected = this.value ? this.value.split(this.separator) : [];	// 清空选择
+				}
 				if (this.$refs.input) {
 					this.$nextTick(() => {
 						uni.$u.formValidate(this.$refs.input, 'change');

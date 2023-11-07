@@ -38,7 +38,7 @@
 		<u-popup ref="uPopup" :show="visible" :mode="mode" :close-on-click-overlay="false" @close="handleClose">
 			<view class="u-popup-slot" :class="'u-popup-slot__' + mode">
 				<view v-if="mode === 'bottom'" class="top">
-					<view @click="handleCancel">
+					<view @click="handleClose">
 						<text class="cancel">{{ cancelText }}</text>
 					</view>
 					<view class="title">{{ label }}</view>
@@ -53,9 +53,10 @@
 							<u-icon name="close"></u-icon>
 						</template>
 					</u-navbar>
+					<hf-search v-if="search" v-model="searchForm.keyword" placeholder="请输入关键词"></hf-search>
 				</template>
 				<u-list :custom-style="mode === 'bottom' ? 'height: 50vh !important;' : 'flex: 1; height: 0 !important;'">
-					<u-list-item v-for="item in list_" :key="item.value">
+					<u-list-item v-for="item in renderList" :key="item.value">
 						<view class="item-wrap">
 							<view class="item" @click="handleClickItem(item)">
 								<view
@@ -95,6 +96,7 @@
 
 <script>
 	import mixin from '../../libs/mixins/form.js';
+	import PinyinEngine from '../../libs/pinyin-engine/cn.js';
 	import loadData from '../../libs/util/loadData.js';
 	export default {
 		name: 'HfFormCheckbox',
@@ -142,6 +144,16 @@
 					return ['bottom', 'right'].includes(val);
 				}
 			},
+			search: {
+				// 是否显示搜索(仅mode='right'有效)
+				type: Boolean,
+				default: false
+			},
+			pinyin: {
+				// 是否拼音搜索(仅mode='right'有效)
+				type: Boolean,
+				default: false
+			},
 		},
 		// #ifdef MP-WEIXIN
 		options: {
@@ -156,11 +168,42 @@
 				list: [],
 				selected: [],
 				visible: false,
+				searchForm: {
+					keyword: ''
+				},
 			};
 		},
 		computed: {
-			list_() {
-				return this.list.map(item => {
+			selectList() {
+				// 选中的选项名
+				const selected = (this.value || '').split(this.separator);
+				return this.list.filter(item => (selected.indexOf(item[this.keyValue]) !== -1));
+			},
+			pinyinKeys() {
+				return [this.keyName];
+			},
+			pinyinObj() {
+				if (this.search && this.pinyin && this.list.length) {
+					return new PinyinEngine(this.list, this.pinyinKeys);
+				}
+				return null;
+			},
+			renderList() {
+				// 渲染显示的列表
+				let renderList = [];
+				if (!(this.search && this.searchForm.keyword)) {
+					// 没有搜索
+					renderList = this.list;
+				} else if (this.pinyinObj) {
+					// 拼音搜索
+					renderList = this.pinyinObj.query(this.searchForm.keyword);
+				} else {
+					// 普通搜索
+					renderList = this.list.filter((item) => {
+						return this.pinyinKeys.some((key) => (item[key].indexOf(this.searchForm.keyword) !== -1));
+					});
+				}
+				return renderList.map(item => {
 					return {
 						source: item,
 						label: item[this.keyName],
@@ -169,11 +212,6 @@
 						selected: this.selected.includes(item[this.keyValue])
 					};
 				});
-			},
-			selectList() {
-				// 选中的选项名
-				const selected = (this.value || '').split(this.separator);
-				return this.list.filter(item => (selected.indexOf(item[this.keyValue]) !== -1));
 			}
 		},
 		watch: {
@@ -229,12 +267,9 @@
 				this.$emit('input', selected);
 				this.handleClose();
 			},
-			handleCancel() {
-				this.selected = this.value ? this.value.split(this.separator) : [];	// 清空选择
-				this.handleClose();
-			},
 			handleClose() {
 				this.visible = false;
+				this.selected = this.value ? this.value.split(this.separator) : [];	// 清空选择
 				this.$nextTick(() => {
 					if (this.$refs.input) {
 						uni.$u.formValidate(this.$refs.input, 'change');
