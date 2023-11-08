@@ -102,7 +102,7 @@
 <script module="test" lang="renderjs">
 	export default {
 		mounted() {
-			(document.querySelector('uni-app') || document.body).appendChild(this.$refs.uOverlay.$el);
+			(document.querySelector('uni-page-wrapper') || document.body).appendChild(this.$refs.uOverlay.$el);
 		},
 	}
 </script>

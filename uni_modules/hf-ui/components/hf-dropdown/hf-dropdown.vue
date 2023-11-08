@@ -33,15 +33,9 @@
 			</view>
 		</view>
 		<view
+			ref="dropdownContent"
 			class="hf-dropdown__content"
-			:style="[
-				contentStyle,
-				{
-					transition: `opacity ${duration / 1000}s linear`,
-					top: $u.addUnit(height),
-					height: contentHeight + 'px'
-				}
-			]"
+			:style="dropdownContentStyle"
 			@tap="maskClick"
 			@touchmove.stop.prevent
 		>
@@ -56,6 +50,16 @@
 		</view>
 	</view>
 </template>
+
+<!-- #ifdef APP-VUE || H5 -->
+<script module="test" lang="renderjs">
+	export default {
+		mounted() {
+			(document.querySelector('uni-page-wrapper') || document.body).appendChild(this.$refs.dropdownContent.$el);
+		},
+	}
+</script>
+<!-- #endif -->
 
 <script>
 	/**
@@ -144,6 +148,7 @@
 				},
 				// 让某个菜单保持高亮的状态
 				highlightIndex: 99999,
+				menuBottom: 0,
 				contentHeight: 0
 			}
 		},
@@ -156,6 +161,21 @@
 				style['transition-duration'] = this.duration / 1000 + 's';
 				style.borderRadius = `0 0 ${this.$u.addUnit(this.borderRadius)} ${this.$u.addUnit(this.borderRadius)}`;
 				return style;
+			},
+			dropdownContentStyle() {
+				return [
+					this.contentStyle,
+					{
+						transition: `opacity ${this.duration / 1000}s linear`,
+						// #ifdef APP-VUE || H5
+						top: uni.$u.addUnit(this.menuBottom, 'px'),
+						// #endif
+						// #ifndef APP-VUE || H5
+						top: uni.$u.addUnit(this.height),
+						// #endif
+						height: this.contentHeight + 'px'
+					}
+				];
 			},
 			renderMenuList() {
 				if (this.noShowOptionsName) return this.menuList;
@@ -233,9 +253,15 @@
 				this.current = 99999;
 				// 下拉内容的样式进行调整，不透明度设置为0
 				this.contentStyle = {
-					zIndex: -1,
 					opacity: 0
-				}
+				};
+				setTimeout(() => {
+					// 过渡动画结束，再设置zIndex为-1
+					this.contentStyle = {
+						zIndex: -1,
+						opacity: 0
+					};
+				}, this.duration);
 			},
 			// 点击遮罩
 			maskClick() {
@@ -258,6 +284,7 @@
 					// H5端bug表现为元素尺寸的top值为导航栏底部到到元素的上边沿的距离，但是元素的bottom值确是导航栏顶部到元素底部的距离
 					// 二者是互相矛盾的，本质原因是H5端导航栏非原生，uni的开发者大意造成
 					// 这里取菜单栏的botton值合理的，不能用res.top，否则页面会造成滚动
+					this.menuBottom = res.bottom;
 					this.contentHeight = windowHeight - res.bottom;
 				})
 			}
@@ -275,7 +302,7 @@
 		&__menu {
 			@include flex(row);
 			position: relative;
-			// z-index: 11;
+			z-index: 11;
 			height: 80rpx;
 			&__item {
 				flex: 1;
@@ -307,29 +334,29 @@
 				}
 			}
 		}
-		&__content {
+	}
+	.hf-dropdown__content {
+		position: absolute;
+		z-index: 8;
+		width: 100%;
+		left: 0px;
+		bottom: 0;
+		overflow: hidden;
+		&__mask {
 			position: absolute;
-			z-index: 8;
+			z-index: 9;
+			background: rgba(0, 0, 0, .3);
 			width: 100%;
-			left: 0px;
+			left: 0;
+			top: 0;
 			bottom: 0;
+		}
+		&__popup {
+			position: relative;
+			z-index: 10;
+			transition: all 0.3s;
+			transform: translate3D(0, -100%, 0);
 			overflow: hidden;
-			&__mask {
-				position: absolute;
-				z-index: 9;
-				background: rgba(0, 0, 0, .3);
-				width: 100%;
-				left: 0;
-				top: 0;
-				bottom: 0;
-			}
-			&__popup {
-				position: relative;
-				z-index: 10;
-				transition: all 0.3s;
-				transform: translate3D(0, -100%, 0);
-				overflow: hidden;
-			}
 		}
 	}
 </style>
