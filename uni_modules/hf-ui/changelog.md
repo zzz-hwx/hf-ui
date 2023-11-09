@@ -1,3 +1,6 @@
+## 3.0.4（2023-11-09）
+- hf-form-cascader 添加props
+	- visibleItemCount：每列中可见选项数量
 ## 3.0.3（2023-11-08）
 - 修改bug：关闭页面弹框没有关闭
 - 修改样式：hf-dropdown动画结束再设置zIndex为-1

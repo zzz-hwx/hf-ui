@@ -732,13 +732,14 @@ export default {
 
 **props**
 
-| 参数          | 说明                                        | 类型    | 默认值 | 可选值      |
-| ------------- | ------------------------------------------- | ------- | ------ | ----------- |
-| options       | 选项                                        | Array   | []     |             |
-| showAllLevels | 是否显示选中值的完整路径                    | Boolean | false  | true\|false |
-| selectParent  | 是否可以选父级                              | Boolean | false  | true\|false |
-| separator     | 分隔符                                      | String  | /      |             |
-| defaultProps  | 配置选项，同hf-cascader-picker.defaultProps | Object  | {}     |             |
+| 参数             | 说明                                        | 类型    | 默认值 | 可选值      |
+| ---------------- | ------------------------------------------- | ------- | ------ | ----------- |
+| options          | 选项                                        | Array   | []     |             |
+| showAllLevels    | 是否显示选中值的完整路径                    | Boolean | false  | true\|false |
+| selectParent     | 是否可以选父级                              | Boolean | false  | true\|false |
+| separator        | 分隔符                                      | String  | /      |             |
+| defaultProps     | 配置选项，同hf-cascader-picker.defaultProps | Object  | {}     |             |
+| visibleItemCount | 每列中可见选项数量                          | Number  | 5      |             |
 
 ### hf-form-tree 树形组件
 

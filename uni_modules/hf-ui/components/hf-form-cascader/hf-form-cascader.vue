@@ -22,6 +22,7 @@
 				:options="options"
 				:select-parent="selectParent"
 				:default-props="defaultProps"
+				:visible-item-count="visibleItemCount"
 			></hf-cascader-picker>
 		</u-popup>
 	</view>
@@ -67,6 +68,10 @@
 			defaultProps: {
 				type: Object,
 				default: () => ({})
+			},
+			visibleItemCount: { // 每列中可见选项数量
+				type: Number,
+				default: 5
 			},
 		},
 		data() {

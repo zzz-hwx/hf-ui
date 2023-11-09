@@ -91,7 +91,7 @@
 				return [this.value, this.options];
 			},
 			pickerViewStyle() {
-				return `height: ${uni.$u.addUnit(this.visibleItemCount * this.itemHeight)}`;
+				return `height: ${uni.$u.addUnit(this.visibleItemCount * this.itemHeight)}; max-height: 70vh;`;
 			},
 			selected_() {
 				return this.selected.filter(item => (item[this.textKey]));
