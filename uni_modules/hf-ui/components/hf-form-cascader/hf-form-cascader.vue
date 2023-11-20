@@ -1,11 +1,27 @@
 <template>
 	<view class="hf-form-cascader">
-		<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
-			<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
-			<template #right>
-				<slot name="right"></slot>
-			</template>
-		</u-form-item>
+		<!-- #ifdef MP-WEIXIN -->
+		<template v-if="$slots['display-section']">
+			<view class="flex" @click="pickerShow">
+				<slot name="display-section" :valueName="valueName" :visible="visible"></slot>
+			</view>
+		</template>
+		<!-- #endif -->
+		<!-- #ifndef MP-WEIXIN -->
+		<template v-if="$scopedSlots['display-section']">
+			<view class="flex" @click="pickerShow">
+				<slot name="display-section" :valueName="valueName" :visible="visible"></slot>
+			</view>
+		</template>
+		<!-- #endif -->
+		<template v-else>
+			<u-form-item :label="label" :prop="prop" :required="required" :label-position="labelPosition" :border-bottom="borderBottom" @click="pickerShow">
+				<hf-form-content ref="input" :value="valueName" :placeholder="placeholder"></hf-form-content>
+				<template #right>
+					<slot name="right"></slot>
+				</template>
+			</u-form-item>
+		</template>
 		
 		<u-popup ref="uPopup" :show="visible" :close-on-click-overlay="false" @close="handleClose">
 			<view class="top">
@@ -115,9 +131,11 @@
 			},
 			handleClose() {
 				this.visible = false;
-				this.$nextTick(() => {
-					uni.$u.formValidate(this.$refs.input, 'change');
-				});
+				if (this.$refs.input) {
+					this.$nextTick(() => {
+						uni.$u.formValidate(this.$refs.input, 'change');
+					});
+				}
 			}
 		}
 	}

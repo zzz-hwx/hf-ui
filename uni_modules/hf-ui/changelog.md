@@ -1,3 +1,5 @@
+## 3.0.5（2023-11-20）
+- hf-form-cascader 添加作用域插槽display-section
 ## 3.0.4（2023-11-09）
 - hf-form-cascader 添加props
 	- visibleItemCount：每列中可见选项数量

@@ -77,6 +77,12 @@
 				"style": {
 					"navigationBarTitleText": "多列选择器"
 				}
+			},
+			{
+				"path": "cascader",
+				"style": {
+					"navigationBarTitleText": "级联选择"
+				}
 			}
 		]
 	}, {

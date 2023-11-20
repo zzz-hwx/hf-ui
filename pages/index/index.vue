@@ -70,6 +70,10 @@
 							path: '/pages/componentsB/area',
 							icon: 'picker'
 						}, {
+							title: 'cascader 级联选择',
+							path: '/pages/componentsB/cascader',
+							icon: 'subsection'
+						}, {
 							title: 'tree 树形组件',
 							path: '/pages/componentsB/tree',
 							icon: 'list'

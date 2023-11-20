@@ -741,6 +741,12 @@ export default {
 | defaultProps     | 配置选项，同hf-cascader-picker.defaultProps | Object  | {}     |             |
 | visibleItemCount | 每列中可见选项数量                          | Number  | 5      |             |
 
+**scoped-slot**
+
+| 名称            | 说明     | 参数                                                 |
+| --------------- | -------- | ---------------------------------------------------- |
+| display-section | 展示部分 | {valueName: '选中的选项名', visible: '是否显示弹窗'} |
+
 ### hf-form-tree 树形组件
 
 树形组件 + 右侧弹框 + 搜索
