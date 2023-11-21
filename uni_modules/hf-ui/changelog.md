@@ -1,3 +1,5 @@
+## 3.0.6（2023-11-21）
+- hf-form-cascader 修改defaultProps的bug
 ## 3.0.5（2023-11-20）
 - hf-form-cascader 添加作用域插槽display-section
 ## 3.0.4（2023-11-09）

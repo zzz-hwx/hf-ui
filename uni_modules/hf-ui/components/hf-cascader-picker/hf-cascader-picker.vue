@@ -94,7 +94,10 @@
 				return `height: ${uni.$u.addUnit(this.visibleItemCount * this.itemHeight)}; max-height: 70vh;`;
 			},
 			selected_() {
-				return this.selected.filter(item => (item[this.textKey]));
+				return this.selected.filter(item => (item[this.textKey])).map(item => ({
+					text: item[this.textKey],
+					value: item[this.idKey]
+				}));
 			},
 			dataList_() {
 				const i = this.selectedIndex;
@@ -103,8 +106,8 @@
 					text: item[this.textKey],
 					value: item[this.idKey],
 					isleaf: item.isleaf,
-					disabled: item.disabled,
-					selected: item.value == this.selected_[i].value
+					disabled: item[this.disabledKey],
+					selected: item[this.idKey] == this.selected_[i].value
 				}));
 			},
 			idKey() {
@@ -176,7 +179,7 @@
 				this.onSelectedChange(node, (!hasNodes || isleaf));
 			},
 			onSelectedChange(node, isleaf) {
-				const isEmpty = this.selected.length && this.selected[0].value === null;	// 是否没选择为空
+				const isEmpty = this.selected.length && this.selected[0][this.idKey] === null;	// 是否没选择为空
 				if (this.selectParent || isleaf || isEmpty) {
 					// 任意一级可选择 || 叶子节点 || 没有选择
 					this._dispatchEvent();
@@ -333,15 +336,15 @@
 			.list {
 				.item-wrap {
 					margin: 0 $sm;
+					&.is-disabled {
+						opacity: .5;
+					}
 				}
 				.item {
 					padding: $sm $xs;
 					display: flex;
 					flex-direction: row;
 					justify-content: space-between;
-					&.is-disabled {
-						opacity: .5;
-					}
 					.check {
 						margin-right: $xs;
 						border: 2px solid $u-primary;

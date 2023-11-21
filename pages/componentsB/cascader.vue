@@ -10,8 +10,15 @@
 					placeholder="请选择"
 					:options="options"
 				></hf-form-cascader>
+				
+				<hf-form-cascader
+					v-model="model.str2"
+					label="defaultProps"
+					placeholder="请选择"
+					:options="options2"
+					:default-props="props2"
+				></hf-form-cascader>
 			</view>
-			
 		</u-form>
 		
 		<view class="title">自定义展示部分 (页面查询条件)</view>
@@ -28,6 +35,12 @@
 			</hf-form-cascader>
 		</view>
 		
+		<view class="title">cascader</view>
+		<view class="section">
+			<hf-cascader-picker v-model="model.str11" :options="options"></hf-cascader-picker>
+			<hf-cascader-picker v-model="model.str12" :options="options2" :default-props="props2"></hf-cascader-picker>
+		</view>
+		
 		<temp-data :info="model"></temp-data>
 	</view>
 </template>
@@ -38,7 +51,10 @@ export default {
 		return {
 			model: {
 				str1: '1-2',
-				str9: ''
+				str2: '1-2',
+				str9: '',
+				str11: '',
+				str12: ''
 			},
 			options: [{
 					value: '1',
@@ -66,7 +82,36 @@ export default {
 						text: '二级 2-1'
 					}]
 				}
-			]
+			],
+			options2: [{
+					key: '1',
+					title: '一级 1',
+					children: [{
+						key: '1-1',
+						title: '二级 1-1',
+						children: [{
+							key: '1-1-1',
+							title: '三级 1-1-1',
+							children: [{
+								key: '1-1-1-1',
+								title: '四级 1-1-1-1'
+							}]
+						}]
+					}, {
+						key: '1-2',
+						title: '二级 1-2',
+						disabled: true
+					}]
+				}, {
+					key: '2',
+					title: '一级 2',
+					children: [{
+						key: '2-1',
+						title: '二级 2-1'
+					}]
+				}
+			],
+			props2: { text: 'title', value: 'key', children: 'children' }
 		};
 	}
 }
