@@ -111,11 +111,12 @@
 				// 选中的选项名
 				const path = treeFindPath(this.value, this.options, this.defaultProps);
 				if (!path.length) return '';
+				const textKey = this.defaultProps.text || 'text';
 				if (this.showAllLevels) {
-					return path.map(item => (item.text)).join(this.separator);
+					return path.map(item => (item[textKey])).join(this.separator);
 				}
 				const last = path[path.length - 1];
-				return last.text;
+				return last[textKey];
 			}
 		},
 		methods: {
