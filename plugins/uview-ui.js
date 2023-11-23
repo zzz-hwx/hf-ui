@@ -73,7 +73,10 @@ uni.$u.setConfig({
 			zIndex: 975,
 		},
 		overlay: {
-			zIndex: 970,	// mask
+			zIndex: 975,	// mask (原先 970 改 975)
+			// 两层弹框叠加 mask 的 z-index 不够，下一层弹框的内容依旧可以点击
+			// 设置 mask和popup弹框一样的z-index值
+			// 同层相互覆盖 解决bug
 		},
 		tooltip: {
 			zIndex: 971,

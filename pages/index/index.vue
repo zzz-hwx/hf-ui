@@ -42,6 +42,10 @@
 							title: '测试',
 							path: '/pages/componentsA/test',
 							icon: 'color'
+						}, {
+							title: 'bug1 两层弹框',
+							path: '/pages/componentsA/bug1',
+							icon: 'popup'
 						}]
 					}, {
 						groupName: '表单组件',

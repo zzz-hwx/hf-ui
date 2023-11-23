@@ -8,32 +8,39 @@
 	"subPackages": [{
 		"root": "pages/componentsA",
 		"pages": [{
-			"path": "form",
-			"style": {
-				"navigationBarTitleText": "表单"
+				"path": "form",
+				"style": {
+					"navigationBarTitleText": "表单"
+				}
+			}, {
+				"path": "push",
+				"style": {
+					"navigationBarTitleText": "uniPush 推送"
+				}
+			}, {
+				"path": "map",
+				"style": {
+					"navigationBarTitleText": "地图组件"
+				}
+			}, {
+				"path": "amap",
+				"style": {
+					"navigationBarTitleText": "高德地图"
+				}
+			}, {
+				"path": "test",
+				"style": {
+					"navigationBarTitleText": "测试",
+					"enablePullDownRefresh": true
+				}
+			},
+			{
+				"path": "bug1",
+				"style": {
+					"navigationBarTitleText": "bug1 两层弹框"
+				}
 			}
-		}, {
-			"path": "push",
-			"style": {
-				"navigationBarTitleText": "uniPush 推送"
-			}
-		}, {
-			"path": "map",
-			"style": {
-				"navigationBarTitleText": "地图组件"
-			}
-		}, {
-			"path": "amap",
-			"style": {
-				"navigationBarTitleText": "高德地图"
-			}
-		}, {
-			"path": "test",
-			"style": {
-				"navigationBarTitleText": "测试",
-				"enablePullDownRefresh": true
-			}
-		}]
+		]
 	}, {
 		"root": "pages/componentsB",
 		"pages": [{
