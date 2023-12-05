@@ -1,3 +1,5 @@
+## 3.0.8（2023-12-05）
+- 更新iconfont图标
 ## 3.0.7（2023-11-21）
 - hf-form-cascader 修改defaultProps的bug
 ## 3.0.6（2023-11-21）
